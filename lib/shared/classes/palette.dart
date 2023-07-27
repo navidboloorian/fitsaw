@@ -9,9 +9,9 @@ class Palette {
 
   static const Color primary = Color(0xff0d1117);
   static const Color canvas = Color(0xff0d1117);
-  static const Color block1Background = Color(0xff23242a);
-  static const Color block2Background = Color(0xff373842);
-  static const Color blockBorder = Color(0xff000000);
+  static const Color container1Background = Color(0xff23242a);
+  static const Color container2Background = Color(0xff373842);
+  static const Color containerBorder = Color(0xff000000);
   static const Color primaryText = Color(0xffe3e3e3);
   static const Color secondaryText = Color(0xff8c8c8c);
   static const Color darkText = Color(0xff0d1117);
