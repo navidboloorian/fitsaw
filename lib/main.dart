@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fitsaw/shared/classes/classes.dart';
 
 void main() {
   runApp(const MainApp());
@@ -9,12 +10,13 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
+    return MaterialApp(
+      home: const Scaffold(
         body: Center(
           child: Text('Hello World!'),
         ),
       ),
+      theme: Themes.dark,
     );
   }
 }

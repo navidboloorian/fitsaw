@@ -1,1 +1,1 @@
-export 'package:fitsaw/features/routines/domain/routine.dart';
+export 'routine.dart';
