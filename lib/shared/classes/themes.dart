@@ -4,6 +4,7 @@ import 'package:fitsaw/shared/classes/palette.dart';
 class Themes {
   static ThemeData get dark {
     return ThemeData(
+      fontFamily: 'OpenSans',
       brightness: Brightness.dark,
       primaryColor: Palette.primary,
       canvasColor: Palette.canvas,

@@ -1,2 +1,3 @@
+export 'fitsaw_icons.dart';
 export 'palette.dart';
-export 'theme.dart';
+export 'themes.dart';
