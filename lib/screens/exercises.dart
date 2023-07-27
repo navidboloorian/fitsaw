@@ -1,3 +1,4 @@
+import 'package:fitsaw/features/exercises/presentation/presentation.dart';
 import 'package:fitsaw/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,8 +8,8 @@ class Exercises extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      body: Center(child: Text('Exercises')),
+    return const Scaffold(
+      body: ExerciseList(),
       bottomNavigationBar: BottomNavBar(),
     );
   }
