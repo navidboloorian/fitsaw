@@ -1,4 +1,5 @@
 import 'package:fitsaw/features/exercises/services/services.dart';
+import 'package:fitsaw/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -18,7 +19,8 @@ class ExerciseList extends ConsumerWidget {
 
         return ListView.builder(
           itemCount: exerciseList.length,
-          itemBuilder: (context, index) => Text(exerciseList[index].name),
+          itemBuilder: (context, index) =>
+              CustomContainer(child: Text(exerciseList[index].name)),
         );
       },
     );
