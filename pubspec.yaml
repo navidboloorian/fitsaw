@@ -28,3 +28,7 @@ flutter:
     - family: FitsawIcons
       fonts:
         - asset: assets/fonts/Fitsaw.ttf
+
+  assets:
+    # Add assets from the images directory to the application.
+    - assets/images/
