@@ -1,34 +1,41 @@
-import 'package:fitsaw/features/exercises/domain/domain.dart';
 import 'package:fitsaw/shared/providers/providers.dart';
-import 'package:realm/realm.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fitsaw/features/exercises/domain/domain.dart';
+import 'package:realm/realm.dart';
 
-class ExerciseListNotifier extends Notifier<RealmResults<Exercise>> {
+// class used to interface with exercise collection in realm
+class ExerciseList {
   late final Realm _realm;
 
-  @override
-  RealmResults<Exercise> build() {
+  ExerciseList(Ref ref) {
     _realm = ref.read(realmProvider);
-    return ref.read(realmProvider).all<Exercise>();
+  }
+
+  // overload the "[]" operator to allow indexing
+  Exercise operator [](int index) {
+    return _realm.all<Exercise>()[index];
+  }
+
+  int length() {
+    return _realm.all<Exercise>().length;
+  }
+
+  // return stream of changes to exercise collection
+  Stream<RealmResultsChanges<Exercise>> changes() {
+    return _realm.all<Exercise>().changes;
   }
 
   void add(Exercise exercise) {
     _realm.write(() => _realm.add(exercise));
   }
 
-  void update(Exercise exercise) {
-    _realm.write(() => _realm.add(exercise, update: true));
-  }
-
   void delete(Exercise exercise) {
     _realm.write(() => _realm.delete(exercise));
   }
 
-  RealmResults<Exercise> get(ObjectId id) {
-    return _realm.query<Exercise>('id == $id');
+  void update(Exercise exercise) {
+    _realm.write(() => _realm.add(exercise, update: true));
   }
 }
 
-final exerciseListProvider =
-    NotifierProvider<ExerciseListNotifier, RealmResults<Exercise>>(
-        () => ExerciseListNotifier());
+final exerciseListProvider = Provider<ExerciseList>((ref) => ExerciseList(ref));

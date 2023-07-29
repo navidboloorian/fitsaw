@@ -18,14 +18,14 @@ class _ExerciseListState extends ConsumerState<ExerciseList> {
     final exerciseList = ref.watch(exerciseListProvider);
 
     return StreamBuilder(
-      stream: exerciseList.changes,
+      stream: exerciseList.changes(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const CircularProgressIndicator();
         }
 
         return ListView.builder(
-          itemCount: exerciseList.length + 1,
+          itemCount: exerciseList.length() + 1,
           itemBuilder: (context, index) {
             if (index == 0) {
               return SearchBox(_searchController);
