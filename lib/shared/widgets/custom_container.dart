@@ -10,8 +10,8 @@ class CustomContainer extends StatelessWidget {
   const CustomContainer({
     super.key,
     this.color = Palette.container1Background,
-    this.padding = Constants.containerPadding,
-    this.margin = Constants.containerMargin,
+    this.padding = const EdgeInsets.fromLTRB(10, 5, 10, 5),
+    this.margin = const EdgeInsets.fromLTRB(0, 0, 0, 10),
     required this.child,
   });
 
@@ -31,7 +31,7 @@ class CustomContainer extends StatelessWidget {
               color: Palette.containerBorder,
               width: 1,
             ),
-            borderRadius: Constants.containerBorderRadius,
+            borderRadius: BorderRadius.circular(5),
           ),
           child: Align(alignment: Alignment.centerLeft, child: child),
         ),

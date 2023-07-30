@@ -27,7 +27,7 @@ class BottomNavBar extends ConsumerWidget {
 
     List<GestureDetector> barItems = <GestureDetector>[];
 
-    // creates list of navigation bar buttons
+    // Creates list of navigation bar buttons.
     for (int i = 0; i < icons.length; i++) {
       String screen = icons.keys.elementAt(i);
       Color iconColor = icons[screen]!['color'];
@@ -39,13 +39,12 @@ class BottomNavBar extends ConsumerWidget {
       }
 
       barItems.add(
-        // attatch a separate gesture detector for each tab button
+        // Attatch a separate gesture detector for each tab button.
         GestureDetector(
           onTap: () {
             ref.read(navScreenProvider.notifier).state = screen;
             Navigator.pushReplacementNamed(context, screen);
           },
-          // had to make custom sections in order to use borders properly
           child: Container(
             width: 60,
             height: 48,
@@ -64,8 +63,8 @@ class BottomNavBar extends ConsumerWidget {
 
     return SizedBox(
       height: 70,
-      // used Row instead of BottomNavBar because it was really annoying to
-      // adjust the height of the BottomNavBar
+      // Used Row instead of BottomNavBar because it was really annoying to
+      // adjust the height of the BottomNavBar.
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: barItems,

@@ -32,7 +32,7 @@ class Tag extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // use Flexible to wrap text in container
+            // Use Flexible to wrap text in container.
             Flexible(
               child: Text(
                 name,

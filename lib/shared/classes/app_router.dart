@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class AppRouter {
   Route? onGenerateRoute(RouteSettings route) {
     switch (route.name) {
-      // the default page when the app starts
+      // The default page when the app starts.
       case '/':
       case 'routines':
         return PageRouteBuilder(
