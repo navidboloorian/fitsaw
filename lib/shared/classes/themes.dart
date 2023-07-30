@@ -15,7 +15,7 @@ class Themes {
         titleMedium: TextStyle(color: Palette.primaryText),
       ),
       appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Palette.canvas,
         foregroundColor: Palette.primaryText,
         centerTitle: true,
         elevation: 0,

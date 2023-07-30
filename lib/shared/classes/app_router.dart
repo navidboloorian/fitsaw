@@ -18,6 +18,10 @@ class AppRouter {
         return PageRouteBuilder(
           pageBuilder: (_, __, ___) => const Market(),
         );
+      case 'view_exercise':
+        return PageRouteBuilder(
+          pageBuilder: (_, __, ___) => const ViewExercise(),
+        );
       default:
         return null;
     }

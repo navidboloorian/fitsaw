@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+// class manages the list of tags entered into the tag text field
 class TagTextFieldListNotifier extends Notifier<List<String>> {
   @override
   List<String> build() {
@@ -16,10 +17,12 @@ class TagTextFieldListNotifier extends Notifier<List<String>> {
 
   void remove(String tag) {
     state.remove(tag);
-    state = state;
+
+    // spread operator triggers a rebuild so it's used instead of state = state
+    state = [...state];
   }
 }
 
-final tagTextFieldProvider =
+final tagTextFieldListProvider =
     NotifierProvider<TagTextFieldListNotifier, List<String>>(
         () => TagTextFieldListNotifier());

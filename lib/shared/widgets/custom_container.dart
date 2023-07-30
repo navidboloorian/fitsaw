@@ -19,20 +19,22 @@ class CustomContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       elevation: 1,
-      color: Colors.transparent,
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        margin: margin,
-        padding: padding,
-        decoration: BoxDecoration(
-          color: color,
-          border: Border.all(
-            color: Palette.containerBorder,
-            width: 1,
+      color: Palette.canvas,
+      child: Center(
+        child: Container(
+          width: MediaQuery.of(context).size.width * 0.9,
+          margin: margin,
+          padding: padding,
+          decoration: BoxDecoration(
+            color: color,
+            border: Border.all(
+              color: Palette.containerBorder,
+              width: 1,
+            ),
+            borderRadius: Constants.containerBorderRadius,
           ),
-          borderRadius: Constants.containerBorderRadius,
+          child: Align(alignment: Alignment.centerLeft, child: child),
         ),
-        child: Align(alignment: Alignment.centerLeft, child: child),
       ),
     );
   }
