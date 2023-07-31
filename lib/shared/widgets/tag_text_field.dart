@@ -63,6 +63,13 @@ class _TagTextFieldState extends ConsumerState<TagTextField> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+
+    _controller.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final tags = ref.watch(tagTextFieldListProvider);
 
@@ -71,6 +78,7 @@ class _TagTextFieldState extends ConsumerState<TagTextField> {
       onTap: ref.read(tagTextFieldListProvider.notifier).remove,
       isDismissible: true,
       child: TextFormField(
+        maxLines: null,
         controller: _controller,
         decoration: const InputDecoration(
           hintText: 'Tags (separate with commas)',

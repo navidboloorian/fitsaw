@@ -1,4 +1,5 @@
 import 'package:fitsaw/features/exercises/domain/domain.dart';
+import 'package:fitsaw/features/exercises/presentation/presentation.dart';
 import 'package:fitsaw/features/exercises/services/services.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
 import 'package:fitsaw/shared/providers/providers.dart';
@@ -112,6 +113,14 @@ class _ViewExerciseState extends ConsumerState<ViewExercise> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+
+    _nameController.dispose();
+    _descriptionController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: _onWillPop,
@@ -119,49 +128,12 @@ class _ViewExerciseState extends ConsumerState<ViewExercise> {
         appBar: CustomAppBar(
           actions: [CheckButton(_upsertExercise)],
         ),
-        body: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              CustomContainer(
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                    hintText: 'Exercise name',
-                    counterText: '',
-                  ),
-                  controller: _nameController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'A name is required';
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              SwitchButton(
-                left: 'Reps',
-                right: 'Time',
-                provider: _timedSwitchButton,
-              ),
-              SwitchButton(
-                left: 'Not Weighted',
-                right: 'Weighted',
-                provider: _weightedSwitchButton,
-              ),
-              CustomContainer(
-                child: TextFormField(
-                  minLines: 5,
-                  maxLines: null,
-                  decoration: const InputDecoration(
-                    hintText: 'Description',
-                    counterText: '',
-                  ),
-                  controller: _descriptionController,
-                ),
-              ),
-              const TagTextField(),
-            ],
-          ),
+        body: ViewExerciseForm(
+          formKey: _formKey,
+          nameController: _nameController,
+          descriptionController: _descriptionController,
+          weightedSwitchButton: _weightedSwitchButton,
+          timedSwitchButton: _timedSwitchButton,
         ),
       ),
     );

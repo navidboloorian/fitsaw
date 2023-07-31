@@ -22,6 +22,7 @@ class CustomContainer extends StatelessWidget {
       color: Palette.canvas,
       child: Center(
         child: Container(
+          constraints: const BoxConstraints(minHeight: 30),
           width: MediaQuery.of(context).size.width * 0.9,
           margin: margin,
           padding: padding,
