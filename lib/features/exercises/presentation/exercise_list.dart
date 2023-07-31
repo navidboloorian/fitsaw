@@ -36,14 +36,30 @@ class _ExerciseListState extends ConsumerState<ExerciseList> {
 
             Exercise exercise = exerciseList[index - 1];
 
-            return GestureDetector(
-              onTap: () => Navigator.pushNamed(
-                context,
-                'view_exercise',
-                arguments: PageArguments(isNew: false, exercise: exercise),
+            return Dismissible(
+              // Generates a unique key from the exercise's id.
+              key: ValueKey(exercise.id),
+              background: Container(
+                color: Palette.fitsawRed,
+                child: const Center(
+                  child: Icon(
+                    Icons.remove_circle_outline,
+                    color: Palette.darkText,
+                  ),
+                ),
               ),
-              child: CustomContainer(
-                child: Text(exercise.name),
+              onDismissed: (DismissDirection direction) =>
+                  ref.read(exerciseListProvider).delete(exercise),
+              child: GestureDetector(
+                onTap: () => Navigator.pushNamed(
+                  context,
+                  'view_exercise',
+                  arguments: PageArguments(isNew: false, exercise: exercise),
+                ),
+                child: TaggedContainer(
+                  tags: exercise.tags,
+                  child: Text(exercise.name),
+                ),
               ),
             );
           },

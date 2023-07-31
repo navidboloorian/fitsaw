@@ -21,7 +21,10 @@ class TaggedContainer extends StatelessWidget {
     return CustomContainer(
       child: Column(
         children: [
-          child,
+          Align(
+            alignment: Alignment.topLeft,
+            child: child,
+          ),
           tags.isEmpty
               ? const SizedBox.shrink()
               : const SizedBox(
