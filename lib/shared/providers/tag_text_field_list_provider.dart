@@ -8,7 +8,10 @@ class TagTextFieldListNotifier extends Notifier<List<String>> {
   }
 
   void set(List<String> tags) {
-    state = tags;
+    // A deep copy must be made because the alternative would result in
+    // alterations being made to the realm collection outside of a "write" block
+    // which is not permitted.
+    state = [...tags];
   }
 
   void add(String tag) {
@@ -20,6 +23,10 @@ class TagTextFieldListNotifier extends Notifier<List<String>> {
 
     // The spread operator triggers a rebuild so it's used instead of state = state.
     state = [...state];
+  }
+
+  void clear() {
+    state = [];
   }
 }
 

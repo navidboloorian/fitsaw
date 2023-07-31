@@ -10,14 +10,15 @@ class Exercises extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: const ExerciseList(),
-      backgroundColor: Palette.canvas,
       appBar: CustomAppBar(
         actions: [
           PlusButton(
             () => Navigator.pushNamed(
               context,
               'view_exercise',
+              arguments: PageArguments(isNew: true),
             ),
           )
         ],

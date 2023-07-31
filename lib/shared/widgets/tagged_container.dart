@@ -1,7 +1,7 @@
 import 'package:fitsaw/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
-// Displays child widget on the top and tag list on the bottom.
+/// Displays child widget on the top and tag list on the bottom.
 class TaggedContainer extends StatelessWidget {
   final List<String> tags;
   final Function(String)? onTap;

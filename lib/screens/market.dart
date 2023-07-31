@@ -8,6 +8,7 @@ class Market extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Center(child: Text('Market')),
       bottomNavigationBar: BottomNavBar(),
     );
