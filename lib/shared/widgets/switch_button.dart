@@ -19,7 +19,7 @@ class SwitchButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // read state
-    final bool switchButtonState = ref.watch(provider);
+    final switchButtonState = ref.watch(provider);
 
     return CustomContainer(
       padding: EdgeInsets.zero,

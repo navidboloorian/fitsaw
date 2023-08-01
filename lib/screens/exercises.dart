@@ -11,7 +11,9 @@ class Exercises extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: const ExerciseList(),
+      body: ListView(
+        children: const [SearchBox(), ExerciseList()],
+      ),
       appBar: CustomAppBar(
         actions: [
           PlusButton(

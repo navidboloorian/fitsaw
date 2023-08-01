@@ -1,6 +1,7 @@
 import 'package:fitsaw/features/exercises/domain/domain.dart';
 import 'package:fitsaw/features/exercises/services/services.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
+import 'package:fitsaw/shared/providers/providers.dart';
 import 'package:fitsaw/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,7 +15,62 @@ class ExerciseList extends ConsumerStatefulWidget {
 }
 
 class _ExerciseListState extends ConsumerState<ExerciseList> {
-  final _searchController = TextEditingController();
+  List<Widget> generateWidgetList(dynamic exerciseList) {
+    final searchQuery = ref.watch(searchQueryProvider);
+    List<Widget> list = [];
+
+    for (int i = 0; i < exerciseList.length(); i++) {
+      bool containsSearchQuery = false;
+      Exercise exercise = exerciseList[i];
+
+      if (exercise.name.toLowerCase().contains(searchQuery)) {
+        containsSearchQuery = true;
+      }
+
+      for (String tag in exercise.tags) {
+        if (tag.toLowerCase().contains(searchQuery)) {
+          containsSearchQuery = true;
+          break;
+        }
+      }
+
+      if (containsSearchQuery) {
+        list.add(
+          Dismissible(
+            // Generates a unique key from the exercise's id.
+            key: ValueKey(exercise.id),
+            background: Container(
+              color: Palette.fitsawRed,
+              child: const Center(
+                child: Icon(
+                  Icons.remove_circle_outline,
+                  color: Palette.darkText,
+                ),
+              ),
+            ),
+            onDismissed: (DismissDirection direction) =>
+                ref.read(exerciseListProvider).delete(exercise),
+            child: GestureDetector(
+              onTap: () => Navigator.pushNamed(
+                context,
+                'view_exercise',
+                arguments: PageArguments(isNew: false, exercise: exercise),
+              ),
+              child: TaggedContainer(
+                tags: exercise.tags,
+                child: Text(exercise.name),
+              ),
+            ),
+          ),
+        );
+
+        list.add(const SizedBox(
+          height: 10,
+        ));
+      }
+    }
+    return list;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,42 +83,9 @@ class _ExerciseListState extends ConsumerState<ExerciseList> {
           return const CircularProgressIndicator();
         }
 
-        return ListView.builder(
-          itemCount: exerciseList.length() + 1,
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              return SearchBox(_searchController);
-            }
-
-            Exercise exercise = exerciseList[index - 1];
-
-            return Dismissible(
-              // Generates a unique key from the exercise's id.
-              key: ValueKey(exercise.id),
-              background: Container(
-                color: Palette.fitsawRed,
-                child: const Center(
-                  child: Icon(
-                    Icons.remove_circle_outline,
-                    color: Palette.darkText,
-                  ),
-                ),
-              ),
-              onDismissed: (DismissDirection direction) =>
-                  ref.read(exerciseListProvider).delete(exercise),
-              child: GestureDetector(
-                onTap: () => Navigator.pushNamed(
-                  context,
-                  'view_exercise',
-                  arguments: PageArguments(isNew: false, exercise: exercise),
-                ),
-                child: TaggedContainer(
-                  tags: exercise.tags,
-                  child: Text(exercise.name),
-                ),
-              ),
-            );
-          },
+        return ExpandableSection(
+          title: 'text',
+          children: generateWidgetList(exerciseList),
         );
       },
     );

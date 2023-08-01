@@ -19,6 +19,7 @@ class TaggedContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomContainer(
+      margin: EdgeInsets.zero,
       child: Column(
         children: [
           Align(
