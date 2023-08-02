@@ -32,6 +32,13 @@ class AppRouter {
             exercise: arguments.exercise,
           ),
         );
+      case 'view_routine':
+        return MaterialPageRoute(
+          builder: (context) => ViewRoutine(
+            isNew: arguments.isNew!,
+            routine: arguments.routine,
+          ),
+        );
       default:
         return null;
     }

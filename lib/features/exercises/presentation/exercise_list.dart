@@ -43,7 +43,7 @@ class _ExerciseListState extends ConsumerState<ExerciseList> {
               color: Palette.fitsawRed,
               child: const Center(
                 child: Icon(
-                  Icons.remove_circle_outline,
+                  Icons.delete_outline,
                   color: Palette.darkText,
                 ),
               ),
@@ -84,7 +84,7 @@ class _ExerciseListState extends ConsumerState<ExerciseList> {
         }
 
         return ExpandableSection(
-          title: 'text',
+          title: 'Your Exercises',
           children: generateWidgetList(exerciseList),
         );
       },

@@ -17,16 +17,16 @@ class ExpandableSection extends StatefulWidget {
 }
 
 class _ExpandableSectionState extends State<ExpandableSection> {
-  bool expanded = false;
+  bool isExpanded = true;
   int itemCount = 0;
 
   // Default state is arrow pointing to the right (collapsed).
-  double turns = 3 / 4;
+  double turns = 0;
 
   void toggleExpandable() {
     setState(
       () {
-        if (expanded) {
+        if (isExpanded) {
           itemCount = 0;
           turns = 3 / 4;
         } else {
@@ -34,7 +34,7 @@ class _ExpandableSectionState extends State<ExpandableSection> {
           turns = 0;
         }
 
-        expanded = !expanded;
+        isExpanded = !isExpanded;
       },
     );
   }
@@ -43,7 +43,7 @@ class _ExpandableSectionState extends State<ExpandableSection> {
   /// items in the list. Previously, when a new item was added the list count
   /// wouldn't update if the list was already expanded.
   void syncItemCount() {
-    if (expanded) {
+    if (isExpanded) {
       itemCount = widget.children.length;
     }
   }

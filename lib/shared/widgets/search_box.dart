@@ -17,6 +17,11 @@ class _SearchBoxState extends ConsumerState<SearchBox> {
   void initState() {
     super.initState();
 
+    // Prevent old search queries from persisting.
+    Future(() {
+      ref.read(searchQueryProvider.notifier).state = '';
+    });
+
     // Update the search query state when text is inputted in the search field.
     // Cast to lower case for a standardized keyword comparison.
     _controller.addListener(() => ref.read(searchQueryProvider.notifier).state =
