@@ -1,4 +1,5 @@
 import 'package:fitsaw/features/routines/domain/domain.dart';
+import 'package:fitsaw/features/routines/presentation/presentation.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
 import 'package:fitsaw/shared/providers/providers.dart';
 import 'package:fitsaw/shared/widgets/widgets.dart';
@@ -61,9 +62,13 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: _onWillPop,
-      child: const Scaffold(
-        appBar: CustomAppBar(),
-        body: Placeholder(),
+      child: Scaffold(
+        appBar: const CustomAppBar(),
+        body: ViewRoutineForm(
+          formKey: _formKey,
+          nameController: _nameController,
+          descriptionController: _descriptionController,
+        ),
       ),
     );
   }
