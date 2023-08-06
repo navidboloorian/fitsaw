@@ -21,11 +21,9 @@ class TaggedContainer extends StatelessWidget {
     return CustomContainer(
       margin: EdgeInsets.zero,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Align(
-            alignment: Alignment.topLeft,
-            child: child,
-          ),
+          child,
           tags.isEmpty
               ? const SizedBox.shrink()
               : const SizedBox(

@@ -1,10 +1,9 @@
 import 'package:fitsaw/features/routines/domain/domain.dart';
 import 'package:fitsaw/features/routines/presentation/presentation.dart';
-import 'package:fitsaw/features/routines/services/routine_exercise_list_provider.dart';
-import 'package:fitsaw/shared/classes/classes.dart';
 import 'package:fitsaw/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fitsaw/features/routines/services/services.dart';
 
 class ViewRoutineForm extends ConsumerWidget {
   final GlobalKey<FormState> formKey;
@@ -23,11 +22,7 @@ class ViewRoutineForm extends ConsumerWidget {
 
     for (RoutineExerciseWrapper routineExercise in routineExerciseList) {
       list.add(
-        CustomContainer(
-          color: Palette.container2Background,
-          margin: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-          child: Text(routineExercise.exercise!.name),
-        ),
+        RoutineExerciseListItem(),
       );
     }
 
