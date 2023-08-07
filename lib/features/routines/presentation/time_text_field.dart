@@ -1,16 +1,16 @@
 import 'package:fitsaw/features/routines/services/services.dart';
 import 'package:flutter/material.dart';
 
-class TimedTextField extends StatefulWidget {
+class TimeTextField extends StatefulWidget {
   final TextEditingController controller;
 
-  const TimedTextField({super.key, required this.controller});
+  const TimeTextField({super.key, required this.controller});
 
   @override
-  State<TimedTextField> createState() => _TimedTextFieldState();
+  State<TimeTextField> createState() => _TimeTextFieldState();
 }
 
-class _TimedTextFieldState extends State<TimedTextField> {
+class _TimeTextFieldState extends State<TimeTextField> {
   @override
   void initState() {
     super.initState();
@@ -27,8 +27,10 @@ class _TimedTextFieldState extends State<TimedTextField> {
       },
       child: TextFormField(
         key: UniqueKey(),
+        textAlign: TextAlign.center,
         controller: widget.controller,
         decoration: const InputDecoration(hintText: '00:00'),
+        keyboardType: TextInputType.number,
         inputFormatters: [TimeInputFormatter()],
       ),
     );

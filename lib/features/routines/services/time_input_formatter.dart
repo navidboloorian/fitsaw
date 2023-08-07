@@ -1,11 +1,10 @@
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class TimeInputFormatter extends TextInputFormatter {
   final RegExp _expression;
-  TimeInputFormatter() : _expression = RegExp(r'^[0-9:]+$');
+  TimeInputFormatter() : _expression = RegExp(r'^[0-9]+:[0-9]+$');
 
   @override
   TextEditingValue formatEditUpdate(

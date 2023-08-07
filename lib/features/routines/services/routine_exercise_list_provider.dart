@@ -1,23 +1,22 @@
 import 'package:fitsaw/features/routines/domain/routine.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class RoutineExerciseListNotifier
-    extends Notifier<List<RoutineExerciseWrapper>> {
+class RoutineExerciseListNotifier extends Notifier<List<Map<String, dynamic>>> {
   @override
-  List<RoutineExerciseWrapper> build() {
+  List<Map<String, dynamic>> build() {
     return [];
   }
 
-  void set(List<RoutineExerciseWrapper> exercises) {
-    state = [...exercises];
+  void set(List<Map<String, dynamic>> routineExercises) {
+    state = [...routineExercises];
   }
 
-  void add(RoutineExerciseWrapper exercise) {
-    state = [...state, exercise];
+  void add(Map<String, dynamic> routineExercise) {
+    state = [...state, routineExercise];
   }
 
-  void remove(RoutineExerciseWrapper exercise) {
-    state.remove(exercise);
+  void remove(Map<String, dynamic> routineExercise) {
+    state.remove(routineExercise);
     state = [...state];
   }
 
@@ -27,5 +26,5 @@ class RoutineExerciseListNotifier
 }
 
 final routineExerciseListProvider =
-    NotifierProvider<RoutineExerciseListNotifier, List<RoutineExerciseWrapper>>(
+    NotifierProvider<RoutineExerciseListNotifier, List<Map<String, dynamic>>>(
         () => RoutineExerciseListNotifier());

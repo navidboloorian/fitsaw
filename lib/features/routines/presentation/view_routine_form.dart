@@ -1,3 +1,4 @@
+import 'package:fitsaw/features/exercises/domain/domain.dart';
 import 'package:fitsaw/features/routines/domain/domain.dart';
 import 'package:fitsaw/features/routines/presentation/presentation.dart';
 import 'package:fitsaw/shared/widgets/widgets.dart';
@@ -17,13 +18,12 @@ class ViewRoutineForm extends ConsumerWidget {
     required this.descriptionController,
   });
 
-  List<Widget> generateRoutineExerciseList(dynamic routineExerciseList) {
+  List<Widget> generateRoutineExerciseList(
+      List<Map<String, dynamic>> routineExerciseList) {
     List<Widget> list = [];
 
-    for (RoutineExerciseWrapper routineExercise in routineExerciseList) {
-      list.add(
-        RoutineExerciseListItem(),
-      );
+    for (Map<String, dynamic> routineExerciseMap in routineExerciseList) {
+      list.add(RoutineExerciseListItem(routineExerciseMap: routineExerciseMap));
     }
 
     return list;
@@ -56,7 +56,7 @@ class ViewRoutineForm extends ConsumerWidget {
               children: [
                 ...generateRoutineExerciseList(
                     ref.watch(routineExerciseListProvider)),
-                RoutineExerciseAutocomplete(),
+                const RoutineExerciseAutocomplete(),
               ],
             ),
           ),
