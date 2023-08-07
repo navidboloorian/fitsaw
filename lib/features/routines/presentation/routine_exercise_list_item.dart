@@ -1,9 +1,9 @@
 import 'package:fitsaw/features/routines/domain/domain.dart';
+import 'package:fitsaw/features/routines/presentation/presentation.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
 import 'package:fitsaw/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fitsaw/features/routines/services/services.dart';
 
 class RoutineExerciseListItem extends ConsumerWidget {
   const RoutineExerciseListItem({super.key});
@@ -20,27 +20,45 @@ class RoutineExerciseListItem extends ConsumerWidget {
           const Divider(
             color: Palette.darkText,
           ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
+          Wrap(
+            direction: Axis.horizontal,
+            alignment: WrapAlignment.start,
             children: [
-              SizedBox(
+              TextFieldColumn(
                 width: 43,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      textAlign: TextAlign.center,
-                      decoration: const InputDecoration(hintText: '00:00'),
-                      inputFormatters: [TimeInputFormatter()],
-                    ),
-                    Text(
-                      'Rest',
-                      style: TextStyle(color: Palette.secondaryText),
-                    ),
-                  ],
-                ),
-              ),
+                label: 'Rest',
+                textField: TimedTextField(controller: TextEditingController()),
+              )
             ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class TextFieldColumn extends StatelessWidget {
+  final double width;
+  final String label;
+  final Widget textField;
+
+  const TextFieldColumn({
+    super.key,
+    required this.width,
+    required this.label,
+    required this.textField,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width,
+      child: Column(
+        children: [
+          textField,
+          Text(
+            label,
+            style: const TextStyle(color: Palette.secondaryText),
           ),
         ],
       ),

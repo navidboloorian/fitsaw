@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class TimeValidation {
+class TimeInputValidator {
   static int toSeconds(String time) {
     if (time.length < 5) {
       return 0;
@@ -43,7 +43,9 @@ class TimeValidation {
   }
 
   // Converts overflowing minutes/seconds (> 60 in either field) to a valid time.
-  static void validate(String time, TextEditingController controller) {
+  static void validate(TextEditingController controller) {
+    String time = controller.text;
+
     if (time.isNotEmpty) {
       int minutes = int.parse(time.substring(0, 2));
       int seconds = int.parse(time.substring(3, 5));

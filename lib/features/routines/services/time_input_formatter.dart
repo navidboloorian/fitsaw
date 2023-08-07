@@ -80,15 +80,9 @@ class TimeInputFormatter extends TextInputFormatter {
         }
       }
 
-      if (leftSubstring.isEmpty && rightSubstring.isEmpty) {
-        // Set the value of an empty input to "00:00." This is used to set the
-        // initial value.
-        newText = '00:00';
-      } else {
-        newText = '$leftSubstring:$rightSubstring';
-      }
+      newText = '$leftSubstring:$rightSubstring';
 
-      // Move cursor to the rightmost point of the textfield.
+      // Move cursor to the rightmost point of the TextField.
       newSelection = newValue.selection.copyWith(
         baseOffset: math.min(newText.length, newText.length),
         extentOffset: math.min(newText.length, newText.length),
