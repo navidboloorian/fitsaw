@@ -1,3 +1,4 @@
+import 'package:fitsaw/features/routines/presentation/presentation.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
 import 'package:fitsaw/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,7 @@ class Routines extends ConsumerWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: ListView(
-        children: const [SearchBox()],
+        children: const [SearchBox(), RoutineList()],
       ),
       appBar: CustomAppBar(
         actions: [

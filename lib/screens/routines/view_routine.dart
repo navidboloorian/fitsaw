@@ -1,5 +1,7 @@
+import 'package:fitsaw/features/exercises/domain/domain.dart';
 import 'package:fitsaw/features/routines/domain/domain.dart';
 import 'package:fitsaw/features/routines/presentation/presentation.dart';
+import 'package:fitsaw/features/routines/services/services.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
 import 'package:fitsaw/shared/providers/providers.dart';
 import 'package:fitsaw/shared/widgets/widgets.dart';
@@ -30,7 +32,107 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
     ref.read(tagTextFieldListProvider.notifier).clear();
   }
 
-  void _upsertRoutine() {}
+  List<RoutineExerciseWrapper> _generateRoutineExerciseList() {
+    List<RoutineExerciseWrapper> list = [];
+
+    for (Map<String, dynamic> routineExercise
+        in ref.read(routineExerciseListProvider)) {
+      int? reps;
+      int? time;
+      int? weight;
+
+      if (routineExercise['repController'] != null) {
+        reps = int.parse(
+            (routineExercise['repController'] as TextEditingController).text);
+      }
+
+      if (routineExercise['timeController'] != null) {
+        time = TimeInputValidator.toSeconds(
+            (routineExercise['timeController'] as TextEditingController).text);
+      }
+
+      if (routineExercise['weightController'] != null) {
+        weight = TimeInputValidator.toSeconds(
+            (routineExercise['weightController'] as TextEditingController)
+                .text);
+      }
+
+      list.add(
+        RoutineExerciseWrapper(
+          exercise: (routineExercise['exercise'] as Exercise),
+          sets: int.parse(
+              (routineExercise['setController'] as TextEditingController).text),
+          reps: reps,
+          time: time,
+          weight: weight,
+          rest: TimeInputValidator.toSeconds(
+              (routineExercise['restController'] as TextEditingController)
+                  .text),
+        ),
+      );
+    }
+
+    return list;
+  }
+
+  bool _formHasErrors() {
+    if (ref.read(routineExerciseListProvider).isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Palette.fitsawRed,
+          duration: Duration(milliseconds: 500),
+          content: Text(
+            'A routine must have at least one exercise.',
+            style: TextStyle(color: Palette.darkText),
+          ),
+        ),
+      );
+
+      return true;
+    } else if (!_formKey.currentState!.validate()) {
+      return true;
+    }
+
+    return false;
+  }
+
+  void _upsertRoutine() {
+    if (!_formHasErrors()) {
+      ObjectId id = widget.isNew ? ObjectId() : widget.routine!.id;
+      String name = _nameController.text;
+      String description = _descriptionController.text;
+      List<String> tags = ref.read(tagTextFieldListProvider);
+      List<RoutineExerciseWrapper> exercises = _generateRoutineExerciseList();
+
+      ref.read(routineListProvider).upsert(
+            Routine(
+              id,
+              name,
+              description: description,
+              tags: tags,
+              exercises: exercises,
+            ),
+          );
+
+      String snackbarMessage =
+          widget.isNew ? 'Routine created!' : 'Routine updated!';
+
+      Navigator.pop(context);
+
+      _resetProviders();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Palette.fitsawGreen,
+          duration: const Duration(milliseconds: 500),
+          content: Text(
+            snackbarMessage,
+            style: const TextStyle(color: Palette.darkText),
+          ),
+        ),
+      );
+    }
+  }
 
   void _populateForm() {}
 
@@ -63,7 +165,9 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        appBar: const CustomAppBar(),
+        appBar: CustomAppBar(
+          actions: [CheckButton(_upsertRoutine)],
+        ),
         body: ViewRoutineForm(
           formKey: _formKey,
           nameController: _nameController,

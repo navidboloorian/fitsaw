@@ -1,5 +1,3 @@
-import 'package:fitsaw/features/exercises/domain/domain.dart';
-import 'package:fitsaw/features/routines/domain/domain.dart';
 import 'package:fitsaw/features/routines/presentation/presentation.dart';
 import 'package:fitsaw/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -18,15 +16,56 @@ class ViewRoutineForm extends ConsumerWidget {
     required this.descriptionController,
   });
 
-  List<Widget> generateRoutineExerciseList(
-      List<Map<String, dynamic>> routineExerciseList) {
+  List<Widget> _generateRoutineExerciseList(WidgetRef ref) {
     List<Widget> list = [];
 
-    for (Map<String, dynamic> routineExerciseMap in routineExerciseList) {
-      list.add(RoutineExerciseListItem(routineExerciseMap: routineExerciseMap));
+    for (int i = 0; i < ref.watch(routineExerciseListProvider).length; i++) {
+      Map<String, dynamic> routineExercise =
+          ref.watch(routineExerciseListProvider)[i];
+
+      list.add(
+        Dismissible(
+          key: UniqueKey(),
+          onDismissed: (DismissDirection direction) {
+            ref.read(routineExerciseListProvider.notifier).removeAt(i);
+          },
+          child: RoutineExerciseListItem(routineExercise: routineExercise),
+        ),
+      );
     }
 
     return list;
+  }
+
+  // Disables shadow and other default stylings upon dragging an element in the
+  // reorderable list.
+  Widget _reorderableDecorator(
+      Widget child, int index, Animation<double> animation) {
+    return AnimatedBuilder(
+      animation: animation,
+      builder: (BuildContext context, Widget? child) {
+        return Material(
+          elevation: 0,
+          color: Colors.transparent,
+          shadowColor: Colors.transparent,
+          child: child,
+        );
+      },
+      child: child,
+    );
+  }
+
+  void _onReorder(int oldIndex, int newIndex, WidgetRef ref) {
+    if (oldIndex < newIndex) {
+      newIndex--;
+    }
+
+    final Map<String, dynamic> routineExercise =
+        ref.read(routineExerciseListProvider.notifier).removeAt(oldIndex);
+
+    ref
+        .read(routineExerciseListProvider.notifier)
+        .insert(newIndex, routineExercise);
   }
 
   @override
@@ -39,7 +78,7 @@ class ViewRoutineForm extends ConsumerWidget {
             child: TextFormField(
               maxLines: null,
               decoration: const InputDecoration(
-                hintText: 'Exercise name',
+                hintText: 'Routine name',
                 counterText: '',
               ),
               controller: nameController,
@@ -54,8 +93,13 @@ class ViewRoutineForm extends ConsumerWidget {
           CustomContainer(
             child: Column(
               children: [
-                ...generateRoutineExerciseList(
-                    ref.watch(routineExerciseListProvider)),
+                ReorderableListView(
+                  proxyDecorator: _reorderableDecorator,
+                  shrinkWrap: true,
+                  onReorder: (oldIndex, newIndex) =>
+                      _onReorder(oldIndex, newIndex, ref),
+                  children: _generateRoutineExerciseList(ref),
+                ),
                 const RoutineExerciseAutocomplete(),
               ],
             ),

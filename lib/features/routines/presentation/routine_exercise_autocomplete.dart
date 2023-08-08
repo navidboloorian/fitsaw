@@ -54,23 +54,23 @@ class RoutineExerciseAutocomplete extends ConsumerWidget {
         );
       },
       onSelected: (option) {
-        Map<String, dynamic> routineExerciseMap = {
+        Map<String, dynamic> routineExercise = {
           'exercise': option,
           'restController': TextEditingController(),
           'setController': TextEditingController(),
         };
 
         if (option.isTimed) {
-          routineExerciseMap['timeController'] = TextEditingController();
+          routineExercise['timeController'] = TextEditingController();
         } else {
-          routineExerciseMap['repController'] = TextEditingController();
+          routineExercise['repController'] = TextEditingController();
         }
 
         if (option.isWeighted) {
-          routineExerciseMap['weightController'] = TextEditingController();
+          routineExercise['weightController'] = TextEditingController();
         }
 
-        ref.read(routineExerciseListProvider.notifier).add(routineExerciseMap);
+        ref.read(routineExerciseListProvider.notifier).add(routineExercise);
       },
       optionsViewBuilder: (
         context,
@@ -83,8 +83,10 @@ class RoutineExerciseAutocomplete extends ConsumerWidget {
           alignment: Alignment.topLeft,
           padding: EdgeInsets.zero,
           height: 33.0 * options.length,
+          margin: EdgeInsets.zero,
           boxConstraints: const BoxConstraints(maxHeight: 99),
           child: ListView.separated(
+            padding: EdgeInsets.zero,
             separatorBuilder: (context, index) => const Divider(
               height: 0,
               color: Palette.darkText,

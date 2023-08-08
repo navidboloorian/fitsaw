@@ -82,18 +82,20 @@ class Routine extends _Routine with RealmEntity, RealmObjectBase, RealmObject {
 
 class RoutineExerciseWrapper extends _RoutineExerciseWrapper
     with RealmEntity, RealmObjectBase, RealmObject {
-  RoutineExerciseWrapper(
-    int sets, {
+  RoutineExerciseWrapper({
     Exercise? exercise,
+    int? sets,
     int? reps,
     int? time,
     int? rest,
+    int? weight,
   }) {
     RealmObjectBase.set(this, 'exercise', exercise);
     RealmObjectBase.set(this, 'sets', sets);
     RealmObjectBase.set(this, 'reps', reps);
     RealmObjectBase.set(this, 'time', time);
     RealmObjectBase.set(this, 'rest', rest);
+    RealmObjectBase.set(this, 'weight', weight);
   }
 
   RoutineExerciseWrapper._();
@@ -105,9 +107,9 @@ class RoutineExerciseWrapper extends _RoutineExerciseWrapper
   set exercise(covariant Exercise? value) => throw RealmUnsupportedSetError();
 
   @override
-  int get sets => RealmObjectBase.get<int>(this, 'sets') as int;
+  int? get sets => RealmObjectBase.get<int>(this, 'sets') as int?;
   @override
-  set sets(int value) => throw RealmUnsupportedSetError();
+  set sets(int? value) => throw RealmUnsupportedSetError();
 
   @override
   int? get reps => RealmObjectBase.get<int>(this, 'reps') as int?;
@@ -125,6 +127,11 @@ class RoutineExerciseWrapper extends _RoutineExerciseWrapper
   set rest(int? value) => throw RealmUnsupportedSetError();
 
   @override
+  int? get weight => RealmObjectBase.get<int>(this, 'weight') as int?;
+  @override
+  set weight(int? value) => throw RealmUnsupportedSetError();
+
+  @override
   Stream<RealmObjectChanges<RoutineExerciseWrapper>> get changes =>
       RealmObjectBase.getChanges<RoutineExerciseWrapper>(this);
 
@@ -140,10 +147,11 @@ class RoutineExerciseWrapper extends _RoutineExerciseWrapper
         'RoutineExerciseWrapper', [
       SchemaProperty('exercise', RealmPropertyType.object,
           optional: true, linkTarget: 'Exercise'),
-      SchemaProperty('sets', RealmPropertyType.int),
+      SchemaProperty('sets', RealmPropertyType.int, optional: true),
       SchemaProperty('reps', RealmPropertyType.int, optional: true),
       SchemaProperty('time', RealmPropertyType.int, optional: true),
       SchemaProperty('rest', RealmPropertyType.int, optional: true),
+      SchemaProperty('weight', RealmPropertyType.int, optional: true),
     ]);
   }
 }

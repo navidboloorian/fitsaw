@@ -6,27 +6,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class RoutineExerciseListItem extends ConsumerWidget {
-  final Map<String, dynamic> routineExerciseMap;
+  final Map<String, dynamic> routineExercise;
 
   late final List<TextFieldColumn> _textFieldColumns;
   late final String _exerciseName;
 
-  RoutineExerciseListItem({super.key, required this.routineExerciseMap}) {
-    _exerciseName = (routineExerciseMap['exercise'] as Exercise).name;
+  RoutineExerciseListItem({super.key, required this.routineExercise}) {
+    _exerciseName = (routineExercise['exercise'] as Exercise).name;
     _textFieldColumns = [];
 
     _generateTextFieldColumns();
   }
 
   void _generateTextFieldColumns() {
-    routineExerciseMap.forEach(
+    routineExercise.forEach(
       (key, value) {
         switch (key) {
           case 'restController':
             {
               _textFieldColumns.add(
                 TextFieldColumn(
-                  width: 43,
+                  width: 44,
                   label: 'Rest',
                   textField: TimeTextField(controller: value),
                 ),
@@ -48,7 +48,7 @@ class RoutineExerciseListItem extends ConsumerWidget {
             {
               _textFieldColumns.add(
                 TextFieldColumn(
-                  width: 43,
+                  width: 44,
                   label: 'Time',
                   textField: TimeTextField(controller: value),
                 ),

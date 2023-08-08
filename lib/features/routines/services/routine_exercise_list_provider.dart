@@ -1,10 +1,31 @@
-import 'package:fitsaw/features/routines/domain/routine.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class RoutineExerciseListNotifier extends Notifier<List<Map<String, dynamic>>> {
   @override
   List<Map<String, dynamic>> build() {
     return [];
+  }
+
+  Map<String, dynamic> removeAt(int index) {
+    Map<String, dynamic> routineExercise = state.removeAt(index);
+
+    set(state);
+
+    return routineExercise;
+  }
+
+  void disposeControllers(Map<String, dynamic> routineExercise) {
+    routineExercise.forEach((key, value) {
+      if (value is TextEditingController) {
+        value.dispose();
+      }
+    });
+  }
+
+  void insert(int index, Map<String, dynamic> routineExercise) {
+    state.insert(index, routineExercise);
+    set(state);
   }
 
   void set(List<Map<String, dynamic>> routineExercises) {
@@ -17,7 +38,7 @@ class RoutineExerciseListNotifier extends Notifier<List<Map<String, dynamic>>> {
 
   void remove(Map<String, dynamic> routineExercise) {
     state.remove(routineExercise);
-    state = [...state];
+    set(state);
   }
 
   void clear() {
