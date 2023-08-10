@@ -42,6 +42,14 @@ class RoutineExerciseListNotifier extends Notifier<List<Map<String, dynamic>>> {
   }
 
   void clear() {
+    for (Map<String, dynamic> routineExercise in state) {
+      routineExercise.forEach((key, value) {
+        if (value != null && value is TextEditingController) {
+          value.dispose();
+        }
+      });
+    }
+
     state = [];
   }
 }

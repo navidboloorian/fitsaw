@@ -30,6 +30,7 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
 
   void _resetProviders() {
     ref.read(tagTextFieldListProvider.notifier).clear();
+    ref.read(routineExerciseListProvider.notifier).clear();
   }
 
   List<RoutineExerciseWrapper> _generateRoutineExerciseList() {
@@ -134,7 +135,63 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
     }
   }
 
-  void _populateForm() {}
+  List<Map<String, dynamic>> _parseExistingExercises() {
+    List<Map<String, dynamic>> list = [];
+
+    for (RoutineExerciseWrapper routineExercise in widget.routine!.exercises) {
+      Map<String, dynamic> routineExerciseMap = {
+        'exercise': routineExercise.exercise
+      };
+
+      TextEditingController restController = TextEditingController();
+      restController.text = TimeInputValidator.toTime(routineExercise.rest!);
+      routineExerciseMap['restController'] = restController;
+
+      TextEditingController setController = TextEditingController();
+      setController.text = TimeInputValidator.toTime(routineExercise.sets!);
+      routineExerciseMap['setController'] = setController;
+
+      if (routineExercise.weight != null) {
+        TextEditingController weightController = TextEditingController();
+        weightController.text =
+            TimeInputValidator.toTime(routineExercise.weight!);
+
+        routineExerciseMap['weightController'] = weightController;
+      }
+
+      if (routineExercise.reps != null) {
+        TextEditingController repController = TextEditingController();
+        repController.text = TimeInputValidator.toTime(routineExercise.reps!);
+
+        routineExerciseMap['repController'] = repController;
+      } else {
+        TextEditingController timeController = TextEditingController();
+        timeController.text = TimeInputValidator.toTime(routineExercise.time!);
+
+        routineExerciseMap['repController'] = timeController;
+      }
+
+      list.add(routineExerciseMap);
+    }
+
+    return list;
+  }
+
+  void _populateForm() {
+    _nameController.text = widget.routine!.name;
+
+    if (widget.routine!.description != null) {
+      _descriptionController.text = widget.routine!.description!;
+    }
+
+    // Uses "Future" to avoid provider being updated before widget is built out.
+    Future(() {
+      ref.read(tagTextFieldListProvider.notifier).set(widget.routine!.tags);
+      ref
+          .read(routineExerciseListProvider.notifier)
+          .set(_parseExistingExercises());
+    });
+  }
 
   /// Clear form/reset providers if user uses the back button.
   Future<bool> _onWillPop() async {
