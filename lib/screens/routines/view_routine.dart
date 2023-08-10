@@ -1,7 +1,8 @@
-import 'package:fitsaw/features/exercises/domain/domain.dart';
-import 'package:fitsaw/features/routines/domain/domain.dart';
-import 'package:fitsaw/features/routines/presentation/presentation.dart';
-import 'package:fitsaw/features/routines/services/services.dart';
+import 'package:fitsaw/features/exercise_list/domain/domain.dart';
+import 'package:fitsaw/features/routine_list/domain/domain.dart';
+import 'package:fitsaw/features/routine_list/services/services.dart';
+import 'package:fitsaw/features/view_routine/presentation/presentation.dart';
+import 'package:fitsaw/features/view_routine/services/services.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
 import 'package:fitsaw/shared/providers/providers.dart';
 import 'package:fitsaw/shared/widgets/widgets.dart';
@@ -151,15 +152,6 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
       setController.text = routineExercise.sets!.toString();
       routineExerciseMap['setController'] = setController;
 
-      print(setController);
-
-      if (routineExercise.weight != null) {
-        TextEditingController weightController = TextEditingController();
-        weightController.text = routineExercise.weight!.toString();
-
-        routineExerciseMap['weightController'] = weightController;
-      }
-
       if (routineExercise.reps != null) {
         TextEditingController repController = TextEditingController();
         repController.text = routineExercise.reps!.toString();
@@ -169,7 +161,14 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
         TextEditingController timeController = TextEditingController();
         timeController.text = TimeInputValidator.toTime(routineExercise.time!);
 
-        routineExerciseMap['repController'] = timeController;
+        routineExerciseMap['timeController'] = timeController;
+      }
+
+      if (routineExercise.weight != null) {
+        TextEditingController weightController = TextEditingController();
+        weightController.text = routineExercise.weight!.toString();
+
+        routineExerciseMap['weightController'] = weightController;
       }
 
       list.add(routineExerciseMap);

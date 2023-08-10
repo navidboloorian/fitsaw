@@ -1,5 +1,5 @@
 import 'package:realm/realm.dart';
-import 'package:fitsaw/features/exercises/domain/domain.dart';
+import 'package:fitsaw/features/exercise_list/domain/domain.dart';
 
 part 'routine.g.dart';
 

@@ -1,5 +1,5 @@
-import 'package:fitsaw/features/exercises/domain/domain.dart';
-import 'package:fitsaw/features/routines/domain/domain.dart';
+import 'package:fitsaw/features/exercise_list/domain/domain.dart';
+import 'package:fitsaw/features/routine_list/domain/domain.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:realm/realm.dart';
 

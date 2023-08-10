@@ -1,5 +1,5 @@
-import 'package:fitsaw/features/exercises/domain/domain.dart';
-import 'package:fitsaw/features/routines/presentation/presentation.dart';
+import 'package:fitsaw/features/exercise_list/domain/domain.dart';
+import 'package:fitsaw/features/view_routine/presentation/presentation.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
 import 'package:fitsaw/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';

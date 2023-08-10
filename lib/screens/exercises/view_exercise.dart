@@ -1,6 +1,6 @@
-import 'package:fitsaw/features/exercises/domain/domain.dart';
-import 'package:fitsaw/features/exercises/presentation/presentation.dart';
-import 'package:fitsaw/features/exercises/services/services.dart';
+import 'package:fitsaw/features/exercise_list/domain/domain.dart';
+import 'package:fitsaw/features/view_exercise/presentation/presentation.dart';
+import 'package:fitsaw/features/exercise_list/services/services.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
 import 'package:fitsaw/shared/providers/providers.dart';
 import 'package:fitsaw/shared/widgets/widgets.dart';

@@ -1,33 +1,33 @@
-import 'package:fitsaw/features/exercises/domain/domain.dart';
-import 'package:fitsaw/features/exercises/services/services.dart';
+import 'package:fitsaw/features/routine_list/domain/domain.dart';
+import 'package:fitsaw/features/routine_list/services/services.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
 import 'package:fitsaw/shared/providers/providers.dart';
 import 'package:fitsaw/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// Visual representation of the exercise list.
-class ExerciseList extends ConsumerStatefulWidget {
-  const ExerciseList({super.key});
+/// Visual representation of the routine list.
+class RoutineList extends ConsumerStatefulWidget {
+  const RoutineList({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _ExerciseListState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _RoutineListState();
 }
 
-class _ExerciseListState extends ConsumerState<ExerciseList> {
-  List<Widget> generateWidgetList(dynamic exerciseList) {
+class _RoutineListState extends ConsumerState<RoutineList> {
+  List<Widget> generateWidgetList(dynamic routineList) {
     final searchQuery = ref.watch(searchQueryProvider);
     List<Widget> list = [];
 
-    for (int i = 0; i < exerciseList.length(); i++) {
+    for (int i = 0; i < routineList.length(); i++) {
       bool containsSearchQuery = false;
-      Exercise exercise = exerciseList[i];
+      Routine routine = routineList[i];
 
-      if (exercise.name.toLowerCase().contains(searchQuery)) {
+      if (routine.name.toLowerCase().contains(searchQuery)) {
         containsSearchQuery = true;
       }
 
-      for (String tag in exercise.tags) {
+      for (String tag in routine.tags) {
         if (tag.toLowerCase().contains(searchQuery)) {
           containsSearchQuery = true;
           break;
@@ -37,8 +37,8 @@ class _ExerciseListState extends ConsumerState<ExerciseList> {
       if (containsSearchQuery) {
         list.add(
           Dismissible(
-            // Generates a unique key from the exercise's id.
-            key: ValueKey(exercise.id),
+            // Generates a unique key from the routine's id.
+            key: ValueKey(routine.id),
             background: Container(
               color: Palette.fitsawRed,
               child: const Center(
@@ -49,16 +49,16 @@ class _ExerciseListState extends ConsumerState<ExerciseList> {
               ),
             ),
             onDismissed: (DismissDirection direction) =>
-                ref.read(exerciseListProvider).delete(exercise),
+                ref.read(routineListProvider).delete(routine),
             child: GestureDetector(
               onTap: () => Navigator.pushNamed(
                 context,
-                'view_exercise',
-                arguments: PageArguments(isNew: false, exercise: exercise),
+                'view_routine',
+                arguments: PageArguments(isNew: false, routine: routine),
               ),
               child: TaggedContainer(
-                tags: exercise.tags,
-                child: Text(exercise.name),
+                tags: routine.tags,
+                child: Text(routine.name),
               ),
             ),
           ),
@@ -74,18 +74,18 @@ class _ExerciseListState extends ConsumerState<ExerciseList> {
 
   @override
   Widget build(BuildContext context) {
-    final exerciseList = ref.watch(exerciseListProvider);
+    final routineList = ref.watch(routineListProvider);
 
     return StreamBuilder(
-      stream: exerciseList.changes(),
+      stream: routineList.changes(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const CircularProgressIndicator();
         }
 
         return ExpandableSection(
-          title: 'Your Exercises',
-          children: generateWidgetList(exerciseList),
+          title: 'Your Routines',
+          children: generateWidgetList(routineList),
         );
       },
     );

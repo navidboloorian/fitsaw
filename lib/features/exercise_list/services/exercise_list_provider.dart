@@ -1,6 +1,6 @@
 import 'package:fitsaw/shared/providers/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fitsaw/features/exercises/domain/domain.dart';
+import 'package:fitsaw/features/exercise_list/domain/domain.dart';
 import 'package:realm/realm.dart';
 
 /// Interfaces with exercise collection in realm.

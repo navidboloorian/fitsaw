@@ -1,8 +1,8 @@
-import 'package:fitsaw/features/routines/presentation/presentation.dart';
+import 'package:fitsaw/features/view_routine/presentation/presentation.dart';
 import 'package:fitsaw/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fitsaw/features/routines/services/services.dart';
+import 'package:fitsaw/features/view_routine/services/services.dart';
 
 class ViewRoutineForm extends ConsumerWidget {
   final GlobalKey<FormState> formKey;
