@@ -17,7 +17,10 @@ class _NumberTextFieldState extends State<NumberTextField> {
   @override
   void initState() {
     super.initState();
-    widget.controller.text = '1';
+
+    if (widget.controller.text.isEmpty) {
+      widget.controller.text = '1';
+    }
   }
 
   @override

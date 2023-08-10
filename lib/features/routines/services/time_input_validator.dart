@@ -50,6 +50,9 @@ class TimeInputValidator {
       int minutes = int.parse(time.substring(0, 2));
       int seconds = int.parse(time.substring(3, 5));
 
+      String minutesString;
+      String secondsString;
+
       if (seconds >= 60 || minutes >= 60) {
         if (seconds >= 60) {
           minutes++;
@@ -60,7 +63,14 @@ class TimeInputValidator {
           minutes = 59;
         }
 
-        String validatedTime = '$minutes:$seconds';
+        minutesString = minutes.toString();
+        secondsString = seconds.toString();
+
+        if (secondsString.length < 2) {
+          secondsString = '0$secondsString';
+        }
+
+        String validatedTime = '$minutesString:$secondsString';
 
         if (validatedTime.length < 5) {
           // Pad extra zero in minutes column.

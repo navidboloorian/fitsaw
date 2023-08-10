@@ -14,7 +14,10 @@ class _TimeTextFieldState extends State<TimeTextField> {
   @override
   void initState() {
     super.initState();
-    widget.controller.text = '00:00';
+
+    if (widget.controller.text.isEmpty) {
+      widget.controller.text = '00:00';
+    }
   }
 
   @override

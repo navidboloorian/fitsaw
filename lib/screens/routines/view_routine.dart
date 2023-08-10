@@ -148,20 +148,21 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
       routineExerciseMap['restController'] = restController;
 
       TextEditingController setController = TextEditingController();
-      setController.text = TimeInputValidator.toTime(routineExercise.sets!);
+      setController.text = routineExercise.sets!.toString();
       routineExerciseMap['setController'] = setController;
+
+      print(setController);
 
       if (routineExercise.weight != null) {
         TextEditingController weightController = TextEditingController();
-        weightController.text =
-            TimeInputValidator.toTime(routineExercise.weight!);
+        weightController.text = routineExercise.weight!.toString();
 
         routineExerciseMap['weightController'] = weightController;
       }
 
       if (routineExercise.reps != null) {
         TextEditingController repController = TextEditingController();
-        repController.text = TimeInputValidator.toTime(routineExercise.reps!);
+        repController.text = routineExercise.reps!.toString();
 
         routineExerciseMap['repController'] = repController;
       } else {
