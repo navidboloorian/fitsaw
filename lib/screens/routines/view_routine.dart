@@ -222,6 +222,8 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
+        floatingActionButton:
+            CheckButton(() => Navigator.pushNamed(context, 'active_routine')),
         appBar: CustomAppBar(
           actions: [CheckButton(_upsertRoutine)],
         ),

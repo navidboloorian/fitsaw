@@ -13,7 +13,7 @@ class RoutineList {
 
   /// Overload the "[]" operator to allow indexing.
   Routine operator [](int index) {
-    return _realm.all<Routine>()[index];
+    return _realm.query<Routine>('TRUEPREDICATE SORT(name ASC)')[index];
   }
 
   int length() {

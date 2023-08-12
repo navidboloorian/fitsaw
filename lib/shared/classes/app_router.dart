@@ -39,6 +39,10 @@ class AppRouter {
             routine: arguments.routine,
           ),
         );
+      case 'active_routine':
+        return MaterialPageRoute(
+          builder: (context) => ActiveRoutine(),
+        );
       default:
         return null;
     }

@@ -13,7 +13,7 @@ class ExerciseList {
 
   /// Overload the "[]" operator to allow indexing.
   Exercise operator [](int index) {
-    return _realm.all<Exercise>()[index];
+    return _realm.query<Exercise>('TRUEPREDICATE SORT(name ASC)')[index];
   }
 
   int length() {
