@@ -42,25 +42,28 @@ class _CountdownTimerState extends ConsumerState<CountdownTimer>
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _controller,
-      builder: (context, child) => Stack(
-        children: [
-          Center(
-            child: CustomPaint(
-              size: const Size.square(100),
-              painter: CustomTimerPainter(
-                animation: _controller,
-                backgroundColor: Colors.white,
-                color: Colors.red,
+      builder: (context, child) => SizedBox(
+        height: 200,
+        child: Stack(
+          children: [
+            Center(
+              child: CustomPaint(
+                size: const Size.square(200),
+                painter: CustomTimerPainter(
+                  animation: _controller,
+                  backgroundColor: Colors.white,
+                  color: Colors.red,
+                ),
               ),
             ),
-          ),
-          Center(
-            child: Text(
-              timerString,
-              style: const TextStyle(fontSize: 40),
+            Center(
+              child: Text(
+                timerString,
+                style: const TextStyle(fontSize: 40),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -99,7 +102,8 @@ class CustomTimerPainter extends CustomPainter {
       );
 
     canvas.drawArc(
-      Rect.fromCircle(center: size.center(Offset.zero), radius: size.width),
+      Rect.fromCircle(
+          center: size.center(Offset.zero), radius: size.width * 2 / 5),
       -math.pi / 2,
       animation.value * 2 * math.pi,
       false,

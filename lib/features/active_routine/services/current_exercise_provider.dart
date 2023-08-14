@@ -4,7 +4,7 @@ import 'package:fitsaw/features/routine_list/domain/domain.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:realm/realm.dart';
 
-final activeRoutineExercise = Provider<RoutineExerciseWrapper>(
+final currentExerciseProvider = Provider<RoutineExerciseWrapper?>(
   (ref) {
     List<RoutineExerciseWrapper> exerciseList = [];
 
@@ -37,7 +37,7 @@ final activeRoutineExercise = Provider<RoutineExerciseWrapper>(
       }
     }
 
-    final index = ref.watch(activeRoutineIndexProvider);
+    final index = ref.watch(currentExerciseIndexProvider);
 
     return exerciseList[index];
   },
