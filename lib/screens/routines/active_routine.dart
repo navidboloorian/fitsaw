@@ -1,4 +1,5 @@
 import 'package:fitsaw/features/active_routine/presentation/presentation.dart';
+import 'package:fitsaw/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -7,6 +8,13 @@ class ActiveRoutine extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return CountdownTimer();
+    return const Scaffold(
+      appBar: CustomAppBar(),
+      body: CustomContainer(
+        child: CountdownTimer(
+          duration: 400,
+        ),
+      ),
+    );
   }
 }

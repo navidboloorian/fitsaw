@@ -4,7 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:math' as math;
 
 class CountdownTimer extends ConsumerStatefulWidget {
-  const CountdownTimer({super.key});
+  final int duration;
+
+  const CountdownTimer({super.key, required this.duration});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _CountdownTimerState();
@@ -16,18 +18,24 @@ class _CountdownTimerState extends ConsumerState<CountdownTimer>
 
   String get timerString {
     Duration duration = _controller.duration! * _controller.value;
-    return '${duration.inMinutes}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}';
+    return '${duration.inMinutes.toString().padLeft(2, '0')}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}';
   }
 
   @override
   void initState() {
     super.initState();
 
-    _controller =
-        AnimationController(vsync: this, duration: const Duration(seconds: 5));
+    _controller = AnimationController(
+        vsync: this, duration: Duration(seconds: widget.duration));
 
     _controller.reverse(
         from: _controller.value == 0.0 ? 1.0 : _controller.value);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -46,7 +54,12 @@ class _CountdownTimerState extends ConsumerState<CountdownTimer>
               ),
             ),
           ),
-          Center(child: Text(timerString)),
+          Center(
+            child: Text(
+              timerString,
+              style: const TextStyle(fontSize: 40),
+            ),
+          ),
         ],
       ),
     );
