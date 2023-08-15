@@ -8,13 +8,9 @@ class ActiveRoutine extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const Scaffold(
+    return Scaffold(
       appBar: CustomAppBar(),
-      body: CustomContainer(
-        child: CountdownTimer(
-          duration: 400,
-        ),
-      ),
+      body: CurrentExercise(),
     );
   }
 }

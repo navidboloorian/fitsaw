@@ -1,3 +1,4 @@
+import 'package:fitsaw/features/active_routine/services/services.dart';
 import 'package:fitsaw/features/exercise_list/domain/domain.dart';
 import 'package:fitsaw/features/routine_list/domain/domain.dart';
 import 'package:fitsaw/features/routine_list/services/services.dart';
@@ -5,6 +6,7 @@ import 'package:fitsaw/features/view_routine/presentation/presentation.dart';
 import 'package:fitsaw/features/view_routine/services/services.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
 import 'package:fitsaw/shared/providers/providers.dart';
+import 'package:fitsaw/shared/widgets/bottom_button.dart';
 import 'package:fitsaw/shared/widgets/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +45,9 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
       int? time;
       int? weight;
 
+      // TODO: stop text input fields from being submitted when they're cleared
+      // results in null check on int parse
+
       if (routineExercise['repController'] != null) {
         reps = int.parse(
             (routineExercise['repController'] as TextEditingController).text);
@@ -54,7 +59,7 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
       }
 
       if (routineExercise['weightController'] != null) {
-        weight = TimeInputValidator.toSeconds(
+        weight = int.parse(
             (routineExercise['weightController'] as TextEditingController)
                 .text);
       }
@@ -200,6 +205,21 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
     return true;
   }
 
+  void _startRoutine() {
+    // Ensure that changes that have made to the routine are maintained for
+    // when the the routine is started.
+    _upsertRoutine();
+
+    ref.read(activeRoutineProvider.notifier).set(widget.routine!);
+    ref.read(currentExerciseIndexProvider.notifier).state = 0;
+
+    Navigator.pushNamed(
+      context,
+      'active_routine',
+      arguments: PageArguments(routine: widget.routine),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -222,15 +242,22 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        floatingActionButton:
-            CheckButton(() => Navigator.pushNamed(context, 'active_routine')),
         appBar: CustomAppBar(
           actions: [CheckButton(_upsertRoutine)],
         ),
-        body: ViewRoutineForm(
-          formKey: _formKey,
-          nameController: _nameController,
-          descriptionController: _descriptionController,
+        body: Column(
+          children: [
+            Expanded(
+              child: ViewRoutineForm(
+                formKey: _formKey,
+                nameController: _nameController,
+                descriptionController: _descriptionController,
+              ),
+            ),
+            widget.isNew
+                ? const SizedBox.shrink()
+                : BottomButton(text: 'Start', onTap: _startRoutine),
+          ],
         ),
       ),
     );
