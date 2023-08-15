@@ -103,7 +103,7 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
     return false;
   }
 
-  void _upsertRoutine() {
+  void _upsertRoutine(bool showSnackbar) {
     if (!_formHasErrors()) {
       ObjectId id = widget.isNew ? ObjectId() : widget.routine!.id;
       String name = _nameController.text;
@@ -128,16 +128,18 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
 
       _resetProviders();
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Palette.fitsawGreen,
-          duration: const Duration(milliseconds: 500),
-          content: Text(
-            snackbarMessage,
-            style: const TextStyle(color: Palette.darkText),
-          ),
-        ),
-      );
+      showSnackbar
+          ? ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: Palette.fitsawGreen,
+                duration: const Duration(milliseconds: 500),
+                content: Text(
+                  snackbarMessage,
+                  style: const TextStyle(color: Palette.darkText),
+                ),
+              ),
+            )
+          : null;
     }
   }
 
@@ -208,10 +210,11 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
   void _startRoutine() {
     // Ensure that changes that have made to the routine are maintained for
     // when the the routine is started.
-    _upsertRoutine();
+    _upsertRoutine(false);
 
     ref.read(activeRoutineProvider.notifier).set(widget.routine!);
     ref.read(currentExerciseIndexProvider.notifier).state = 0;
+    ref.read(isRoutineCompletedProvider.notifier).state = false;
 
     Navigator.pushNamed(
       context,
@@ -243,7 +246,7 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
       onWillPop: _onWillPop,
       child: Scaffold(
         appBar: CustomAppBar(
-          actions: [CheckButton(_upsertRoutine)],
+          actions: [CheckButton(() => _upsertRoutine(true))],
         ),
         body: Column(
           children: [

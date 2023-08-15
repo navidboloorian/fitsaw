@@ -17,15 +17,8 @@ class CurrentExercise extends ConsumerWidget {
     if (exerciseWrapper.exercise!.isTimed) {
       exerciseFields.add(
         CustomContainer(
-          child: Column(
-            children: [
-              CountdownTimer(
-                duration: exerciseWrapper.time!,
-              ),
-              exerciseWrapper.exercise!.isWeighted
-                  ? Text('${exerciseWrapper.weight} lbs')
-                  : const SizedBox.shrink(),
-            ],
+          child: CountdownTimer(
+            duration: exerciseWrapper.time!,
           ),
         ),
       );
@@ -54,7 +47,8 @@ class CurrentExercise extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    RoutineExerciseWrapper? exerciseWrapper = ref.read(currentExerciseProvider);
+    RoutineExerciseWrapper? exerciseWrapper =
+        ref.watch(currentExerciseProvider);
 
     return ListView(children: _exerciseFields(exerciseWrapper!));
   }

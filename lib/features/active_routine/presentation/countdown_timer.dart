@@ -23,9 +23,25 @@ class _CountdownTimerState extends ConsumerState<CountdownTimer>
     return '${duration.inMinutes.toString().padLeft(2, '0')}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}';
   }
 
+  void _initAnimation() {
+    _isStopped = false;
+    _controller = AnimationController(
+        vsync: this, duration: Duration(seconds: widget.duration));
+
+    _controller.reverse(
+        from: _controller.value == 0.0 ? 1.0 : _controller.value);
+
+    _controller.addListener(_goToNextExercise);
+  }
+
   void _goToNextExercise() {
     if (_controller.value == 0) {
-      ref.read(currentExerciseIndexProvider.notifier).state++;
+      if (ref.read(currentExerciseIndexProvider) !=
+          ref.read(activeExerciseListProvider).length - 1) {
+        ref.read(currentExerciseIndexProvider.notifier).state++;
+      } else {
+        ref.read(isRoutineCompletedProvider.notifier).state = true;
+      }
     }
   }
 
@@ -52,15 +68,16 @@ class _CountdownTimerState extends ConsumerState<CountdownTimer>
   void initState() {
     super.initState();
 
-    _isStopped = false;
+    _initAnimation();
+  }
 
-    _controller = AnimationController(
-        vsync: this, duration: Duration(seconds: widget.duration));
+  @override
+  void didUpdateWidget(CountdownTimer oldWidget) {
+    super.didUpdateWidget(oldWidget);
 
-    _controller.reverse(
-        from: _controller.value == 0.0 ? 1.0 : _controller.value);
-
-    _controller.addListener(_goToNextExercise);
+    if (oldWidget != widget) {
+      _initAnimation();
+    }
   }
 
   @override
