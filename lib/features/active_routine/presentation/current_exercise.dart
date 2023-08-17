@@ -8,7 +8,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class CurrentExercise extends ConsumerWidget {
   const CurrentExercise({super.key});
 
-  List<Widget> _exerciseFields(RoutineExerciseWrapper exerciseWrapper) {
+  List<Widget> _exerciseFields(
+      RoutineExerciseWrapper exerciseWrapper, WidgetRef ref) {
     List<Widget> exerciseFields = [];
 
     exerciseFields
@@ -25,13 +26,32 @@ class CurrentExercise extends ConsumerWidget {
     } else {
       exerciseFields.add(
         CustomContainer(
-          child: Column(
-            children: [
-              Text('${exerciseWrapper.reps} reps'),
-              exerciseWrapper.exercise!.isWeighted
-                  ? Text('${exerciseWrapper.weight} lbs')
-                  : const SizedBox.shrink(),
-            ],
+          child: Center(
+            child: Column(
+              children: [
+                Text(
+                  '${exerciseWrapper.reps} reps',
+                  style: const TextStyle(fontSize: 30),
+                ),
+                exerciseWrapper.exercise!.isWeighted
+                    ? Text(
+                        '${exerciseWrapper.weight} lbs',
+                        style: const TextStyle(fontSize: 30),
+                      )
+                    : const SizedBox.shrink(),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    if (ref.read(currentExerciseIndexProvider) <
+        ref.read(activeExerciseListProvider).length - 1) {
+      exerciseFields.add(
+        CustomContainer(
+          child: Text(
+            'Next: ${ref.read(activeExerciseListProvider)[ref.read(currentExerciseIndexProvider) + 1].exercise!.name}',
           ),
         ),
       );
@@ -50,6 +70,6 @@ class CurrentExercise extends ConsumerWidget {
     RoutineExerciseWrapper? exerciseWrapper =
         ref.watch(currentExerciseProvider);
 
-    return ListView(children: _exerciseFields(exerciseWrapper!));
+    return ListView(children: _exerciseFields(exerciseWrapper!, ref));
   }
 }

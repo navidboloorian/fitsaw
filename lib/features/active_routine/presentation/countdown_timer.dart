@@ -23,17 +23,6 @@ class _CountdownTimerState extends ConsumerState<CountdownTimer>
     return '${duration.inMinutes.toString().padLeft(2, '0')}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}';
   }
 
-  void _initAnimation() {
-    _isStopped = false;
-    _controller = AnimationController(
-        vsync: this, duration: Duration(seconds: widget.duration));
-
-    _controller.reverse(
-        from: _controller.value == 0.0 ? 1.0 : _controller.value);
-
-    _controller.addListener(_goToNextExercise);
-  }
-
   void _goToNextExercise() {
     if (_controller.value == 0) {
       if (ref.read(currentExerciseIndexProvider) !=
@@ -68,7 +57,13 @@ class _CountdownTimerState extends ConsumerState<CountdownTimer>
   void initState() {
     super.initState();
 
-    _initAnimation();
+    _isStopped = false;
+
+    _controller = AnimationController(
+        vsync: this, duration: Duration(seconds: widget.duration));
+    _controller.reverse(
+        from: _controller.value == 0.0 ? 1.0 : _controller.value);
+    _controller.addListener(_goToNextExercise);
   }
 
   @override
@@ -76,7 +71,12 @@ class _CountdownTimerState extends ConsumerState<CountdownTimer>
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget != widget) {
-      _initAnimation();
+      _isStopped = false;
+
+      _controller.duration = Duration(seconds: widget.duration);
+      _controller.reverse();
+
+      _reset();
     }
   }
 
