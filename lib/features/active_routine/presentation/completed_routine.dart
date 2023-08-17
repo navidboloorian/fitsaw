@@ -3,8 +3,6 @@ import 'dart:math' as math;
 import 'package:fitsaw/features/active_routine/services/active_exercise_list_provider.dart';
 import 'package:fitsaw/features/active_routine/services/active_routine_provider.dart';
 import 'package:fitsaw/features/routine_list/domain/domain.dart';
-import 'package:fitsaw/features/view_routine/services/routine_exercise_list_provider.dart';
-import 'package:fitsaw/features/view_routine/services/services.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
 import 'package:fitsaw/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -46,8 +44,6 @@ class _CompletedRoutineState extends ConsumerState<CompletedRoutine> {
         }
       }
     }
-
-    print(_totalTime);
 
     _exerciseCount = exercises.length;
   }

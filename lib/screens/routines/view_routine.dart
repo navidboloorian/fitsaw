@@ -45,10 +45,20 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
       int? time;
       int? weight;
 
-      // TODO: stop text input fields from being submitted when they're cleared
-      // results in null check on int parse
+      if ((routineExercise['setController'] as TextEditingController)
+          .text
+          .isEmpty) {
+        (routineExercise['setController'] as TextEditingController).text = '1';
+      }
 
       if (routineExercise['repController'] != null) {
+        if ((routineExercise['repController'] as TextEditingController)
+            .text
+            .isEmpty) {
+          (routineExercise['repController'] as TextEditingController).text =
+              '1';
+        }
+
         reps = int.parse(
             (routineExercise['repController'] as TextEditingController).text);
       }
@@ -59,6 +69,13 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
       }
 
       if (routineExercise['weightController'] != null) {
+        if ((routineExercise['weightController'] as TextEditingController)
+            .text
+            .isEmpty) {
+          (routineExercise['weightController'] as TextEditingController).text =
+              '1';
+        }
+
         weight = int.parse(
             (routineExercise['weightController'] as TextEditingController)
                 .text);
@@ -210,17 +227,19 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
   void _startRoutine() {
     // Ensure that changes that have made to the routine are maintained for
     // when the the routine is started.
-    _upsertRoutine(false);
+    if (!_formHasErrors()) {
+      _upsertRoutine(false);
 
-    ref.read(activeRoutineProvider.notifier).set(widget.routine!);
-    ref.read(currentExerciseIndexProvider.notifier).state = 0;
-    ref.read(isRoutineCompletedProvider.notifier).state = false;
+      ref.read(activeRoutineProvider.notifier).set(widget.routine!);
+      ref.read(currentExerciseIndexProvider.notifier).state = 0;
+      ref.read(isRoutineCompletedProvider.notifier).state = false;
 
-    Navigator.pushNamed(
-      context,
-      'active_routine',
-      arguments: PageArguments(routine: widget.routine),
-    );
+      Navigator.pushNamed(
+        context,
+        'active_routine',
+        arguments: PageArguments(routine: widget.routine),
+      );
+    }
   }
 
   @override
