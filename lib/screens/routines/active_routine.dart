@@ -16,24 +16,41 @@ class ActiveRoutine extends ConsumerWidget {
     }
   }
 
+  Future<bool> _goToPreviousExercise(
+      BuildContext context, WidgetRef ref) async {
+    if (ref.read(currentExerciseIndexProvider) != 0) {
+      // go to previous exercise if it's not the first exercise in the routine
+      ref.read(currentExerciseIndexProvider.notifier).state--;
+      return false;
+    } else {
+      // pop navigator if it's the first exercise in the routine
+      return true;
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: const CustomAppBar(),
-      body: ref.watch(isRoutineCompletedProvider)
-          ? Column(
-              children: [
-                const Expanded(child: CompletedRoutine()),
-                BottomButton(
-                    text: 'Finish', onTap: () => Navigator.pop(context)),
-              ],
-            )
-          : Column(
-              children: [
-                const Expanded(child: CurrentExercise()),
-                BottomButton(text: 'Next', onTap: () => _goToNextExercise(ref))
-              ],
-            ),
+    return WillPopScope(
+      // intercept back button
+      onWillPop: () => _goToPreviousExercise(context, ref),
+      child: Scaffold(
+        appBar: const CustomAppBar(),
+        body: ref.watch(isRoutineCompletedProvider)
+            ? Column(
+                children: [
+                  const Expanded(child: CompletedRoutine()),
+                  BottomButton(
+                      text: 'Finish', onTap: () => Navigator.pop(context)),
+                ],
+              )
+            : Column(
+                children: [
+                  const Expanded(child: CurrentExercise()),
+                  BottomButton(
+                      text: 'Next', onTap: () => _goToNextExercise(ref))
+                ],
+              ),
+      ),
     );
   }
 }
