@@ -117,6 +117,7 @@ class ViewRoutineForm extends ConsumerWidget {
             ),
           ),
           const TagTextField(),
+          const SizedBox(height: 10),
         ],
       ),
     );
