@@ -34,20 +34,26 @@ class ActiveRoutine extends ConsumerWidget {
       // intercept back button
       onWillPop: () => _goToPreviousExercise(context, ref),
       child: Scaffold(
-        appBar: const CustomAppBar(),
+        appBar: CustomAppBar(
+          leading: BackArrowButton(() => Navigator.pop(context)),
+        ),
         body: ref.watch(isRoutineCompletedProvider)
             ? Column(
                 children: [
                   const Expanded(child: CompletedRoutine()),
                   BottomButton(
-                      text: 'Finish', onTap: () => Navigator.pop(context)),
+                    text: 'Finish',
+                    onTap: () => Navigator.pop(context),
+                  ),
                 ],
               )
             : Column(
                 children: [
                   const Expanded(child: CurrentExercise()),
                   BottomButton(
-                      text: 'Next', onTap: () => _goToNextExercise(ref))
+                    text: 'Next',
+                    onTap: () => _goToNextExercise(ref),
+                  )
                 ],
               ),
       ),
