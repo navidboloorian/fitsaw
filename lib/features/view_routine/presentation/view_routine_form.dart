@@ -94,6 +94,7 @@ class ViewRoutineForm extends ConsumerWidget {
             child: Column(
               children: [
                 ReorderableListView(
+                  physics: NeverScrollableScrollPhysics(),
                   proxyDecorator: _reorderableDecorator,
                   shrinkWrap: true,
                   onReorder: (oldIndex, newIndex) =>

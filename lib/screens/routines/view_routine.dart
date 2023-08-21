@@ -6,7 +6,6 @@ import 'package:fitsaw/features/view_routine/presentation/presentation.dart';
 import 'package:fitsaw/features/view_routine/services/services.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
 import 'package:fitsaw/shared/providers/providers.dart';
-import 'package:fitsaw/shared/widgets/bottom_button.dart';
 import 'package:fitsaw/shared/widgets/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
@@ -64,6 +63,12 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
       }
 
       if (routineExercise['timeController'] != null) {
+        if ((routineExercise['timeController'] as TextEditingController).text ==
+            '00:00') {
+          (routineExercise['timeController'] as TextEditingController).text =
+              '00:01';
+        }
+
         time = TimeInputValidator.toSeconds(
             (routineExercise['timeController'] as TextEditingController).text);
       }
