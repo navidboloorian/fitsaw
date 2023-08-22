@@ -33,7 +33,7 @@ class _ViewExerciseState extends ConsumerState<ViewExercise> {
   void _resetProviders() {
     ref.read(_timedSwitchButton.notifier).state = false;
     ref.read(_weightedSwitchButton.notifier).state = false;
-    ref.read(tagTextFieldListProvider.notifier).clear();
+    ref.read(tagTextFieldListFamily('exercise').notifier).clear();
   }
 
   void _upsertExercise() {
@@ -42,7 +42,7 @@ class _ViewExerciseState extends ConsumerState<ViewExercise> {
       String name = _nameController.text;
       bool isTimed = ref.read(_timedSwitchButton);
       bool isWeighted = ref.read(_weightedSwitchButton);
-      List<String> tags = ref.read(tagTextFieldListProvider);
+      List<String> tags = ref.read(tagTextFieldListFamily('exercise'));
 
       // Make description null if empty.
       String? description = _descriptionController.text.isEmpty
@@ -92,7 +92,9 @@ class _ViewExerciseState extends ConsumerState<ViewExercise> {
       ref.read(_weightedSwitchButton.notifier).state =
           widget.exercise!.isWeighted;
       ref.read(_timedSwitchButton.notifier).state = widget.exercise!.isTimed;
-      ref.read(tagTextFieldListProvider.notifier).set(widget.exercise!.tags);
+      ref
+          .read(tagTextFieldListFamily('exercise').notifier)
+          .set(widget.exercise!.tags);
     });
   }
 

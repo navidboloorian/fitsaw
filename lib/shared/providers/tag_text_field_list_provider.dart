@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Manages the list of tags entered into the tag text field.
-class TagTextFieldListNotifier extends Notifier<List<String>> {
+class TagTextFieldListNotifier extends FamilyNotifier<List<String>, String> {
   @override
-  List<String> build() {
+  List<String> build(String arg) {
     return [];
   }
 
@@ -30,6 +30,6 @@ class TagTextFieldListNotifier extends Notifier<List<String>> {
   }
 }
 
-final tagTextFieldListProvider =
-    NotifierProvider<TagTextFieldListNotifier, List<String>>(
+final tagTextFieldListFamily =
+    NotifierProvider.family<TagTextFieldListNotifier, List<String>, String>(
         () => TagTextFieldListNotifier());

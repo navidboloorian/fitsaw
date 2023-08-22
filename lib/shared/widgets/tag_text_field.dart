@@ -5,10 +5,12 @@ import 'package:fitsaw/shared/providers/providers.dart';
 
 class TagTextField extends ConsumerStatefulWidget {
   final List<String>? preExistingTags;
+  final String type;
 
   const TagTextField({
     super.key,
     this.preExistingTags,
+    required this.type,
   });
 
   @override
@@ -28,14 +30,14 @@ class _TagTextFieldState extends ConsumerState<TagTextField> {
       bool tagExists = false;
 
       // Ensure duplicate tags don't exist.
-      if (ref.read(tagTextFieldListProvider).contains(tag)) {
+      if (ref.read(tagTextFieldListFamily(widget.type)).contains(tag)) {
         tagExists = true;
       }
 
       // Prevent tags with only spaces, require at least one alphanumeric.
       if (!tagExists && RegExp(r'^[a-zA-Z0-9 ]+$').hasMatch(tag)) {
         // Add tag to the outer tag list state.
-        ref.read(tagTextFieldListProvider.notifier).add(tag);
+        ref.read(tagTextFieldListFamily(widget.type).notifier).add(tag);
 
         // Keep chars to the right of the comma.
         if (delimIndex != _controller.text.length - 1) {
@@ -58,7 +60,9 @@ class _TagTextFieldState extends ConsumerState<TagTextField> {
 
     // Load exercise's tags in if they exist.
     if (widget.preExistingTags != null) {
-      ref.read(tagTextFieldListProvider.notifier).set(widget.preExistingTags!);
+      ref
+          .read(tagTextFieldListFamily(widget.type).notifier)
+          .set(widget.preExistingTags!);
     }
   }
 
@@ -71,11 +75,11 @@ class _TagTextFieldState extends ConsumerState<TagTextField> {
 
   @override
   Widget build(BuildContext context) {
-    final tags = ref.watch(tagTextFieldListProvider);
+    final tags = ref.watch(tagTextFieldListFamily(widget.type));
 
     return TaggedContainer(
       tags: tags,
-      onTap: ref.read(tagTextFieldListProvider.notifier).remove,
+      onTap: ref.read(tagTextFieldListFamily(widget.type).notifier).remove,
       isDismissible: true,
       child: TextFormField(
         maxLines: null,

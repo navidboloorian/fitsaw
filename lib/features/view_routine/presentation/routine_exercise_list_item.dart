@@ -86,23 +86,33 @@ class RoutineExerciseListItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return CustomContainer(
-      color: Palette.container2Background,
-      margin: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(_exerciseName),
-          const Divider(
-            color: Palette.darkText,
-          ),
-          Wrap(
-            spacing: 10,
-            direction: Axis.horizontal,
-            alignment: WrapAlignment.start,
-            children: _textFieldColumns,
-          ),
-        ],
+    return GestureDetector(
+      onTap: () => Navigator.pushNamed(
+        context,
+        'view_exercise',
+        arguments: PageArguments(
+          exercise: routineExercise['exercise'] as Exercise,
+          isNew: false,
+        ),
+      ),
+      child: CustomContainer(
+        color: Palette.container2Background,
+        margin: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(_exerciseName),
+            const Divider(
+              color: Palette.darkText,
+            ),
+            Wrap(
+              spacing: 10,
+              direction: Axis.horizontal,
+              alignment: WrapAlignment.start,
+              children: _textFieldColumns,
+            ),
+          ],
+        ),
       ),
     );
   }

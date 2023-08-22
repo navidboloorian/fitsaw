@@ -31,7 +31,7 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
   final TextEditingController _descriptionController = TextEditingController();
 
   void _resetProviders() {
-    ref.read(tagTextFieldListProvider.notifier).clear();
+    ref.read(tagTextFieldListFamily('routine').notifier).clear();
     ref.read(routineExerciseListProvider.notifier).clear();
   }
 
@@ -130,7 +130,7 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
       ObjectId id = widget.isNew ? ObjectId() : widget.routine!.id;
       String name = _nameController.text;
       String description = _descriptionController.text;
-      List<String> tags = ref.read(tagTextFieldListProvider);
+      List<String> tags = ref.read(tagTextFieldListFamily('routine'));
       List<RoutineExerciseWrapper> exercises = _generateRoutineExerciseList();
 
       ref.read(routineListProvider).upsert(
@@ -215,7 +215,9 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
 
     // Uses "Future" to avoid provider being updated before widget is built out.
     Future(() {
-      ref.read(tagTextFieldListProvider.notifier).set(widget.routine!.tags);
+      ref
+          .read(tagTextFieldListFamily('routine').notifier)
+          .set(widget.routine!.tags);
       ref
           .read(routineExerciseListProvider.notifier)
           .set(_parseExistingExercises());

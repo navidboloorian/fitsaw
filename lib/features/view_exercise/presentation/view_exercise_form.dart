@@ -61,7 +61,7 @@ class ViewExerciseForm extends ConsumerWidget {
               controller: descriptionController,
             ),
           ),
-          const TagTextField(),
+          const TagTextField(type: 'exercise'),
           const SizedBox(height: 10),
         ],
       ),

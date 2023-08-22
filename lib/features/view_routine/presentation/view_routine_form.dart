@@ -116,7 +116,7 @@ class ViewRoutineForm extends ConsumerWidget {
               controller: descriptionController,
             ),
           ),
-          const TagTextField(),
+          const TagTextField(type: 'routine'),
           const SizedBox(height: 10),
         ],
       ),
