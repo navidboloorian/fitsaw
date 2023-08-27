@@ -9,7 +9,6 @@ class RoutineExerciseListNotifier extends Notifier<List<Map<String, dynamic>>> {
 
   Map<String, dynamic> removeAt(int index) {
     Map<String, dynamic> routineExercise = state.removeAt(index);
-
     set(state);
 
     return routineExercise;

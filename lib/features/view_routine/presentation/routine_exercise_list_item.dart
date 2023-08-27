@@ -7,11 +7,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class RoutineExerciseListItem extends ConsumerWidget {
   final Map<String, dynamic> routineExercise;
+  final Function(BuildContext, Exercise) onClick;
 
   late final List<TextFieldColumn> _textFieldColumns;
   late final String _exerciseName;
 
-  RoutineExerciseListItem({super.key, required this.routineExercise}) {
+  RoutineExerciseListItem(
+      {super.key, required this.routineExercise, required this.onClick}) {
     _exerciseName = (routineExercise['exercise'] as Exercise).name;
     _textFieldColumns = [];
 
@@ -87,14 +89,7 @@ class RoutineExerciseListItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(
-        context,
-        'view_exercise',
-        arguments: PageArguments(
-          exercise: routineExercise['exercise'] as Exercise,
-          isNew: false,
-        ),
-      ),
+      onTap: () => onClick(context, routineExercise['exercise'] as Exercise),
       child: CustomContainer(
         color: Palette.container2Background,
         margin: const EdgeInsets.fromLTRB(0, 0, 0, 5),
