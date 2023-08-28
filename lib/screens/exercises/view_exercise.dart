@@ -63,7 +63,7 @@ class _ViewExerciseState extends ConsumerState<ViewExercise> {
       String snackbarMessage =
           widget.isNew ? 'Exercise created!' : 'Exercise updated!';
 
-      Navigator.pop(context);
+      Navigator.pop(context, true);
 
       _resetProviders();
 

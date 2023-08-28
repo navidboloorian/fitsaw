@@ -12,8 +12,11 @@ class RoutineExerciseListItem extends ConsumerWidget {
   late final List<TextFieldColumn> _textFieldColumns;
   late final String _exerciseName;
 
-  RoutineExerciseListItem(
-      {super.key, required this.routineExercise, required this.onClick}) {
+  RoutineExerciseListItem({
+    super.key,
+    required this.routineExercise,
+    required this.onClick,
+  }) {
     _exerciseName = (routineExercise['exercise'] as Exercise).name;
     _textFieldColumns = [];
 
