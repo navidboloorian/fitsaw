@@ -2,7 +2,7 @@ import 'package:fitsaw/features/exercise_list/domain/domain.dart';
 import 'package:flutter/material.dart';
 
 class RoutineExerciseController {
-  late final Exercise exercise;
+  final Exercise exercise;
   late final TextEditingController restController;
   late final TextEditingController setController;
   late final TextEditingController weightController;
@@ -15,5 +15,13 @@ class RoutineExerciseController {
     weightController = TextEditingController();
     timeController = TextEditingController();
     repController = TextEditingController();
+  }
+
+  void dispose() {
+    restController.dispose();
+    setController.dispose();
+    weightController.dispose();
+    timeController.dispose();
+    repController.dispose();
   }
 }

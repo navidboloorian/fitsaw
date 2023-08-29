@@ -1,5 +1,6 @@
 import 'package:fitsaw/features/exercise_list/domain/domain.dart';
 import 'package:fitsaw/features/exercise_list/services/services.dart';
+import 'package:fitsaw/features/view_routine/domain/domain.dart';
 import 'package:fitsaw/features/view_routine/services/routine_exercise_list_provider.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
 import 'package:fitsaw/shared/widgets/widgets.dart';
@@ -54,21 +55,8 @@ class RoutineExerciseAutocomplete extends ConsumerWidget {
         );
       },
       onSelected: (option) {
-        Map<String, dynamic> routineExercise = {
-          'exercise': option,
-          'restController': TextEditingController(),
-          'setController': TextEditingController(),
-        };
-
-        if (option.isTimed) {
-          routineExercise['timeController'] = TextEditingController();
-        } else {
-          routineExercise['repController'] = TextEditingController();
-        }
-
-        if (option.isWeighted) {
-          routineExercise['weightController'] = TextEditingController();
-        }
+        RoutineExerciseController routineExercise =
+            RoutineExerciseController(option);
 
         ref.read(routineExerciseListProvider.notifier).add(routineExercise);
       },

@@ -1,7 +1,7 @@
 import 'package:fitsaw/features/active_routine/services/services.dart';
-import 'package:fitsaw/features/exercise_list/domain/domain.dart';
 import 'package:fitsaw/features/routine_list/domain/domain.dart';
 import 'package:fitsaw/features/routine_list/services/services.dart';
+import 'package:fitsaw/features/view_routine/domain/domain.dart';
 import 'package:fitsaw/features/view_routine/presentation/presentation.dart';
 import 'package:fitsaw/features/view_routine/services/services.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
@@ -38,65 +38,48 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
   List<RoutineExerciseWrapper> _generateRoutineExerciseList() {
     List<RoutineExerciseWrapper> list = [];
 
-    for (Map<String, dynamic> routineExercise
+    for (RoutineExerciseController routineExercise
         in ref.read(routineExerciseListProvider)) {
       int? reps;
       int? time;
       int? weight;
 
-      if ((routineExercise['setController'] as TextEditingController)
-          .text
-          .isEmpty) {
-        (routineExercise['setController'] as TextEditingController).text = '1';
+      if (routineExercise.setController.text.isEmpty) {
+        routineExercise.setController.text = '1';
       }
 
-      if (routineExercise['repController'] != null) {
-        if ((routineExercise['repController'] as TextEditingController)
-            .text
-            .isEmpty) {
-          (routineExercise['repController'] as TextEditingController).text =
-              '1';
+      if (routineExercise.exercise.isTimed) {
+        if (routineExercise.timeController.text == '00:00') {
+          routineExercise.timeController.text = '00:01';
         }
 
-        reps = int.parse(
-            (routineExercise['repController'] as TextEditingController).text);
+        time =
+            TimeInputValidator.toSeconds(routineExercise.timeController.text);
+      } else {
+        if (routineExercise.repController.text.isEmpty) {
+          routineExercise.repController.text = '1';
+        }
+
+        reps = int.parse(routineExercise.repController.text);
       }
 
-      if (routineExercise['timeController'] != null) {
-        if ((routineExercise['timeController'] as TextEditingController).text ==
-            '00:00') {
-          (routineExercise['timeController'] as TextEditingController).text =
-              '00:01';
+      if (routineExercise.exercise.isWeighted) {
+        if (routineExercise.weightController.text.isEmpty) {
+          routineExercise.weightController.text = '1';
         }
 
-        time = TimeInputValidator.toSeconds(
-            (routineExercise['timeController'] as TextEditingController).text);
-      }
-
-      if (routineExercise['weightController'] != null) {
-        if ((routineExercise['weightController'] as TextEditingController)
-            .text
-            .isEmpty) {
-          (routineExercise['weightController'] as TextEditingController).text =
-              '1';
-        }
-
-        weight = int.parse(
-            (routineExercise['weightController'] as TextEditingController)
-                .text);
+        weight = int.parse(routineExercise.weightController.text);
       }
 
       list.add(
         RoutineExerciseWrapper(
-          exercise: (routineExercise['exercise'] as Exercise),
-          sets: int.parse(
-              (routineExercise['setController'] as TextEditingController).text),
+          exercise: routineExercise.exercise,
+          sets: int.parse(routineExercise.setController.text),
           reps: reps,
           time: time,
           weight: weight,
-          rest: TimeInputValidator.toSeconds(
-              (routineExercise['restController'] as TextEditingController)
-                  .text),
+          rest:
+              TimeInputValidator.toSeconds(routineExercise.restController.text),
         ),
       );
     }
@@ -165,42 +148,33 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
     }
   }
 
-  List<Map<String, dynamic>> _parseExistingExercises() {
-    List<Map<String, dynamic>> list = [];
+  List<RoutineExerciseController> _parseExistingExercises() {
+    List<RoutineExerciseController> list = [];
 
     for (RoutineExerciseWrapper routineExercise in widget.routine!.exercises) {
-      Map<String, dynamic> routineExerciseMap = {
-        'exercise': routineExercise.exercise
-      };
+      RoutineExerciseController routineExerciseController =
+          RoutineExerciseController(routineExercise.exercise!);
 
-      TextEditingController restController = TextEditingController();
-      restController.text = TimeInputValidator.toTime(routineExercise.rest!);
-      routineExerciseMap['restController'] = restController;
+      routineExerciseController.restController.text =
+          TimeInputValidator.toTime(routineExercise.rest!);
 
-      TextEditingController setController = TextEditingController();
-      setController.text = routineExercise.sets!.toString();
-      routineExerciseMap['setController'] = setController;
+      routineExerciseController.setController.text =
+          routineExercise.sets!.toString();
 
-      if (routineExercise.reps != null) {
-        TextEditingController repController = TextEditingController();
-        repController.text = routineExercise.reps!.toString();
-
-        routineExerciseMap['repController'] = repController;
+      if (routineExerciseController.exercise.isTimed) {
+        routineExerciseController.timeController.text =
+            TimeInputValidator.toTime(routineExercise.time!);
       } else {
-        TextEditingController timeController = TextEditingController();
-        timeController.text = TimeInputValidator.toTime(routineExercise.time!);
-
-        routineExerciseMap['timeController'] = timeController;
+        routineExerciseController.repController.text =
+            routineExercise.reps!.toString();
       }
 
-      if (routineExercise.weight != null) {
-        TextEditingController weightController = TextEditingController();
-        weightController.text = routineExercise.weight!.toString();
-
-        routineExerciseMap['weightController'] = weightController;
+      if (routineExerciseController.exercise.isWeighted) {
+        routineExerciseController.weightController.text =
+            routineExercise.weight!.toString();
       }
 
-      list.add(routineExerciseMap);
+      list.add(routineExerciseController);
     }
 
     return list;

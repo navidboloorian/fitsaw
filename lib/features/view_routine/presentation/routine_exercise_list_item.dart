@@ -1,4 +1,5 @@
 import 'package:fitsaw/features/exercise_list/domain/domain.dart';
+import 'package:fitsaw/features/view_routine/domain/domain.dart';
 import 'package:fitsaw/features/view_routine/presentation/presentation.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
 import 'package:fitsaw/shared/widgets/widgets.dart';
@@ -6,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class RoutineExerciseListItem extends ConsumerWidget {
-  final Map<String, dynamic> routineExercise;
+  final RoutineExerciseController routineExercise;
   final Function(BuildContext, Exercise) onClick;
 
   late final List<TextFieldColumn> _textFieldColumns;
@@ -17,82 +18,64 @@ class RoutineExerciseListItem extends ConsumerWidget {
     required this.routineExercise,
     required this.onClick,
   }) {
-    _exerciseName = (routineExercise['exercise'] as Exercise).name;
+    _exerciseName = routineExercise.exercise.name;
     _textFieldColumns = [];
 
     _generateTextFieldColumns();
   }
 
   void _generateTextFieldColumns() {
-    routineExercise.forEach(
-      (key, value) {
-        switch (key) {
-          case 'restController':
-            {
-              _textFieldColumns.add(
-                TextFieldColumn(
-                  width: 44,
-                  label: 'Rest',
-                  textField: TimeTextField(controller: value),
-                ),
-              );
-            }
-            break;
-          case 'setController':
-            {
-              _textFieldColumns.add(
-                TextFieldColumn(
-                  width: 32,
-                  label: 'Sets',
-                  textField: NumberTextField(controller: value, lengthLimit: 2),
-                ),
-              );
-            }
-            break;
-          case 'timeController':
-            {
-              _textFieldColumns.add(
-                TextFieldColumn(
-                  width: 44,
-                  label: 'Time',
-                  textField: TimeTextField(controller: value),
-                ),
-              );
-            }
-            break;
-          case 'repController':
-            {
-              _textFieldColumns.add(
-                TextFieldColumn(
-                  width: 37,
-                  label: 'Reps',
-                  textField: NumberTextField(controller: value, lengthLimit: 2),
-                ),
-              );
-            }
-            break;
-          case 'weightController':
-            {
-              _textFieldColumns.add(
-                TextFieldColumn(
-                  width: 88,
-                  label: 'Weight (lbs)',
-                  textField: NumberTextField(controller: value, lengthLimit: 3),
-                ),
-              );
-            }
-            break;
-          default:
-            break;
-        }
-      },
+    _textFieldColumns.add(
+      TextFieldColumn(
+        width: 44,
+        label: 'Rest',
+        textField: TimeTextField(controller: routineExercise.restController),
+      ),
     );
+    _textFieldColumns.add(
+      TextFieldColumn(
+        width: 32,
+        label: 'Sets',
+        textField: NumberTextField(
+            controller: routineExercise.setController, lengthLimit: 2),
+      ),
+    );
+
+    if (routineExercise.exercise.isTimed) {
+      _textFieldColumns.add(
+        TextFieldColumn(
+          width: 44,
+          label: 'Time',
+          textField: TimeTextField(controller: routineExercise.timeController),
+        ),
+      );
+    } else {
+      _textFieldColumns.add(
+        TextFieldColumn(
+          width: 37,
+          label: 'Reps',
+          textField: NumberTextField(
+              controller: routineExercise.repController, lengthLimit: 2),
+        ),
+      );
+    }
+
+    if (routineExercise.exercise.isWeighted) {
+      _textFieldColumns.add(
+        TextFieldColumn(
+          width: 88,
+          label: 'Weight (lbs)',
+          textField: NumberTextField(
+              controller: routineExercise.weightController, lengthLimit: 3),
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
-      onTap: () => onClick(context, routineExercise['exercise'] as Exercise),
+      onTap: () => onClick(context, routineExercise.exercise),
       child: CustomContainer(
         color: Palette.container2Background,
         margin: const EdgeInsets.fromLTRB(0, 0, 0, 5),

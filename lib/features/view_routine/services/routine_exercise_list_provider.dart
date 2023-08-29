@@ -1,58 +1,48 @@
-import 'package:flutter/material.dart';
+import 'package:fitsaw/features/view_routine/domain/domain.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class RoutineExerciseListNotifier extends Notifier<List<Map<String, dynamic>>> {
+class RoutineExerciseListNotifier
+    extends Notifier<List<RoutineExerciseController>> {
   @override
-  List<Map<String, dynamic>> build() {
+  List<RoutineExerciseController> build() {
     return [];
   }
 
-  Map<String, dynamic> removeAt(int index) {
-    Map<String, dynamic> routineExercise = state.removeAt(index);
+  RoutineExerciseController removeAt(int index) {
+    RoutineExerciseController routineExercise = state.removeAt(index);
+
     set(state);
 
     return routineExercise;
   }
 
-  void disposeControllers(Map<String, dynamic> routineExercise) {
-    routineExercise.forEach((key, value) {
-      if (value is TextEditingController) {
-        value.dispose();
-      }
-    });
-  }
-
-  void insert(int index, Map<String, dynamic> routineExercise) {
+  void insert(int index, RoutineExerciseController routineExercise) {
     state.insert(index, routineExercise);
     set(state);
   }
 
-  void set(List<Map<String, dynamic>> routineExercises) {
+  void set(List<RoutineExerciseController> routineExercises) {
     state = [...routineExercises];
   }
 
-  void add(Map<String, dynamic> routineExercise) {
+  void add(RoutineExerciseController routineExercise) {
     state = [...state, routineExercise];
   }
 
-  void remove(Map<String, dynamic> routineExercise) {
+  void remove(RoutineExerciseController routineExercise) {
     state.remove(routineExercise);
     set(state);
   }
 
   void clear() {
-    for (Map<String, dynamic> routineExercise in state) {
-      routineExercise.forEach((key, value) {
-        if (value != null && value is TextEditingController) {
-          value.dispose();
-        }
-      });
+    for (RoutineExerciseController routineExercise in state) {
+      routineExercise.dispose();
     }
 
     state = [];
   }
 }
 
-final routineExerciseListProvider =
-    NotifierProvider<RoutineExerciseListNotifier, List<Map<String, dynamic>>>(
-        () => RoutineExerciseListNotifier());
+final routineExerciseListProvider = NotifierProvider<
+    RoutineExerciseListNotifier,
+    List<RoutineExerciseController>>(() => RoutineExerciseListNotifier());

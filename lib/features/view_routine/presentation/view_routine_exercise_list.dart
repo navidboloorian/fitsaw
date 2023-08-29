@@ -1,4 +1,5 @@
 import 'package:fitsaw/features/exercise_list/domain/domain.dart';
+import 'package:fitsaw/features/view_routine/domain/domain.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
 import 'package:fitsaw/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,7 @@ class _ViewRoutineExerciseListState
     List<Widget> list = [];
 
     for (int i = 0; i < ref.watch(routineExerciseListProvider).length; i++) {
-      Map<String, dynamic> routineExercise =
+      RoutineExerciseController routineExercise =
           ref.watch(routineExerciseListProvider)[i];
 
       list.add(
@@ -81,7 +82,7 @@ class _ViewRoutineExerciseListState
       newIndex--;
     }
 
-    final Map<String, dynamic> routineExercise =
+    final RoutineExerciseController routineExercise =
         ref.read(routineExerciseListProvider.notifier).removeAt(oldIndex);
 
     ref
