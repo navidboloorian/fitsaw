@@ -84,7 +84,7 @@ class _ExerciseListState extends ConsumerState<ExerciseList> {
         }
 
         return ExpandableSection(
-          title: 'Your Exercises',
+          header: const SectionHeader(title: 'Your Exercises'),
           children: generateWidgetList(exerciseList),
         );
       },

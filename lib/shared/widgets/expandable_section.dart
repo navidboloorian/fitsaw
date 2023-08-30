@@ -1,37 +1,41 @@
-import 'package:fitsaw/shared/classes/classes.dart';
+import 'package:fitsaw/shared/providers/providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// Used to create custom expandable section widget. Takes a title to
-/// display on the title block and a list of elements to display in the section.
+/// Used to create custom expandable section widget. Takes a header to
+/// display as the title block and a list of elements to display in the section.
 /// Custom expandable is necessary in order to change the color of the header vs
 /// the list elements.
-class ExpandableSection extends StatefulWidget {
-  final String title;
+class ExpandableSection extends ConsumerStatefulWidget {
   final List<Widget> children;
+  final Widget header;
 
-  const ExpandableSection(
-      {super.key, required this.title, required this.children});
+  const ExpandableSection({
+    super.key,
+    required this.header,
+    required this.children,
+  });
 
   @override
-  State<ExpandableSection> createState() => _ExpandableSectionState();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _ExpandableSectionState();
 }
 
-class _ExpandableSectionState extends State<ExpandableSection> {
+class _ExpandableSectionState extends ConsumerState<ExpandableSection> {
   bool isExpanded = true;
   int itemCount = 0;
 
-  // Default state is arrow pointing to the right (collapsed).
-  double turns = 0;
-
-  void toggleExpandable() {
+  void _toggleExpandable() {
     setState(
       () {
         if (isExpanded) {
           itemCount = 0;
-          turns = 3 / 4;
+          ref.read(expandableArrowProvider(widget.header.key!).notifier).state =
+              3 / 4;
         } else {
           itemCount = widget.children.length;
-          turns = 0;
+          ref.read(expandableArrowProvider(widget.header.key!).notifier).state =
+              0;
         }
 
         isExpanded = !isExpanded;
@@ -55,49 +59,7 @@ class _ExpandableSectionState extends State<ExpandableSection> {
     return Column(
       children: [
         // Title block that collapses/expands the list on tap.
-        GestureDetector(
-          onTap: toggleExpandable,
-          child:
-              // Sets title background color.
-              Container(
-            height: 40,
-            decoration: const BoxDecoration(
-              color: Palette.container2Background,
-              border: Border(
-                top: BorderSide(color: Colors.black, width: 1),
-                bottom: BorderSide(color: Colors.black, width: 1),
-              ),
-            ),
-            width: MediaQuery.of(context).size.width,
-            child:
-                // Content of the title block.
-                Center(
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width * 0.9 - 20,
-                child: Row(
-                  children: [
-                    Text(
-                      widget.title,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    AnimatedRotation(
-                      turns: turns,
-                      duration: const Duration(milliseconds: 50),
-                      child: const Icon(
-                        Icons.arrow_drop_down_rounded,
-                        color: Colors.white,
-                        size: 30,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
+        GestureDetector(onTap: _toggleExpandable, child: widget.header),
         AnimatedSize(
           curve: Curves.linear,
           duration: const Duration(milliseconds: 150),

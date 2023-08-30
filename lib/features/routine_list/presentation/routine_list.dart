@@ -84,7 +84,7 @@ class _RoutineListState extends ConsumerState<RoutineList> {
         }
 
         return ExpandableSection(
-          title: 'Your Routines',
+          header: SectionHeader(key: UniqueKey(), title: 'Your Routines'),
           children: generateWidgetList(routineList),
         );
       },
