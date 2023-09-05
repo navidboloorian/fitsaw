@@ -26,28 +26,18 @@ class RoutineExerciseController {
 
   // Delete the last controller in the list.
   void delete() {
-    if (exercise.isTimed) {
-      TextEditingController controller =
-          timeControllers.elementAt(timeControllers.length - 1);
-      timeControllers.removeAt(timeControllers.length - 1);
+    TextEditingController controller =
+        timeControllers.elementAt(timeControllers.length - 1);
+    timeControllers.removeAt(timeControllers.length - 1);
+    controller.dispose();
 
-      controller.dispose();
-    } else {
-      TextEditingController controller =
-          repControllers.elementAt(repControllers.length - 1);
-      repControllers.removeAt(repControllers.length - 1);
+    controller = repControllers.elementAt(repControllers.length - 1);
+    repControllers.removeAt(repControllers.length - 1);
+    controller.dispose();
 
-      controller.dispose();
-    }
-
-    if (exercise.isWeighted) {
-      TextEditingController controller =
-          weightControllers.elementAt(weightControllers.length - 1);
-
-      weightControllers.removeAt(weightControllers.length - 1);
-
-      controller.dispose();
-    }
+    controller = weightControllers.elementAt(weightControllers.length - 1);
+    weightControllers.removeAt(weightControllers.length - 1);
+    controller.dispose();
   }
 
   void dispose() {

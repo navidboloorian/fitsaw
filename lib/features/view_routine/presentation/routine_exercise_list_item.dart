@@ -84,8 +84,10 @@ class _RoutineExerciseListItemState
       isExpanded: true,
       gap: 0,
       header: RoutineExerciseListItemHeader(
-          key: UniqueKey(),
-          title: widget.routineExerciseController.exercise.name),
+        key: UniqueKey(),
+        exercise: widget.routineExerciseController.exercise,
+        onEdit: widget.onEdit,
+      ),
       children: [
         ExerciseWideRow(
           setController: widget.routineExerciseController.setController,

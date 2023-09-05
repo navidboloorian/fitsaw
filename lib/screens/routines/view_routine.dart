@@ -190,31 +190,25 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
       routineExerciseController.setController.text =
           routineExercise.sets!.toString();
 
-      if (routineExerciseController.exercise.isTimed) {
-        for (int time in routineExercise.times) {
-          routineExerciseController.timeControllers.add(
-            TextEditingController(
-              text: TimeInputValidator.toTime(time),
-            ),
-          );
-        }
-      } else {
-        for (int reps in routineExercise.reps) {
-          routineExerciseController.repControllers.add(
-            TextEditingController(
-              text: reps.toString(),
-            ),
-          );
-        }
-      }
+      for (int i = 0; i < routineExercise.sets!; i++) {
+        routineExerciseController.add();
 
-      if (routineExerciseController.exercise.isWeighted) {
-        for (int weight in routineExercise.weights) {
-          routineExerciseController.weightControllers.add(
-            TextEditingController(
-              text: weight.toString(),
-            ),
-          );
+        if (routineExerciseController.exercise.isTimed) {
+          int time = routineExercise.times[i];
+
+          routineExerciseController.timeControllers[i].text =
+              TimeInputValidator.toTime(time);
+        } else {
+          int reps = routineExercise.reps[i];
+
+          routineExerciseController.repControllers[i].text = reps.toString();
+        }
+
+        if (routineExerciseController.exercise.isWeighted) {
+          int weight = routineExercise.weights[i];
+
+          routineExerciseController.weightControllers[i].text =
+              weight.toString();
         }
       }
 

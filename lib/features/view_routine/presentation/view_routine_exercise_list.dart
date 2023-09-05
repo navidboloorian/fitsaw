@@ -51,9 +51,10 @@ class _ViewRoutineExerciseListState
           child: CustomContainer(
             color: Palette.container2Background,
             padding: EdgeInsets.zero,
+            margin: const EdgeInsets.fromLTRB(0, 0, 0, 5),
             child: RoutineExerciseListItem(
               routineExerciseController: routineExerciseController,
-              onEdit: (context, exercise) => {},
+              onEdit: _viewExercise,
             ),
           ),
         ),
