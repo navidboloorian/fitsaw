@@ -17,9 +17,9 @@ class _Routine {
 @RealmModel()
 class _RoutineExerciseWrapper {
   late final $Exercise? exercise;
-  late final int? sets;
-  late final int? reps;
-  late final int? time;
   late final int? rest;
-  late final int? weight;
+  late final int? sets;
+  late final List<int> reps;
+  late final List<int> times;
+  late final List<int> weights;
 }

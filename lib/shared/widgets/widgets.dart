@@ -13,3 +13,4 @@ export 'expandable_section.dart';
 export 'bottom_button.dart';
 export 'back_arrow_button.dart';
 export 'section_header.dart';
+export 'expandable_arrow.dart';

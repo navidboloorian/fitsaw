@@ -84,18 +84,19 @@ class RoutineExerciseWrapper extends _RoutineExerciseWrapper
     with RealmEntity, RealmObjectBase, RealmObject {
   RoutineExerciseWrapper({
     Exercise? exercise,
-    int? sets,
-    int? reps,
-    int? time,
     int? rest,
-    int? weight,
+    int? sets,
+    Iterable<int> reps = const [],
+    Iterable<int> times = const [],
+    Iterable<int> weights = const [],
   }) {
     RealmObjectBase.set(this, 'exercise', exercise);
-    RealmObjectBase.set(this, 'sets', sets);
-    RealmObjectBase.set(this, 'reps', reps);
-    RealmObjectBase.set(this, 'time', time);
     RealmObjectBase.set(this, 'rest', rest);
-    RealmObjectBase.set(this, 'weight', weight);
+    RealmObjectBase.set(this, 'sets', sets);
+    RealmObjectBase.set<RealmList<int>>(this, 'reps', RealmList<int>(reps));
+    RealmObjectBase.set<RealmList<int>>(this, 'times', RealmList<int>(times));
+    RealmObjectBase.set<RealmList<int>>(
+        this, 'weights', RealmList<int>(weights));
   }
 
   RoutineExerciseWrapper._();
@@ -107,29 +108,33 @@ class RoutineExerciseWrapper extends _RoutineExerciseWrapper
   set exercise(covariant Exercise? value) => throw RealmUnsupportedSetError();
 
   @override
-  int? get sets => RealmObjectBase.get<int>(this, 'sets') as int?;
-  @override
-  set sets(int? value) => throw RealmUnsupportedSetError();
-
-  @override
-  int? get reps => RealmObjectBase.get<int>(this, 'reps') as int?;
-  @override
-  set reps(int? value) => throw RealmUnsupportedSetError();
-
-  @override
-  int? get time => RealmObjectBase.get<int>(this, 'time') as int?;
-  @override
-  set time(int? value) => throw RealmUnsupportedSetError();
-
-  @override
   int? get rest => RealmObjectBase.get<int>(this, 'rest') as int?;
   @override
   set rest(int? value) => throw RealmUnsupportedSetError();
 
   @override
-  int? get weight => RealmObjectBase.get<int>(this, 'weight') as int?;
+  int? get sets => RealmObjectBase.get<int>(this, 'sets') as int?;
   @override
-  set weight(int? value) => throw RealmUnsupportedSetError();
+  set sets(int? value) => throw RealmUnsupportedSetError();
+
+  @override
+  RealmList<int> get reps =>
+      RealmObjectBase.get<int>(this, 'reps') as RealmList<int>;
+  @override
+  set reps(covariant RealmList<int> value) => throw RealmUnsupportedSetError();
+
+  @override
+  RealmList<int> get times =>
+      RealmObjectBase.get<int>(this, 'times') as RealmList<int>;
+  @override
+  set times(covariant RealmList<int> value) => throw RealmUnsupportedSetError();
+
+  @override
+  RealmList<int> get weights =>
+      RealmObjectBase.get<int>(this, 'weights') as RealmList<int>;
+  @override
+  set weights(covariant RealmList<int> value) =>
+      throw RealmUnsupportedSetError();
 
   @override
   Stream<RealmObjectChanges<RoutineExerciseWrapper>> get changes =>
@@ -147,11 +152,14 @@ class RoutineExerciseWrapper extends _RoutineExerciseWrapper
         'RoutineExerciseWrapper', [
       SchemaProperty('exercise', RealmPropertyType.object,
           optional: true, linkTarget: 'Exercise'),
-      SchemaProperty('sets', RealmPropertyType.int, optional: true),
-      SchemaProperty('reps', RealmPropertyType.int, optional: true),
-      SchemaProperty('time', RealmPropertyType.int, optional: true),
       SchemaProperty('rest', RealmPropertyType.int, optional: true),
-      SchemaProperty('weight', RealmPropertyType.int, optional: true),
+      SchemaProperty('sets', RealmPropertyType.int, optional: true),
+      SchemaProperty('reps', RealmPropertyType.int,
+          collectionType: RealmCollectionType.list),
+      SchemaProperty('times', RealmPropertyType.int,
+          collectionType: RealmCollectionType.list),
+      SchemaProperty('weights', RealmPropertyType.int,
+          collectionType: RealmCollectionType.list),
     ]);
   }
 }

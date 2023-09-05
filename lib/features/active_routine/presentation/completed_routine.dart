@@ -32,18 +32,18 @@ class _CompletedRoutineState extends ConsumerState<CompletedRoutine> {
 
     ref.read(activeExerciseListProvider).length;
 
-    for (RoutineExerciseWrapper routineExercise
-        in ref.read(activeExerciseListProvider)) {
-      if (routineExercise.exercise!.name != 'Rest') {
-        exercises.add(routineExercise.exercise!.name);
+    // for (RoutineExerciseWrapper routineExercise
+    //     in ref.read(activeExerciseListProvider)) {
+    //   if (routineExercise.exercise!.name != 'Rest') {
+    //     exercises.add(routineExercise.exercise!.name);
 
-        if (routineExercise.reps != null) {
-          _repCount += routineExercise.reps!;
-        } else {
-          _totalTime += routineExercise.time!;
-        }
-      }
-    }
+    //     if (routineExercise.reps != null) {
+    //       _repCount += routineExercise.reps!;
+    //     } else {
+    //       _totalTime += routineExercise.time!;
+    //     }
+    //   }
+    // }
 
     _exerciseCount = exercises.length;
   }

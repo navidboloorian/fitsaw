@@ -39,7 +39,7 @@ class _ViewRoutineExerciseListState
     List<Widget> list = [];
 
     for (int i = 0; i < ref.watch(routineExerciseListProvider).length; i++) {
-      RoutineExerciseController routineExercise =
+      RoutineExerciseController routineExerciseController =
           ref.watch(routineExerciseListProvider)[i];
 
       list.add(
@@ -48,9 +48,13 @@ class _ViewRoutineExerciseListState
           onDismissed: (DismissDirection direction) {
             ref.read(routineExerciseListProvider.notifier).removeAt(i);
           },
-          child: RoutineExerciseListItem(
-            routineExercise: routineExercise,
-            onClick: _viewExercise,
+          child: CustomContainer(
+            color: Palette.container2Background,
+            padding: EdgeInsets.zero,
+            child: RoutineExerciseListItem(
+              routineExerciseController: routineExerciseController,
+              onEdit: (context, exercise) => {},
+            ),
           ),
         ),
       );

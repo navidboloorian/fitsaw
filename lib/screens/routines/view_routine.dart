@@ -32,54 +32,83 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
 
   void _resetProviders() {
     ref.read(tagTextFieldListFamily('routine').notifier).clear();
+
+    for (RoutineExerciseController routineExerciseController
+        in ref.read(routineExerciseListProvider)) {
+      routineExerciseController.delete();
+    }
+
     ref.read(routineExerciseListProvider.notifier).clear();
   }
 
   List<RoutineExerciseWrapper> _generateRoutineExerciseList() {
     List<RoutineExerciseWrapper> list = [];
 
-    for (RoutineExerciseController routineExercise
+    for (RoutineExerciseController routineExerciseController
         in ref.read(routineExerciseListProvider)) {
-      int? reps;
-      int? time;
-      int? weight;
+      List<int> reps = [];
+      List<int> times = [];
+      List<int> weights = [];
 
-      if (routineExercise.setController.text.isEmpty) {
-        routineExercise.setController.text = '1';
+      if (routineExerciseController.setController.text.isEmpty) {
+        routineExerciseController.setController.text = '1';
       }
 
-      if (routineExercise.exercise.isTimed) {
-        if (routineExercise.timeController.text == '00:00') {
-          routineExercise.timeController.text = '00:01';
-        }
+      if (routineExerciseController.exercise.isTimed) {
+        for (TextEditingController controller
+            in routineExerciseController.timeControllers) {
+          if (controller.text == '00:00') {
+            controller.text = '00:01';
+          }
 
-        time =
-            TimeInputValidator.toSeconds(routineExercise.timeController.text);
+          TimeInputValidator.validate(controller);
+
+          int time = TimeInputValidator.toSeconds(controller.text);
+
+          times.add(time);
+        }
       } else {
-        if (routineExercise.repController.text.isEmpty) {
-          routineExercise.repController.text = '1';
-        }
+        for (TextEditingController controller
+            in routineExerciseController.repControllers) {
+          if (controller.text.isEmpty) {
+            controller.text = '1';
+          }
 
-        reps = int.parse(routineExercise.repController.text);
+          int repCount = int.parse(controller.text);
+
+          reps.add(repCount);
+        }
       }
 
-      if (routineExercise.exercise.isWeighted) {
-        if (routineExercise.weightController.text.isEmpty) {
-          routineExercise.weightController.text = '1';
-        }
+      if (routineExerciseController.exercise.isWeighted) {
+        for (TextEditingController controller
+            in routineExerciseController.weightControllers) {
+          if (controller.text.isEmpty) {
+            controller.text = '1';
+          }
 
-        weight = int.parse(routineExercise.weightController.text);
+          int weightCount = int.parse(controller.text);
+
+          weights.add(weightCount);
+        }
       }
+
+      TimeInputValidator.validate(routineExerciseController.restController);
+
+      print(reps);
+      print(times);
+      print(weights);
 
       list.add(
         RoutineExerciseWrapper(
-          exercise: routineExercise.exercise,
-          sets: int.parse(routineExercise.setController.text),
+          exercise: routineExerciseController.exercise,
+          sets: int.parse(routineExerciseController.setController.text),
           reps: reps,
-          time: time,
-          weight: weight,
-          rest:
-              TimeInputValidator.toSeconds(routineExercise.restController.text),
+          times: times,
+          weights: weights,
+          rest: TimeInputValidator.toSeconds(
+            routineExerciseController.restController.text,
+          ),
         ),
       );
     }
@@ -162,16 +191,31 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
           routineExercise.sets!.toString();
 
       if (routineExerciseController.exercise.isTimed) {
-        routineExerciseController.timeController.text =
-            TimeInputValidator.toTime(routineExercise.time!);
+        for (int time in routineExercise.times) {
+          routineExerciseController.timeControllers.add(
+            TextEditingController(
+              text: TimeInputValidator.toTime(time),
+            ),
+          );
+        }
       } else {
-        routineExerciseController.repController.text =
-            routineExercise.reps!.toString();
+        for (int reps in routineExercise.reps) {
+          routineExerciseController.repControllers.add(
+            TextEditingController(
+              text: reps.toString(),
+            ),
+          );
+        }
       }
 
       if (routineExerciseController.exercise.isWeighted) {
-        routineExerciseController.weightController.text =
-            routineExercise.weight!.toString();
+        for (int weight in routineExercise.weights) {
+          routineExerciseController.weightControllers.add(
+            TextEditingController(
+              text: weight.toString(),
+            ),
+          );
+        }
       }
 
       list.add(routineExerciseController);

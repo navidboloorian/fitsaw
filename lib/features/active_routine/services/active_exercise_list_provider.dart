@@ -20,8 +20,8 @@ final activeExerciseListProvider = Provider<List<RoutineExerciseWrapper>>(
           RoutineExerciseWrapper(
             exercise: exercise.exercise,
             reps: exercise.reps,
-            time: exercise.time,
-            weight: exercise.weight,
+            times: [],
+            weights: [],
           ),
         );
 
@@ -30,7 +30,7 @@ final activeExerciseListProvider = Provider<List<RoutineExerciseWrapper>>(
           exerciseList.add(
             RoutineExerciseWrapper(
               exercise: Exercise(ObjectId(), 'Rest', true, false),
-              time: exercise.rest,
+              times: [],
             ),
           );
         }

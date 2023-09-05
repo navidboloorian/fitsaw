@@ -11,10 +11,7 @@ class TimeTextField extends StatefulWidget {
 }
 
 class _TimeTextFieldState extends State<TimeTextField> {
-  @override
-  void initState() {
-    super.initState();
-
+  void _setDefault() {
     if (widget.controller.text.isEmpty) {
       widget.controller.text = '00:00';
     }
@@ -22,6 +19,8 @@ class _TimeTextFieldState extends State<TimeTextField> {
 
   @override
   Widget build(BuildContext context) {
+    _setDefault();
+
     return Focus(
       onFocusChange: (hasFocus) {
         if (!hasFocus) {

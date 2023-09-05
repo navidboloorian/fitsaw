@@ -19,7 +19,7 @@ class CurrentExercise extends ConsumerWidget {
       exerciseFields.add(
         CustomContainer(
           child: CountdownTimer(
-            duration: exerciseWrapper.time!,
+            duration: 0,
           ),
         ),
       );
@@ -35,7 +35,7 @@ class CurrentExercise extends ConsumerWidget {
                 ),
                 exerciseWrapper.exercise!.isWeighted
                     ? Text(
-                        '${exerciseWrapper.weight} lbs',
+                        '0 lbs',
                         style: const TextStyle(fontSize: 30),
                       )
                     : const SizedBox.shrink(),

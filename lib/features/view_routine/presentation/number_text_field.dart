@@ -13,10 +13,7 @@ class NumberTextField extends StatefulWidget {
 }
 
 class _NumberTextFieldState extends State<NumberTextField> {
-  @override
-  void initState() {
-    super.initState();
-
+  void _setDefault() {
     if (widget.controller.text.isEmpty) {
       widget.controller.text = '1';
     }
@@ -24,6 +21,8 @@ class _NumberTextFieldState extends State<NumberTextField> {
 
   @override
   Widget build(BuildContext context) {
+    _setDefault();
+
     return Focus(
       onFocusChange: (hasFocus) {
         if (!hasFocus) {
