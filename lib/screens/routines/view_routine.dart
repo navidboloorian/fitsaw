@@ -251,6 +251,7 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
       ref.read(currentSetProvider.notifier).state = 0;
       ref.read(isRoutineCompletedProvider.notifier).state = false;
       ref.read(isRestProvider.notifier).state = false;
+      ref.read(totalTimeProvider.notifier).start();
 
       Navigator.pushNamed(
         context,

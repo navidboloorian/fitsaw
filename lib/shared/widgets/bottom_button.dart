@@ -18,6 +18,7 @@ class BottomButton extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: CustomContainer(
+          margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
           height: 35,
           color: Palette.fitsawBlue,
           child: Center(
