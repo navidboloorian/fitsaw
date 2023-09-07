@@ -1,4 +1,5 @@
 import 'package:fitsaw/features/active_routine/services/services.dart';
+import 'package:fitsaw/features/routine_list/domain/domain.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,11 +26,47 @@ class _CountdownTimerState extends ConsumerState<CountdownTimer>
 
   void _goToNextExercise() {
     if (_controller.value == 0) {
-      if (ref.read(currentExerciseIndexProvider) !=
-          ref.read(activeExerciseListProvider).length - 1) {
-        ref.read(currentExerciseIndexProvider.notifier).state++;
+      int currentSet = ref.watch(currentSetProvider);
+      int currentExerciseIndex = ref.watch(currentExerciseIndexProvider);
+      bool isResting = ref.watch(isRestProvider);
+      RoutineExerciseWrapper? currentExerciseWrapper =
+          ref.watch(currentExerciseProvider);
+
+      bool isLastExercise = currentExerciseIndex ==
+              ref.watch(activeRoutineProvider)!.exercises.length - 1 &&
+          currentSet ==
+              ref
+                      .watch(activeRoutineProvider)!
+                      .exercises[currentExerciseIndex]
+                      .sets! -
+                  1;
+
+      if (isResting) {
+        ref.read(isRestProvider.notifier).state = false;
+
+        if (currentSet < currentExerciseWrapper!.sets! - 1) {
+          ref.read(currentSetProvider.notifier).state++;
+        } else if (currentExerciseIndex <
+            ref.watch(activeRoutineProvider)!.exercises.length - 1) {
+          ref.read(currentSetProvider.notifier).state = 0;
+          ref.read(currentExerciseIndexProvider.notifier).state++;
+        } else {
+          ref.read(isRoutineCompletedProvider.notifier).state = true;
+        }
       } else {
-        ref.read(isRoutineCompletedProvider.notifier).state = true;
+        if (currentExerciseWrapper!.rest! > 0 && !isLastExercise) {
+          ref.read(isRestProvider.notifier).state = true;
+        } else {
+          if (currentSet < currentExerciseWrapper.sets! - 1) {
+            ref.read(currentSetProvider.notifier).state++;
+          } else if (currentExerciseIndex <
+              ref.watch(activeRoutineProvider)!.exercises.length - 1) {
+            ref.read(currentSetProvider.notifier).state = 0;
+            ref.read(currentExerciseIndexProvider.notifier).state++;
+          } else {
+            ref.read(isRoutineCompletedProvider.notifier).state = true;
+          }
+        }
       }
     }
   }

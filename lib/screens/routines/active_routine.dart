@@ -7,24 +7,29 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class ActiveRoutine extends ConsumerWidget {
   const ActiveRoutine({super.key});
 
-  void _goToNextExercise(WidgetRef ref) {
-    if (ref.read(currentExerciseIndexProvider) !=
-        ref.read(activeExerciseListProvider).length - 1) {
-      ref.read(currentExerciseIndexProvider.notifier).state++;
-    } else {
-      ref.read(isRoutineCompletedProvider.notifier).state = true;
-    }
-  }
+  Future<bool> _onWillPop(WidgetRef ref) async {
+    int currentSet = ref.watch(currentSetProvider);
+    int currentExerciseIndex = ref.watch(currentExerciseIndexProvider);
+    bool isResting = ref.watch(isRestProvider);
+    bool isFirstExercise = currentExerciseIndex == 0 && currentSet == 0;
 
-  Future<bool> _goToPreviousExercise(
-      BuildContext context, WidgetRef ref) async {
-    if (ref.read(currentExerciseIndexProvider) != 0) {
-      // go to previous exercise if it's not the first exercise in the routine
-      ref.read(currentExerciseIndexProvider.notifier).state--;
+    ref.read(isRestProvider.notifier).state = false;
+
+    if (isResting) {
+      ref.read(isRestProvider.notifier).state = false;
       return false;
     } else {
-      // pop navigator if it's the first exercise in the routine
-      return true;
+      if (isFirstExercise) {
+        return true;
+      } else {
+        if (currentSet > 0) {
+          ref.read(currentSetProvider.notifier).state--;
+        } else {
+          ref.read(currentExerciseIndexProvider.notifier).state--;
+        }
+
+        return false;
+      }
     }
   }
 
@@ -32,30 +37,16 @@ class ActiveRoutine extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return WillPopScope(
       // intercept back button
-      onWillPop: () => _goToPreviousExercise(context, ref),
+      onWillPop: () => _onWillPop(ref),
       child: Scaffold(
         appBar: CustomAppBar(
           leading: BackArrowButton(() => Navigator.pop(context)),
         ),
         body: ref.watch(isRoutineCompletedProvider)
-            ? Column(
-                children: [
-                  const Expanded(child: CompletedRoutine()),
-                  BottomButton(
-                    text: 'Finish',
-                    onTap: () => Navigator.pop(context),
-                  ),
-                ],
-              )
-            : Column(
-                children: [
-                  const Expanded(child: CurrentExercise()),
-                  BottomButton(
-                    text: 'Next',
-                    onTap: () => _goToNextExercise(ref),
-                  )
-                ],
-              ),
+            ? const CompletedRoutine()
+            : ref.watch(isRestProvider)
+                ? const Rest()
+                : const CurrentExercise(),
       ),
     );
   }

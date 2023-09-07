@@ -95,10 +95,6 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
 
       TimeInputValidator.validate(routineExerciseController.restController);
 
-      print(reps);
-      print(times);
-      print(weights);
-
       list.add(
         RoutineExerciseWrapper(
           exercise: routineExerciseController.exercise,
@@ -137,44 +133,45 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
     return false;
   }
 
-  void _upsertRoutine(bool showSnackbar) {
+  Routine? _upsertRoutine(bool showSnackbar) {
     if (!_formHasErrors()) {
       ObjectId id = widget.isNew ? ObjectId() : widget.routine!.id;
       String name = _nameController.text;
       String description = _descriptionController.text;
       List<String> tags = ref.read(tagTextFieldListFamily('routine'));
       List<RoutineExerciseWrapper> exercises = _generateRoutineExerciseList();
+      Routine routine = Routine(
+        id,
+        name,
+        description: description,
+        tags: tags,
+        exercises: exercises,
+      );
 
-      ref.read(routineListProvider).upsert(
-            Routine(
-              id,
-              name,
-              description: description,
-              tags: tags,
-              exercises: exercises,
-            ),
-          );
+      ref.read(routineListProvider).upsert(routine);
 
       String snackbarMessage =
           widget.isNew ? 'Routine created!' : 'Routine updated!';
 
-      Navigator.pop(context);
+      if (showSnackbar) {
+        Navigator.pop(context);
+        _resetProviders();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Palette.fitsawGreen,
+            duration: const Duration(milliseconds: 500),
+            content: Text(
+              snackbarMessage,
+              style: const TextStyle(color: Palette.darkText),
+            ),
+          ),
+        );
+      }
 
-      _resetProviders();
-
-      showSnackbar
-          ? ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: Palette.fitsawGreen,
-                duration: const Duration(milliseconds: 500),
-                content: Text(
-                  snackbarMessage,
-                  style: const TextStyle(color: Palette.darkText),
-                ),
-              ),
-            )
-          : null;
+      return routine;
     }
+
+    return null;
   }
 
   List<RoutineExerciseController> _parseExistingExercises() {
@@ -247,16 +244,17 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
     // Ensure that changes that have made to the routine are maintained for
     // when the the routine is started.
     if (!_formHasErrors()) {
-      _upsertRoutine(false);
+      Routine? routine = _upsertRoutine(false);
 
-      ref.read(activeRoutineProvider.notifier).set(widget.routine!);
+      ref.read(activeRoutineProvider.notifier).set(routine!);
       ref.read(currentExerciseIndexProvider.notifier).state = 0;
+      ref.read(currentSetProvider.notifier).state = 0;
       ref.read(isRoutineCompletedProvider.notifier).state = false;
+      ref.read(isRestProvider.notifier).state = false;
 
       Navigator.pushNamed(
         context,
         'active_routine',
-        arguments: PageArguments(routine: widget.routine),
       );
     }
   }
@@ -268,6 +266,10 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
     if (!widget.isNew) {
       _populateForm();
     }
+
+    Future(() {
+      ref.read(activeRoutineProvider.notifier).set(null);
+    });
   }
 
   @override

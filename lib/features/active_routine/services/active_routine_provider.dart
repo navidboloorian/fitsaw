@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class ActiveRoutineNotifier extends StateNotifier<Routine?> {
   ActiveRoutineNotifier() : super(null);
 
-  void set(Routine routine) {
+  void set(Routine? routine) {
     state = routine;
   }
 

@@ -4,9 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final currentExerciseProvider = Provider<RoutineExerciseWrapper?>(
   (ref) {
-    final index = ref.watch(currentExerciseIndexProvider);
-    final activeExerciseList = ref.watch(activeExerciseListProvider);
+    final exerciseIndex = ref.watch(currentExerciseIndexProvider);
 
-    return activeExerciseList[index];
+    return ref.watch(activeRoutineProvider)!.exercises[exerciseIndex];
   },
 );
