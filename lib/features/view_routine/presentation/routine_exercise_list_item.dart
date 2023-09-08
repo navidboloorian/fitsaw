@@ -2,7 +2,7 @@ import 'package:fitsaw/features/exercise_list/domain/domain.dart';
 import 'package:fitsaw/features/view_routine/domain/domain.dart';
 import 'package:fitsaw/features/view_routine/presentation/presentation.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
-import 'package:fitsaw/shared/widgets/expandable_section.dart';
+import 'package:fitsaw/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -124,10 +124,10 @@ class ExerciseWideRow extends ConsumerWidget {
           padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
           child: Row(
             children: [
-              TextFieldColumn(
+              LabeledField(
                 width: 44,
                 label: 'Rest',
-                textField: TimeTextField(
+                child: TimeTextField(
                   controller: restController,
                 ),
               ),
@@ -137,10 +137,10 @@ class ExerciseWideRow extends ConsumerWidget {
                     updateSets(setController.text);
                   }
                 },
-                child: TextFieldColumn(
+                child: LabeledField(
                   width: 32,
                   label: 'Sets',
-                  textField: NumberTextField(
+                  child: NumberTextField(
                     controller: setController,
                     lengthLimit: 2,
                   ),
@@ -173,10 +173,10 @@ class PerSetRow extends ConsumerWidget {
 
     if (routineExerciseController.exercise.isTimed) {
       list.add(
-        TextFieldColumn(
+        LabeledField(
           width: 42,
           label: 'Time',
-          textField: TimeTextField(
+          child: TimeTextField(
             controller:
                 routineExerciseController.timeControllers[rowNumber - 1],
           ),
@@ -184,10 +184,10 @@ class PerSetRow extends ConsumerWidget {
       );
     } else {
       list.add(
-        TextFieldColumn(
+        LabeledField(
           width: 37,
           label: 'Reps',
-          textField: NumberTextField(
+          child: NumberTextField(
             controller: routineExerciseController.repControllers[rowNumber - 1],
             lengthLimit: 2,
           ),
@@ -199,10 +199,10 @@ class PerSetRow extends ConsumerWidget {
       list.add(const SizedBox(width: 5));
 
       list.add(
-        TextFieldColumn(
+        LabeledField(
           width: 55,
           label: 'Weight',
-          textField: NumberTextField(
+          child: NumberTextField(
             controller:
                 routineExerciseController.weightControllers[rowNumber - 1],
             lengthLimit: 3,
@@ -233,35 +233,6 @@ class PerSetRow extends ConsumerWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class TextFieldColumn extends StatelessWidget {
-  final double width;
-  final String label;
-  final Widget textField;
-
-  const TextFieldColumn({
-    super.key,
-    required this.width,
-    required this.label,
-    required this.textField,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: width,
-      child: Column(
-        children: [
-          textField,
-          Text(
-            label,
-            style: const TextStyle(color: Palette.secondaryText),
-          ),
-        ],
-      ),
     );
   }
 }

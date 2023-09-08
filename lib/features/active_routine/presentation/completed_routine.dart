@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 
+import 'package:fitsaw/features/active_routine/presentation/presentation.dart';
 import 'package:fitsaw/features/active_routine/services/services.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
-import 'package:fitsaw/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:confetti/confetti.dart';
@@ -17,7 +17,7 @@ class CompletedRoutine extends ConsumerStatefulWidget {
 
 class _CompletedRoutineState extends ConsumerState<CompletedRoutine> {
   late final ConfettiController _controller;
-  late final Duration totalTime;
+  late final Duration elapsedTime;
 
   void _calculateStats() {}
 
@@ -26,7 +26,7 @@ class _CompletedRoutineState extends ConsumerState<CompletedRoutine> {
     super.initState();
 
     ref.read(totalTimeProvider).stop();
-    totalTime = ref.read(totalTimeProvider.notifier).elapsed();
+    elapsedTime = ref.read(totalTimeProvider.notifier).elapsed();
     ref.read(totalTimeProvider).reset();
 
     _controller = ConfettiController(
@@ -50,11 +50,7 @@ class _CompletedRoutineState extends ConsumerState<CompletedRoutine> {
       children: [
         ListView(
           children: [
-            CustomContainer(
-              child: Text(
-                totalTime.toString().split('.').first.padLeft(8, '0'),
-              ),
-            ),
+            RoutineSummary(elapsedTime: elapsedTime),
           ],
         ),
         ConfettiWidget(

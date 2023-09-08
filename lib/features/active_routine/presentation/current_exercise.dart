@@ -13,12 +13,19 @@ class CurrentExercise extends ConsumerWidget {
       RoutineExerciseWrapper exerciseWrapper, int set) {
     List<Widget> children = [];
 
-    children.add(
-      Text(
-        '${exerciseWrapper.reps[set]} reps',
-        style: const TextStyle(fontSize: 30),
-      ),
-    );
+    exerciseWrapper.reps[set] > 1
+        ? children.add(
+            Text(
+              '${exerciseWrapper.reps[set]} reps',
+              style: const TextStyle(fontSize: 30),
+            ),
+          )
+        : children.add(
+            Text(
+              '${exerciseWrapper.reps[set]} rep',
+              style: const TextStyle(fontSize: 30),
+            ),
+          );
 
     if (exerciseWrapper.exercise!.isWeighted) {
       children.add(

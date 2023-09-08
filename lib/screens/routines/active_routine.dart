@@ -15,6 +15,10 @@ class ActiveRoutine extends ConsumerWidget {
 
     ref.read(isRestProvider.notifier).state = false;
 
+    if (ref.read(isRoutineCompletedProvider)) {
+      return true;
+    }
+
     if (isResting) {
       ref.read(isRestProvider.notifier).state = false;
       return false;

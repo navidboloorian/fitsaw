@@ -5,14 +5,20 @@ class TotalTimeNotifier extends StateNotifier<Stopwatch> {
 
   void start() {
     state.start();
+    print("HERE");
+    print(state.isRunning);
   }
 
   void stop() {
+    print(state.isRunning);
+    print(state.elapsed);
     state.stop();
+    print("EVERWHERE");
   }
 
   void reset() {
     state.reset();
+    print("THERE");
   }
 
   Duration elapsed() {

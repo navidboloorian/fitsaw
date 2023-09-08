@@ -67,6 +67,14 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
 
           times.add(time);
         }
+
+        // This case will be a true if a set count has been increased but the
+        // field was not unfocused.
+        if (times.length <
+            int.parse(routineExerciseController.setController.text)) {
+          routineExerciseController.setController.text =
+              times.length.toString();
+        }
       } else {
         for (TextEditingController controller
             in routineExerciseController.repControllers) {
@@ -77,6 +85,11 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
           int repCount = int.parse(controller.text);
 
           reps.add(repCount);
+        }
+
+        if (times.length <
+            int.parse(routineExerciseController.setController.text)) {
+          routineExerciseController.setController.text = reps.length.toString();
         }
       }
 
