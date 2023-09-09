@@ -17,6 +17,10 @@ class AppRouter {
         return PageRouteBuilder(
           pageBuilder: (_, __, ___) => const Routines(),
         );
+      case 'history':
+        return PageRouteBuilder(
+          pageBuilder: (_, __, ___) => const History(),
+        );
       case 'exercises':
         return PageRouteBuilder(
           pageBuilder: (_, __, ___) => const Exercises(),

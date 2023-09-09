@@ -11,9 +11,13 @@ class BottomNavBar extends ConsumerWidget {
     String currentScreen = ref.watch(navScreenProvider);
 
     const Map<String, Map> icons = <String, Map>{
+      'history': {
+        'icon': Icons.history_outlined,
+        'color': Palette.fitsawBlue,
+      },
       'exercises': {
         'icon': FitsawIcons.exercises,
-        'color': Palette.fitsawBlue,
+        'color': Palette.fitsawPurple,
       },
       'routines': {
         'icon': FitsawIcons.routines,
@@ -55,6 +59,7 @@ class BottomNavBar extends ConsumerWidget {
             child: Icon(
               icons[screen]!['icon'],
               color: iconColor,
+              size: screen == 'history' ? 30 : null,
             ),
           ),
         ),

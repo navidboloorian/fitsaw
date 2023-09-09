@@ -1,18 +1,20 @@
 import 'package:fitsaw/features/active_routine/presentation/presentation.dart';
-import 'package:fitsaw/features/active_routine/services/active_routine_provider.dart';
-import 'package:fitsaw/features/active_routine/services/services.dart';
 import 'package:fitsaw/features/routine_list/domain/domain.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
 import 'package:fitsaw/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class RoutineSummary extends ConsumerWidget {
-  final Duration elapsedTime;
+class RoutineSummaryDisplay extends ConsumerWidget {
+  final String elapsedTime;
+  final Routine routine;
+  final bool isHistory;
 
-  const RoutineSummary({
+  const RoutineSummaryDisplay({
     super.key,
     required this.elapsedTime,
+    required this.routine,
+    required this.isHistory,
   });
 
   List<Widget> _generateSetRows(RoutineExerciseWrapper routineExerciseWrapper) {
@@ -21,7 +23,9 @@ class RoutineSummary extends ConsumerWidget {
     for (int i = 0; i < routineExerciseWrapper.sets!; i++) {
       list.add(
         RoutineSummaryRow(
-            rowNumber: i, routineExerciseWrapper: routineExerciseWrapper),
+          rowNumber: i,
+          routineExerciseWrapper: routineExerciseWrapper,
+        ),
       );
     }
 
@@ -31,8 +35,7 @@ class RoutineSummary extends ConsumerWidget {
   List<Widget> _generateSections(WidgetRef ref) {
     List<Widget> list = [];
 
-    for (RoutineExerciseWrapper routineExerciseWrapper
-        in ref.read(activeRoutineProvider)!.exercises) {
+    for (RoutineExerciseWrapper routineExerciseWrapper in routine.exercises) {
       list.add(
         ExpandableSection(
           gap: 0,
@@ -52,17 +55,18 @@ class RoutineSummary extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Routine routine = ref.read(activeRoutineProvider)!;
-
     return CustomContainer(
       padding: EdgeInsets.zero,
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-            child: Center(
+          Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
               child: Text(
-                'Congratulations! You have completed your routine: ${routine.name}',
+                isHistory
+                    ? 'Routine: ${routine.name}'
+                    : 'Congratulations! You have completed your routine: ${routine.name}!',
               ),
             ),
           ),

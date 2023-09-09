@@ -6,7 +6,7 @@ part of 'routine.dart';
 // RealmObjectGenerator
 // **************************************************************************
 
-class Routine extends _Routine with RealmEntity, RealmObjectBase, RealmObject {
+class Routine extends $Routine with RealmEntity, RealmObjectBase, RealmObject {
   Routine(
     ObjectId id,
     String name, {
@@ -80,7 +80,7 @@ class Routine extends _Routine with RealmEntity, RealmObjectBase, RealmObject {
   }
 }
 
-class RoutineExerciseWrapper extends _RoutineExerciseWrapper
+class RoutineExerciseWrapper extends $RoutineExerciseWrapper
     with RealmEntity, RealmObjectBase, RealmObject {
   RoutineExerciseWrapper({
     Exercise? exercise,

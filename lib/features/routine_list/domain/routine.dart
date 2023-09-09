@@ -4,18 +4,18 @@ import 'package:fitsaw/features/exercise_list/domain/domain.dart';
 part 'routine.g.dart';
 
 @RealmModel()
-class _Routine {
+class $Routine {
   @PrimaryKey()
   late final ObjectId id;
 
   late final String name;
   late final String? description;
-  late final List<_RoutineExerciseWrapper> exercises;
+  late final List<$RoutineExerciseWrapper> exercises;
   late final List<String> tags;
 }
 
 @RealmModel()
-class _RoutineExerciseWrapper {
+class $RoutineExerciseWrapper {
   late final $Exercise? exercise;
   late final int? rest;
   late final int? sets;
