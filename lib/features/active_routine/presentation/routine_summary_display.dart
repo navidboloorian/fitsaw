@@ -1,5 +1,7 @@
 import 'package:fitsaw/features/active_routine/presentation/presentation.dart';
+import 'package:fitsaw/features/history/domain/history.dart';
 import 'package:fitsaw/features/routine_list/domain/domain.dart';
+import 'package:fitsaw/features/view_routine/services/services.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
 import 'package:fitsaw/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -7,13 +9,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class RoutineSummaryDisplay extends ConsumerWidget {
   final String elapsedTime;
-  final Routine routine;
+  final HistoryRoutine historyRoutine;
   final bool isHistory;
 
   const RoutineSummaryDisplay({
     super.key,
     required this.elapsedTime,
-    required this.routine,
+    required this.historyRoutine,
     required this.isHistory,
   });
 
@@ -35,14 +37,15 @@ class RoutineSummaryDisplay extends ConsumerWidget {
   List<Widget> _generateSections(WidgetRef ref) {
     List<Widget> list = [];
 
-    for (RoutineExerciseWrapper routineExerciseWrapper in routine.exercises) {
+    for (RoutineExerciseWrapper routineExerciseWrapper
+        in historyRoutine.exercises) {
       list.add(
         ExpandableSection(
           gap: 0,
           header: SummarySectionHeader(
             key: UniqueKey(),
             setCount: routineExerciseWrapper.sets!,
-            exercise: routineExerciseWrapper.exercise!,
+            historyExercise: routineExerciseWrapper.historyExercise!,
           ),
           isExpanded: true,
           children: _generateSetRows(routineExerciseWrapper),
@@ -65,8 +68,8 @@ class RoutineSummaryDisplay extends ConsumerWidget {
               padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
               child: Text(
                 isHistory
-                    ? 'Routine: ${routine.name}'
-                    : 'Congratulations! You have completed your routine: ${routine.name}!',
+                    ? 'Routine: ${historyRoutine.name}'
+                    : 'Congratulations! You have completed your routine: ${historyRoutine.name}!',
               ),
             ),
           ),
@@ -113,12 +116,14 @@ class RoutineSummaryRow extends ConsumerWidget {
   List<Widget> _generateFields() {
     List<Widget> list = [];
 
-    if (routineExerciseWrapper.exercise!.isTimed) {
+    if (routineExerciseWrapper.historyExercise!.isTimed) {
       list.add(
         LabeledField(
           width: 42,
           label: 'Time',
-          child: Text(routineExerciseWrapper.times[rowNumber].toString()),
+          child: Text(
+            TimeInputValidator.toTime(routineExerciseWrapper.times[rowNumber]),
+          ),
         ),
       );
     } else {
@@ -131,7 +136,7 @@ class RoutineSummaryRow extends ConsumerWidget {
       );
     }
 
-    if (routineExerciseWrapper.exercise!.isWeighted) {
+    if (routineExerciseWrapper.historyExercise!.isWeighted) {
       list.add(const SizedBox(width: 5));
 
       list.add(

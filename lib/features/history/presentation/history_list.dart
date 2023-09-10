@@ -1,6 +1,5 @@
 import 'package:fitsaw/features/active_routine/presentation/presentation.dart';
 import 'package:fitsaw/features/history/domain/history.dart';
-import 'package:fitsaw/features/history/services/history_list_provider.dart';
 import 'package:fitsaw/features/history/services/services.dart';
 import 'package:fitsaw/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +45,7 @@ class _HistoryListState extends ConsumerState<HistoryList> {
       list.add(
         RoutineSummaryDisplay(
           elapsedTime: summary.elapsedTime!,
-          routine: summary.routine!,
+          historyRoutine: summary.historyRoutine!,
           isHistory: true,
         ),
       );
@@ -59,15 +58,17 @@ class _HistoryListState extends ConsumerState<HistoryList> {
   Widget build(BuildContext context) {
     final historyList = ref.watch(historyListProvider);
 
-    return StreamBuilder(
-      stream: historyList.changes(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const CircularProgressIndicator();
-        }
+    return historyList.length() == 0
+        ? const Center(child: Text('No Workout History'))
+        : StreamBuilder(
+            stream: historyList.changes(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const CircularProgressIndicator();
+              }
 
-        return ListView(children: _pageElements());
-      },
-    );
+              return ListView(children: _pageElements());
+            },
+          );
   }
 }

@@ -17,5 +17,22 @@ class _RoutineSummary {
   late final ObjectId id;
 
   late final String? elapsedTime;
-  late final $Routine? routine;
+  late final _HistoryRoutine? historyRoutine;
+}
+
+@RealmModel()
+class _HistoryRoutine {
+  late final String name;
+  late final String? description;
+  late final List<$RoutineExerciseWrapper> exercises;
+  late final List<String> tags;
+}
+
+@RealmModel()
+class $HistoryExercise {
+  late final String name;
+  late final String? description;
+  late final bool isTimed;
+  late final bool isWeighted;
+  late final List<String> tags;
 }

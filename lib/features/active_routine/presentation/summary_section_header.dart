@@ -1,15 +1,15 @@
-import 'package:fitsaw/features/exercise_list/domain/domain.dart';
+import 'package:fitsaw/features/history/domain/history.dart';
 import 'package:fitsaw/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SummarySectionHeader extends ConsumerWidget {
-  final Exercise exercise;
+  final HistoryExercise historyExercise;
   final int setCount;
 
   const SummarySectionHeader({
     super.key,
-    required this.exercise,
+    required this.historyExercise,
     required this.setCount,
   });
 
@@ -24,8 +24,8 @@ class SummarySectionHeader extends ConsumerWidget {
         children: [
           ExpandableArrow(key: key),
           setCount > 1
-              ? Text('$setCount sets of ${exercise.name}')
-              : Text('$setCount set of ${exercise.name}'),
+              ? Text('$setCount sets of ${historyExercise.name}')
+              : Text('$setCount set of ${historyExercise.name}'),
         ],
       ),
     );

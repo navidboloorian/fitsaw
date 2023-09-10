@@ -84,6 +84,7 @@ class RoutineExerciseWrapper extends $RoutineExerciseWrapper
     with RealmEntity, RealmObjectBase, RealmObject {
   RoutineExerciseWrapper({
     Exercise? exercise,
+    HistoryExercise? historyExercise,
     int? rest,
     int? sets,
     Iterable<int> reps = const [],
@@ -91,6 +92,7 @@ class RoutineExerciseWrapper extends $RoutineExerciseWrapper
     Iterable<int> weights = const [],
   }) {
     RealmObjectBase.set(this, 'exercise', exercise);
+    RealmObjectBase.set(this, 'historyExercise', historyExercise);
     RealmObjectBase.set(this, 'rest', rest);
     RealmObjectBase.set(this, 'sets', sets);
     RealmObjectBase.set<RealmList<int>>(this, 'reps', RealmList<int>(reps));
@@ -106,6 +108,14 @@ class RoutineExerciseWrapper extends $RoutineExerciseWrapper
       RealmObjectBase.get<Exercise>(this, 'exercise') as Exercise?;
   @override
   set exercise(covariant Exercise? value) => throw RealmUnsupportedSetError();
+
+  @override
+  HistoryExercise? get historyExercise =>
+      RealmObjectBase.get<HistoryExercise>(this, 'historyExercise')
+          as HistoryExercise?;
+  @override
+  set historyExercise(covariant HistoryExercise? value) =>
+      throw RealmUnsupportedSetError();
 
   @override
   int? get rest => RealmObjectBase.get<int>(this, 'rest') as int?;
@@ -152,6 +162,8 @@ class RoutineExerciseWrapper extends $RoutineExerciseWrapper
         'RoutineExerciseWrapper', [
       SchemaProperty('exercise', RealmPropertyType.object,
           optional: true, linkTarget: 'Exercise'),
+      SchemaProperty('historyExercise', RealmPropertyType.object,
+          optional: true, linkTarget: 'HistoryExercise'),
       SchemaProperty('rest', RealmPropertyType.int, optional: true),
       SchemaProperty('sets', RealmPropertyType.int, optional: true),
       SchemaProperty('reps', RealmPropertyType.int,

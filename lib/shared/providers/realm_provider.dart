@@ -11,10 +11,13 @@ final realmProvider = Provider<Realm>((ref) {
       Exercise.schema,
       Routine.schema,
       RoutineExerciseWrapper.schema,
-      History.schema,
       RoutineSummary.schema,
+      History.schema,
+      HistoryRoutine.schema,
+      HistoryExercise.schema,
     ],
     schemaVersion: 3,
+    shouldDeleteIfMigrationNeeded: true,
     migrationCallback: (migration, oldSchemaVersion) {
       final oldRoutineSummaries = migration.oldRealm.all('RoutineSummary');
 

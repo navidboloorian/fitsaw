@@ -1,3 +1,4 @@
+import 'package:fitsaw/features/history/domain/history.dart';
 import 'package:realm/realm.dart';
 import 'package:fitsaw/features/exercise_list/domain/domain.dart';
 
@@ -17,6 +18,7 @@ class $Routine {
 @RealmModel()
 class $RoutineExerciseWrapper {
   late final $Exercise? exercise;
+  late final $HistoryExercise? historyExercise;
   late final int? rest;
   late final int? sets;
   late final List<int> reps;
