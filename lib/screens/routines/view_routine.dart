@@ -191,38 +191,44 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
     List<RoutineExerciseController> list = [];
 
     for (RoutineExerciseWrapper routineExercise in widget.routine!.exercises) {
-      RoutineExerciseController routineExerciseController =
-          RoutineExerciseController(routineExercise.exercise!);
+      try {
+        RoutineExerciseController routineExerciseController =
+            RoutineExerciseController(routineExercise.exercise!);
 
-      routineExerciseController.restController.text =
-          TimeInputValidator.toTime(routineExercise.rest!);
+        routineExerciseController.restController.text =
+            TimeInputValidator.toTime(routineExercise.rest!);
 
-      routineExerciseController.setController.text =
-          routineExercise.sets!.toString();
+        routineExerciseController.setController.text =
+            routineExercise.sets!.toString();
 
-      for (int i = 0; i < routineExercise.sets!; i++) {
-        routineExerciseController.add();
+        for (int i = 0; i < routineExercise.sets!; i++) {
+          routineExerciseController.add();
 
-        if (routineExerciseController.exercise.isTimed) {
-          int time = routineExercise.times[i];
+          if (routineExerciseController.exercise.isTimed) {
+            int time = routineExercise.times[i];
 
-          routineExerciseController.timeControllers[i].text =
-              TimeInputValidator.toTime(time);
-        } else {
-          int reps = routineExercise.reps[i];
+            routineExerciseController.timeControllers[i].text =
+                TimeInputValidator.toTime(time);
+          } else {
+            int reps = routineExercise.reps[i];
 
-          routineExerciseController.repControllers[i].text = reps.toString();
+            routineExerciseController.repControllers[i].text = reps.toString();
+          }
+
+          if (routineExerciseController.exercise.isWeighted) {
+            int weight = routineExercise.weights[i];
+
+            routineExerciseController.weightControllers[i].text =
+                weight.toString();
+          }
         }
 
-        if (routineExerciseController.exercise.isWeighted) {
-          int weight = routineExercise.weights[i];
-
-          routineExerciseController.weightControllers[i].text =
-              weight.toString();
-        }
+        list.add(routineExerciseController);
+      } catch (error) {
+        // The exercise has been deleted and we're using "!" on a null variable.
+        // We don't need to handle the error as the exercise has not been added
+        // to the list.
       }
-
-      list.add(routineExerciseController);
     }
 
     return list;
@@ -311,7 +317,7 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
                 descriptionController: _descriptionController,
               ),
             ),
-            widget.isNew
+            widget.isNew || ref.watch(routineExerciseListProvider).isEmpty
                 ? const SizedBox.shrink()
                 : BottomButton(text: 'Start', onTap: _startRoutine),
           ],

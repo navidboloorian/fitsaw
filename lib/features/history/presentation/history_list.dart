@@ -27,7 +27,7 @@ class _HistoryListState extends ConsumerState<HistoryList> {
             key: UniqueKey(),
             title: DateParser.intToString(history.date),
           ),
-          isExpanded: true,
+          isExpanded: false,
           children: _routineSummaries(history.summaries),
         ),
       );

@@ -45,7 +45,7 @@ class AppRouter {
         );
       case 'active_routine':
         return MaterialPageRoute(
-          builder: (context) => ActiveRoutine(),
+          builder: (context) => const ActiveRoutine(),
         );
       default:
         return null;
