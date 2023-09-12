@@ -7,8 +7,15 @@ import 'dart:math' as math;
 
 class CountdownTimer extends ConsumerStatefulWidget {
   final int duration;
+  final int? set;
+  final int? exerciseIndex;
 
-  const CountdownTimer({super.key, required this.duration});
+  const CountdownTimer({
+    super.key,
+    required this.duration,
+    this.set,
+    this.exerciseIndex,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _CountdownTimerState();
@@ -107,13 +114,25 @@ class _CountdownTimerState extends ConsumerState<CountdownTimer>
   void didUpdateWidget(CountdownTimer oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (oldWidget != widget) {
-      _isStopped = false;
+    if (ref.watch(isRestProvider)) {
+      if (oldWidget != widget) {
+        _isStopped = false;
 
-      _controller.duration = Duration(seconds: widget.duration);
-      _controller.reverse();
+        _controller.duration = Duration(seconds: widget.duration);
+        _controller.reverse();
 
-      _reset();
+        _reset();
+      }
+    } else {
+      if (oldWidget.exerciseIndex != widget.exerciseIndex ||
+          oldWidget.set != widget.set) {
+        _isStopped = false;
+
+        _controller.duration = Duration(seconds: widget.duration);
+        _controller.reverse();
+
+        _reset();
+      }
     }
   }
 

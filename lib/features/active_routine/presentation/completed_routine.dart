@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'package:fitsaw/features/active_routine/presentation/presentation.dart';
 import 'package:fitsaw/features/active_routine/services/services.dart';
 import 'package:fitsaw/features/history/domain/domain.dart';
-import 'package:fitsaw/features/history/presentation/history_helper.dart';
 import 'package:fitsaw/features/history/services/history_list_provider.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
 import 'package:flutter/material.dart';
@@ -44,9 +43,7 @@ class _CompletedRoutineState extends ConsumerState<CompletedRoutine> {
               RoutineSummary(
                 ObjectId(),
                 elapsedTime: elapsedTime,
-                historyRoutine: HistoryHelper.routineToHistory(
-                  ref.read(activeRoutineProvider)!,
-                ),
+                historyRoutine: ref.read(activeRoutineProvider)!,
               ),
             ],
           ),
@@ -78,9 +75,7 @@ class _CompletedRoutineState extends ConsumerState<CompletedRoutine> {
             children: [
               RoutineSummaryDisplay(
                 elapsedTime: elapsedTime!,
-                historyRoutine: HistoryHelper.routineToHistory(
-                  ref.read(activeRoutineProvider)!,
-                ),
+                historyRoutine: ref.read(activeRoutineProvider)!,
                 isHistory: false,
               ),
             ],

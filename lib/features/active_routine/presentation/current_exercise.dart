@@ -2,36 +2,144 @@ import 'package:fitsaw/features/active_routine/presentation/presentation.dart';
 import 'package:fitsaw/features/active_routine/services/services.dart';
 import 'package:fitsaw/features/exercise_list/domain/domain.dart';
 import 'package:fitsaw/features/routine_list/domain/domain.dart';
+import 'package:fitsaw/features/view_routine/presentation/number_text_field.dart';
 import 'package:fitsaw/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CurrentExercise extends ConsumerWidget {
+class CurrentExercise extends ConsumerStatefulWidget {
   const CurrentExercise({super.key});
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _CurrentExerciseState();
+}
+
+class _CurrentExerciseState extends ConsumerState<CurrentExercise> {
+  TextEditingController? _repController;
+  TextEditingController? _weightController;
+  int? _repValue;
+  int? _weightValue;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _setControllers();
+  }
+
+  void _setControllers() {
+    int set = ref.read(currentSetProvider);
+    RoutineExerciseWrapper currentExercise = ref.read(currentExerciseProvider)!;
+
+    if (!currentExercise.exercise!.isTimed) {
+      _repController =
+          TextEditingController(text: currentExercise.reps[set].toString());
+
+      _repValue = currentExercise.reps[set];
+      _repController!.addListener(_setRepValue);
+    } else {
+      _repController = null;
+      _repValue = null;
+    }
+
+    if (currentExercise.exercise!.isWeighted) {
+      _weightController =
+          TextEditingController(text: currentExercise.weights[set].toString());
+
+      _weightValue = currentExercise.weights[set];
+      _weightController!.addListener(_setWeightValue);
+    } else {
+      _weightController = null;
+      _weightValue = null;
+    }
+  }
+
+  void _setRepValue() {
+    if (_repController!.text.isNotEmpty) {
+      setState(() {
+        _repValue = int.parse(_repController!.text);
+      });
+    }
+  }
+
+  void _setWeightValue() {
+    if (_weightController!.text.isNotEmpty) {
+      setState(() {
+        _weightValue = int.parse(_weightController!.text);
+      });
+    }
+  }
+
+  void _updateExerciseStats() {
+    int set = ref.read(currentSetProvider);
+    RoutineExerciseWrapper currentExercise = ref.read(currentExerciseProvider)!;
+
+    if (!currentExercise.exercise!.isTimed) {
+      if (_repValue != currentExercise.reps[set]) {
+        currentExercise.reps[set] = _repValue!;
+      }
+    }
+
+    if (currentExercise.exercise!.isWeighted) {
+      if (_weightValue != currentExercise.weights[set]) {
+        currentExercise.weights[set] = _weightValue!;
+      }
+    }
+  }
 
   CustomContainer _repExerciseDetails(
       RoutineExerciseWrapper exerciseWrapper, int set) {
     List<Widget> children = [];
+    _setControllers();
 
-    exerciseWrapper.reps[set] > 1
-        ? children.add(
-            Text(
-              '${exerciseWrapper.reps[set]} reps',
-              style: const TextStyle(fontSize: 30),
+    children.add(
+      Center(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              // tweak these specific numbers
+              width: _repValue.toString().length == 1 ? 40 : 50,
+              child: NumberTextField(
+                controller: _repController!,
+                lengthLimit: 2,
+                style: const TextStyle(fontSize: 30),
+              ),
             ),
-          )
-        : children.add(
-            Text(
-              '${exerciseWrapper.reps[set]} rep',
-              style: const TextStyle(fontSize: 30),
-            ),
-          );
+            _repValue! != 1
+                ? const Text('reps', style: TextStyle(fontSize: 30))
+                : const Text('rep', style: TextStyle(fontSize: 30)),
+          ],
+        ),
+      ),
+    );
 
     if (exerciseWrapper.exercise!.isWeighted) {
       children.add(
-        Text(
-          '${exerciseWrapper.weights[set]} lbs',
-          style: const TextStyle(fontSize: 30),
+        Center(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                // tweak these specific numbers
+                width: _weightValue.toString().length == 1
+                    ? 40
+                    : _weightValue.toString().length == 2
+                        ? 50
+                        : 60,
+                child: NumberTextField(
+                  key: const ValueKey(1),
+                  controller: _weightController!,
+                  lengthLimit: 3,
+                  style: const TextStyle(fontSize: 30),
+                ),
+              ),
+              _weightValue! != 1
+                  ? const Text('lbs', style: TextStyle(fontSize: 30))
+                  : const Text('lb', style: TextStyle(fontSize: 30)),
+            ],
+          ),
         ),
       );
     }
@@ -45,7 +153,7 @@ class CurrentExercise extends ConsumerWidget {
     );
   }
 
-  List<Widget> _pageElements(WidgetRef ref) {
+  List<Widget> _pageElements() {
     List<Widget> list = [];
     RoutineExerciseWrapper? currentExerciseWrapper =
         ref.watch(currentExerciseProvider);
@@ -69,6 +177,8 @@ class CurrentExercise extends ConsumerWidget {
       list.add(
         CustomContainer(
           child: CountdownTimer(
+              set: ref.watch(currentSetProvider),
+              exerciseIndex: ref.watch(currentExerciseIndexProvider),
               duration: currentExerciseWrapper.times[currentSet]),
         ),
       );
@@ -77,9 +187,27 @@ class CurrentExercise extends ConsumerWidget {
         list.add(
           CustomContainer(
             child: Center(
-              child: Text(
-                '${currentExerciseWrapper.weights[currentSet]} lbs',
-                style: const TextStyle(fontSize: 30),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    // tweak these specific numbers
+                    width: _weightValue.toString().length == 1
+                        ? 40
+                        : _weightValue.toString().length == 2
+                            ? 50
+                            : 60,
+                    child: NumberTextField(
+                      key: const ValueKey(1),
+                      controller: _weightController!,
+                      lengthLimit: 3,
+                      style: const TextStyle(fontSize: 30),
+                    ),
+                  ),
+                  _weightValue! != 1
+                      ? const Text('lbs', style: TextStyle(fontSize: 30))
+                      : const Text('lb', style: TextStyle(fontSize: 30)),
+                ],
               ),
             ),
           ),
@@ -129,7 +257,9 @@ class CurrentExercise extends ConsumerWidget {
     return list;
   }
 
-  void _goToNextExercise(WidgetRef ref) {
+  void _goToNextExercise() {
+    _updateExerciseStats();
+
     int currentSet = ref.watch(currentSetProvider);
     int currentExerciseIndex = ref.watch(currentExerciseIndexProvider);
     RoutineExerciseWrapper? currentExerciseWrapper =
@@ -156,10 +286,25 @@ class CurrentExercise extends ConsumerWidget {
         ref.read(isRoutineCompletedProvider.notifier).state = true;
       }
     }
+
+    _setControllers();
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void dispose() {
+    super.dispose();
+
+    if (_repController != null) {
+      _repController!.dispose();
+    }
+
+    if (_weightController != null) {
+      _weightController!.dispose();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     int currentSet = ref.watch(currentSetProvider);
     int currentExerciseIndex = ref.watch(currentExerciseIndexProvider);
     bool isLastExercise = currentExerciseIndex ==
@@ -174,11 +319,11 @@ class CurrentExercise extends ConsumerWidget {
     return Column(
       children: [
         Expanded(
-          child: ListView(children: _pageElements(ref)),
+          child: ListView(children: _pageElements()),
         ),
         BottomButton(
           text: isLastExercise ? 'Finish' : 'Next',
-          onTap: () => _goToNextExercise(ref),
+          onTap: _goToNextExercise,
         ),
       ],
     );

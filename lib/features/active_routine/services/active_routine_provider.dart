@@ -1,11 +1,11 @@
-import 'package:fitsaw/features/routine_list/domain/domain.dart';
+import 'package:fitsaw/features/history/domain/domain.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ActiveRoutineNotifier extends StateNotifier<Routine?> {
+class ActiveRoutineNotifier extends StateNotifier<HistoryRoutine?> {
   ActiveRoutineNotifier() : super(null);
 
-  void set(Routine? routine) {
-    state = routine;
+  void set(HistoryRoutine? historyRoutine) {
+    state = historyRoutine;
   }
 
   void clear() {
@@ -14,5 +14,5 @@ class ActiveRoutineNotifier extends StateNotifier<Routine?> {
 }
 
 final activeRoutineProvider =
-    StateNotifierProvider<ActiveRoutineNotifier, Routine?>(
+    StateNotifierProvider<ActiveRoutineNotifier, HistoryRoutine?>(
         (ref) => ActiveRoutineNotifier());

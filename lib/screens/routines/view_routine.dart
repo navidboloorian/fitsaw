@@ -1,4 +1,5 @@
 import 'package:fitsaw/features/active_routine/services/services.dart';
+import 'package:fitsaw/features/history/presentation/presentation.dart';
 import 'package:fitsaw/features/routine_list/domain/domain.dart';
 import 'package:fitsaw/features/routine_list/services/services.dart';
 import 'package:fitsaw/features/view_routine/domain/domain.dart';
@@ -228,6 +229,7 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
         // The exercise has been deleted and we're using "!" on a null variable.
         // We don't need to handle the error as the exercise has not been added
         // to the list.
+        continue;
       }
     }
 
@@ -265,7 +267,10 @@ class _ViewRoutineState extends ConsumerState<ViewRoutine> {
     if (!_formHasErrors()) {
       Routine? routine = _upsertRoutine(false);
 
-      ref.read(activeRoutineProvider.notifier).set(routine!);
+      ref
+          .read(activeRoutineProvider.notifier)
+          .set(HistoryHelper.routineToHistory(routine!));
+
       ref.read(currentExerciseIndexProvider.notifier).state = 0;
       ref.read(currentSetProvider.notifier).state = 0;
       ref.read(isRoutineCompletedProvider.notifier).state = false;

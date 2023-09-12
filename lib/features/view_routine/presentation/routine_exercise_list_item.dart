@@ -30,7 +30,7 @@ class _RoutineExerciseListItemState
   void _generatePerSetRows() {
     if (sets > perSetRows.length) {
       for (int i = perSetRows.length; i < sets; i++) {
-        // avoids adding extra controllers when prepopulating
+        // Avoids adding extra controllers when prepopulating.
         if (sets > widget.routineExerciseController.repControllers.length) {
           widget.routineExerciseController.add();
         }

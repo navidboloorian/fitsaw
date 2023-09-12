@@ -4,9 +4,14 @@ import 'package:flutter/services.dart';
 class NumberTextField extends StatefulWidget {
   final TextEditingController controller;
   final int lengthLimit;
+  final TextStyle? style;
 
-  const NumberTextField(
-      {super.key, required this.controller, required this.lengthLimit});
+  const NumberTextField({
+    super.key,
+    required this.controller,
+    required this.lengthLimit,
+    this.style,
+  });
 
   @override
   State<NumberTextField> createState() => _NumberTextFieldState();
@@ -24,6 +29,7 @@ class _NumberTextFieldState extends State<NumberTextField> {
     _setDefault();
 
     return Focus(
+      key: widget.key,
       onFocusChange: (hasFocus) {
         if (!hasFocus) {
           if (widget.controller.text.isEmpty ||
@@ -33,10 +39,11 @@ class _NumberTextFieldState extends State<NumberTextField> {
         }
       },
       child: TextFormField(
+        key: widget.key != null ? widget.key : UniqueKey(),
         textAlign: TextAlign.center,
-        key: UniqueKey(),
         controller: widget.controller,
         decoration: const InputDecoration(hintText: '0'),
+        style: widget.style,
         keyboardType: TextInputType.number,
         inputFormatters: [
           FilteringTextInputFormatter.digitsOnly,

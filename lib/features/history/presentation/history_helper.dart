@@ -19,6 +19,7 @@ class HistoryHelper {
         reps: exerciseWrapper.reps,
         times: exerciseWrapper.times,
         weights: exerciseWrapper.weights,
+        exercise: exerciseWrapper.exercise,
       );
 
       exercises.add(historyExerciseWrapper);

@@ -15,7 +15,7 @@ class RoutineExerciseListItemHeader extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // This container allows the entire row to be clickable isntead of just the
+    // This container allows the entire row to be clickable instead of just the
     // text/arrow. I'm not sure why this works but it does.
     return Container(
       color: Colors.transparent,
