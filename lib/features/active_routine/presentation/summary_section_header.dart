@@ -23,9 +23,11 @@ class SummarySectionHeader extends ConsumerWidget {
       child: Row(
         children: [
           ExpandableArrow(key: key),
-          setCount > 1
-              ? Text('$setCount sets of ${historyExercise.name}')
-              : Text('$setCount set of ${historyExercise.name}'),
+          Flexible(
+            child: setCount > 1
+                ? Text('$setCount sets of ${historyExercise.name}')
+                : Text('$setCount set of ${historyExercise.name}'),
+          ),
         ],
       ),
     );

@@ -3,6 +3,7 @@ import 'package:fitsaw/features/routine_list/domain/domain.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'dart:math' as math;
 
 class CountdownTimer extends ConsumerStatefulWidget {
@@ -27,6 +28,10 @@ class _CountdownTimerState extends ConsumerState<CountdownTimer>
     with TickerProviderStateMixin {
   late bool _isStopped;
   late AnimationController _controller;
+  late AudioPlayer _audioPlayer;
+  bool _twoSecBeep = false;
+  bool _oneSecBeep = false;
+  bool _zeroSecBeep = false;
 
   String get timerString {
     Duration duration = _controller.duration! * _controller.value;
@@ -94,6 +99,37 @@ class _CountdownTimerState extends ConsumerState<CountdownTimer>
     }
   }
 
+  void _playSound() {
+    if (_controller.lastElapsedDuration != null) {
+      double timeLeft = _controller.duration!.inSeconds.toDouble() -
+          _controller.lastElapsedDuration!.inSeconds.toDouble();
+
+      if (!_twoSecBeep && timeLeft == 3) {
+        setState(() {
+          _twoSecBeep = true;
+        });
+
+        _audioPlayer.play(AssetSource('audio/short_beep.wav'));
+      }
+
+      if (!_oneSecBeep && timeLeft == 2) {
+        setState(() {
+          _oneSecBeep = true;
+        });
+
+        _audioPlayer.play(AssetSource('audio/short_beep.wav'));
+      }
+
+      if (!_zeroSecBeep && timeLeft == 1) {
+        setState(() {
+          _zeroSecBeep = true;
+        });
+
+        _audioPlayer.play(AssetSource('audio/long_beep.wav'));
+      }
+    }
+  }
+
   void _reset() {
     _controller.value = widget.duration.toDouble();
     _controller.duration = Duration(seconds: widget.duration);
@@ -107,6 +143,7 @@ class _CountdownTimerState extends ConsumerState<CountdownTimer>
   void initState() {
     super.initState();
 
+    _audioPlayer = AudioPlayer();
     _isStopped = false;
 
     _controller = AnimationController(
@@ -114,6 +151,7 @@ class _CountdownTimerState extends ConsumerState<CountdownTimer>
     _controller.reverse(
         from: _controller.value == 0.0 ? 1.0 : _controller.value);
     _controller.addListener(_goToNextExercise);
+    _controller.addListener(_playSound);
   }
 
   @override
@@ -145,6 +183,7 @@ class _CountdownTimerState extends ConsumerState<CountdownTimer>
   @override
   void dispose() {
     _controller.dispose();
+    _audioPlayer.dispose();
     super.dispose();
   }
 

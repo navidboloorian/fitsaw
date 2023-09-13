@@ -1,12 +1,13 @@
 name: fitsaw
 description: A new Flutter project.
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: '>=3.0.5 <4.0.0'
+  sdk: ">=3.0.5 <4.0.0"
 
 dependencies:
+  audioplayers: ^5.1.0
   confetti: ^0.7.0
   flutter:
     sdk: flutter
@@ -17,10 +18,11 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
+  flutter_launcher_icons: "^0.13.1"
 
 flutter:
   uses-material-design: true
-  fonts: 
+  fonts:
     - family: OpenSans
       fonts:
         - asset: assets/fonts/OpenSans-Regular.ttf
@@ -33,3 +35,11 @@ flutter:
   assets:
     # Add assets from the images directory to the application.
     - assets/images/
+    - assets/audio/
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/icon.jpg"
+  min_sdk_android: 21
+  remove_alpha_ios: true
