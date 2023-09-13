@@ -91,7 +91,6 @@ class _CurrentExerciseState extends ConsumerState<CurrentExercise> {
   CustomContainer _repExerciseDetails(
       RoutineExerciseWrapper exerciseWrapper, int set) {
     List<Widget> children = [];
-    _setControllers();
 
     children.add(
       Center(
@@ -102,6 +101,7 @@ class _CurrentExerciseState extends ConsumerState<CurrentExercise> {
               // tweak these specific numbers
               width: _repValue.toString().length == 1 ? 40 : 50,
               child: NumberTextField(
+                key: const ValueKey(0),
                 controller: _repController!,
                 lengthLimit: 2,
                 style: const TextStyle(fontSize: 30),
@@ -177,9 +177,11 @@ class _CurrentExerciseState extends ConsumerState<CurrentExercise> {
       list.add(
         CustomContainer(
           child: CountdownTimer(
-              set: ref.watch(currentSetProvider),
-              exerciseIndex: ref.watch(currentExerciseIndexProvider),
-              duration: currentExerciseWrapper.times[currentSet]),
+            set: ref.watch(currentSetProvider),
+            exerciseIndex: ref.watch(currentExerciseIndexProvider),
+            duration: currentExerciseWrapper.times[currentSet],
+            setControllers: _setControllers,
+          ),
         ),
       );
 

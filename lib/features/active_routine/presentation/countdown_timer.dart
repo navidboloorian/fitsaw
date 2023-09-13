@@ -9,12 +9,14 @@ class CountdownTimer extends ConsumerStatefulWidget {
   final int duration;
   final int? set;
   final int? exerciseIndex;
+  final Function? setControllers;
 
   const CountdownTimer({
     super.key,
     required this.duration,
     this.set,
     this.exerciseIndex,
+    this.setControllers,
   });
 
   @override
@@ -74,6 +76,10 @@ class _CountdownTimerState extends ConsumerState<CountdownTimer>
             ref.read(isRoutineCompletedProvider.notifier).state = true;
           }
         }
+      }
+
+      if (widget.setControllers != null) {
+        widget.setControllers!();
       }
     }
   }

@@ -19,15 +19,17 @@ class RoutineExerciseListItemHeader extends ConsumerWidget {
     // text/arrow. I'm not sure why this works but it does.
     return Container(
       color: Colors.transparent,
-      width: double.infinity,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.max,
         children: [
-          Row(
-            children: [
-              ExpandableArrow(key: key),
-              Text(exercise.name),
-            ],
+          Flexible(
+            child: Row(
+              children: [
+                ExpandableArrow(key: key),
+                Flexible(child: Text(exercise.name)),
+              ],
+            ),
           ),
           EditButton(() => onEdit(context, exercise)),
         ],

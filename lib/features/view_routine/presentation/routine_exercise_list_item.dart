@@ -80,21 +80,37 @@ class _RoutineExerciseListItemState
   Widget build(BuildContext context) {
     _generatePerSetRows();
 
-    return ExpandableSection(
-      isExpanded: true,
-      gap: 0,
-      header: RoutineExerciseListItemHeader(
-        key: UniqueKey(),
-        exercise: widget.routineExerciseController.exercise,
-        onEdit: widget.onEdit,
-      ),
+    return Column(
       children: [
-        ExerciseWideRow(
-          setController: widget.routineExerciseController.setController,
-          restController: widget.routineExerciseController.restController,
-          updateSets: _updateSets,
+        const Align(
+          alignment: Alignment.topCenter,
+          child: SizedBox(
+            height: 8,
+            child: Icon(
+              Icons.drag_handle,
+              size: 15,
+              opticalSize: 15,
+              color: Palette.containerBorder,
+            ),
+          ),
         ),
-        ...perSetRows,
+        ExpandableSection(
+          isExpanded: true,
+          gap: 0,
+          header: RoutineExerciseListItemHeader(
+            key: UniqueKey(),
+            exercise: widget.routineExerciseController.exercise,
+            onEdit: widget.onEdit,
+          ),
+          children: [
+            ExerciseWideRow(
+              setController: widget.routineExerciseController.setController,
+              restController: widget.routineExerciseController.restController,
+              updateSets: _updateSets,
+            ),
+            ...perSetRows,
+          ],
+        ),
       ],
     );
   }
