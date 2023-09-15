@@ -1,4 +1,5 @@
 import 'package:fitsaw/screens/screens.dart';
+import 'package:fitsaw/screens/settings.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
 import 'package:flutter/material.dart';
 
@@ -42,6 +43,10 @@ class AppRouter {
             isNew: arguments.isNew!,
             routine: arguments.routine,
           ),
+        );
+      case 'settings':
+        return MaterialPageRoute(
+          builder: (context) => const Settings(),
         );
       case 'active_routine':
         return MaterialPageRoute(

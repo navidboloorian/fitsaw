@@ -1,6 +1,7 @@
 import 'package:fitsaw/features/active_routine/presentation/presentation.dart';
 import 'package:fitsaw/features/history/domain/history.dart';
 import 'package:fitsaw/features/history/services/services.dart';
+import 'package:fitsaw/shared/classes/classes.dart';
 import 'package:fitsaw/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -64,7 +65,9 @@ class _HistoryListState extends ConsumerState<HistoryList> {
             stream: historyList.changes(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
-                return const CircularProgressIndicator();
+                return const Center(
+                  child: CircularProgressIndicator(color: Palette.fitsawBlue),
+                );
               }
 
               return ListView(children: _pageElements());

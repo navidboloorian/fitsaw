@@ -16,3 +16,4 @@ export 'section_header.dart';
 export 'expandable_arrow.dart';
 export 'edit_button.dart';
 export 'labeled_field.dart';
+export 'settings_button.dart';

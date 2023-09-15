@@ -15,6 +15,7 @@ class Routines extends ConsumerWidget {
         children: const [SearchBox(), RoutineList()],
       ),
       appBar: CustomAppBar(
+        leading: SettingsButton(() => Navigator.pushNamed(context, 'settings')),
         actions: [
           PlusButton(
             () => Navigator.pushNamed(

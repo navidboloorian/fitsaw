@@ -80,7 +80,9 @@ class _RoutineListState extends ConsumerState<RoutineList> {
       stream: routineList.changes(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return const CircularProgressIndicator();
+          return const Center(
+            child: CircularProgressIndicator(color: Palette.fitsawBlue),
+          );
         }
 
         return ExpandableSection(

@@ -15,6 +15,7 @@ class Exercises extends ConsumerWidget {
         children: const [SearchBox(), ExerciseList()],
       ),
       appBar: CustomAppBar(
+        leading: SettingsButton(() => Navigator.pushNamed(context, 'settings')),
         actions: [
           PlusButton(
             () => Navigator.pushNamed(

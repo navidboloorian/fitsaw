@@ -32,6 +32,9 @@ class Themes {
         errorBorder: InputBorder.none,
         disabledBorder: InputBorder.none,
       ),
+      listTileTheme: const ListTileThemeData(
+        horizontalTitleGap: 0,
+      ),
     );
   }
 }

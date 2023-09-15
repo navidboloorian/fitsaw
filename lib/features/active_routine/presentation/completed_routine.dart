@@ -66,7 +66,9 @@ class _CompletedRoutineState extends ConsumerState<CompletedRoutine> {
   @override
   Widget build(BuildContext context) {
     if (elapsedTime == null) {
-      return const CircularProgressIndicator();
+      return const Center(
+        child: CircularProgressIndicator(color: Palette.fitsawBlue),
+      );
     } else {
       return Stack(
         alignment: Alignment.center,
