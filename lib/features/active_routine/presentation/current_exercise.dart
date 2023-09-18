@@ -2,7 +2,7 @@ import 'package:fitsaw/features/active_routine/presentation/presentation.dart';
 import 'package:fitsaw/features/active_routine/services/services.dart';
 import 'package:fitsaw/features/exercise_list/domain/domain.dart';
 import 'package:fitsaw/features/routine_list/domain/domain.dart';
-import 'package:fitsaw/features/settings.dart/services/services.dart';
+import 'package:fitsaw/features/settings/services/services.dart';
 import 'package:fitsaw/features/view_routine/presentation/number_text_field.dart';
 import 'package:fitsaw/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';

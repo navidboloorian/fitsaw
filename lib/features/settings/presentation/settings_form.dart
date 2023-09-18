@@ -1,4 +1,4 @@
-import 'package:fitsaw/features/settings.dart/services/services.dart';
+import 'package:fitsaw/features/settings/services/services.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
 import 'package:fitsaw/shared/widgets/custom_container.dart';
 import 'package:flutter/material.dart';

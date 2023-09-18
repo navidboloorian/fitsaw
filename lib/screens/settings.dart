@@ -1,5 +1,5 @@
-import 'package:fitsaw/features/settings.dart/domain/domain.dart';
-import 'package:fitsaw/features/settings.dart/services/services.dart';
+import 'package:fitsaw/features/settings/domain/domain.dart';
+import 'package:fitsaw/features/settings/services/services.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
 import 'package:fitsaw/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';

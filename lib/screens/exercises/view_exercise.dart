@@ -27,12 +27,9 @@ class _ViewExerciseState extends ConsumerState<ViewExercise> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
-  late final _weightedSwitchButton = switchButtonProvider('isWeighted');
-  late final _timedSwitchButton = switchButtonProvider('isTimed');
-
   void _resetProviders() {
-    ref.read(_timedSwitchButton.notifier).state = false;
-    ref.read(_weightedSwitchButton.notifier).state = false;
+    ref.read(switchButtonProvider('timed').notifier).state = false;
+    ref.read(switchButtonProvider('weighted').notifier).state = false;
     ref.read(tagTextFieldListFamily('exercise').notifier).clear();
   }
 
@@ -40,8 +37,8 @@ class _ViewExerciseState extends ConsumerState<ViewExercise> {
     if (_formKey.currentState!.validate()) {
       ObjectId id = widget.isNew ? ObjectId() : widget.exercise!.id;
       String name = _nameController.text;
-      bool isTimed = ref.read(_timedSwitchButton);
-      bool isWeighted = ref.read(_weightedSwitchButton);
+      bool isTimed = ref.read(switchButtonProvider('timed'));
+      bool isWeighted = ref.read(switchButtonProvider('weighted'));
       List<String> tags = ref.read(tagTextFieldListFamily('exercise'));
 
       // Make description null if empty.
@@ -89,9 +86,10 @@ class _ViewExerciseState extends ConsumerState<ViewExercise> {
 
     // Uses "Future" to avoid provider being updated before widget is built out.
     Future(() {
-      ref.read(_weightedSwitchButton.notifier).state =
+      ref.read(switchButtonProvider('weighted').notifier).state =
           widget.exercise!.isWeighted;
-      ref.read(_timedSwitchButton.notifier).state = widget.exercise!.isTimed;
+      ref.read(switchButtonProvider('timed').notifier).state =
+          widget.exercise!.isTimed;
       ref
           .read(tagTextFieldListFamily('exercise').notifier)
           .set(widget.exercise!.tags);
@@ -134,8 +132,6 @@ class _ViewExerciseState extends ConsumerState<ViewExercise> {
           formKey: _formKey,
           nameController: _nameController,
           descriptionController: _descriptionController,
-          weightedSwitchButton: _weightedSwitchButton,
-          timedSwitchButton: _timedSwitchButton,
         ),
       ),
     );

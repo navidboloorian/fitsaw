@@ -1,7 +1,8 @@
 import 'package:fitsaw/features/exercise_list/domain/domain.dart';
 import 'package:fitsaw/features/history/domain/history.dart';
 import 'package:fitsaw/features/routine_list/domain/domain.dart';
-import 'package:fitsaw/features/settings.dart/domain/domain.dart';
+import 'package:fitsaw/features/settings/domain/domain.dart';
+import 'package:fitsaw/features/user_flow/domain/domain.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:realm/realm.dart';
 
@@ -17,6 +18,7 @@ final realmProvider = Provider<Realm>((ref) {
       HistoryRoutine.schema,
       HistoryExercise.schema,
       SettingsInfo.schema,
+      FitsawUser.schema
     ],
     schemaVersion: 3,
     shouldDeleteIfMigrationNeeded: true,

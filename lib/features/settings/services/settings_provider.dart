@@ -1,4 +1,4 @@
-import 'package:fitsaw/features/settings.dart/domain/domain.dart';
+import 'package:fitsaw/features/settings/domain/domain.dart';
 import 'package:fitsaw/shared/providers/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:realm/realm.dart';

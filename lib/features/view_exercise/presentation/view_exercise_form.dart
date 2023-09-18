@@ -6,16 +6,12 @@ class ViewExerciseForm extends ConsumerWidget {
   final GlobalKey<FormState> formKey;
   final TextEditingController nameController;
   final TextEditingController descriptionController;
-  final StateProvider<bool> weightedSwitchButton;
-  final StateProvider<bool> timedSwitchButton;
 
   const ViewExerciseForm({
     super.key,
     required this.formKey,
     required this.nameController,
     required this.descriptionController,
-    required this.weightedSwitchButton,
-    required this.timedSwitchButton,
   });
 
   @override
@@ -40,15 +36,15 @@ class ViewExerciseForm extends ConsumerWidget {
               },
             ),
           ),
-          SwitchButton(
+          const SwitchButton(
             left: 'Reps',
             right: 'Time',
-            provider: timedSwitchButton,
+            providerName: 'timed',
           ),
-          SwitchButton(
+          const SwitchButton(
             left: 'Not Weighted',
             right: 'Weighted',
-            provider: weightedSwitchButton,
+            providerName: 'weighted',
           ),
           CustomContainer(
             child: TextFormField(

@@ -5,11 +5,15 @@ import 'package:flutter/material.dart';
 class BottomButton extends StatelessWidget {
   final String text;
   final VoidCallback onTap;
+  final double height;
+  final EdgeInsets margin;
 
   const BottomButton({
     super.key,
     required this.text,
     required this.onTap,
+    this.height = 30,
+    this.margin = const EdgeInsets.fromLTRB(0, 10, 0, 10),
   });
 
   @override
@@ -18,8 +22,9 @@ class BottomButton extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: CustomContainer(
-          margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-          height: 35,
+          margin: margin,
+          height: height,
+          padding: EdgeInsets.zero,
           color: Palette.fitsawBlue,
           child: Center(
             child: Text(
