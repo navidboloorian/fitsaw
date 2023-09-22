@@ -16,7 +16,7 @@ class Exercise extends $Exercise
     String? description,
     Iterable<String> tags = const [],
   }) {
-    RealmObjectBase.set(this, 'id', id);
+    RealmObjectBase.set(this, '_id', id);
     RealmObjectBase.set(this, 'name', name);
     RealmObjectBase.set(this, 'description', description);
     RealmObjectBase.set(this, 'isTimed', isTimed);
@@ -28,7 +28,7 @@ class Exercise extends $Exercise
   Exercise._();
 
   @override
-  ObjectId get id => RealmObjectBase.get<ObjectId>(this, 'id') as ObjectId;
+  ObjectId get id => RealmObjectBase.get<ObjectId>(this, '_id') as ObjectId;
   @override
   set id(ObjectId value) => throw RealmUnsupportedSetError();
 
@@ -72,7 +72,8 @@ class Exercise extends $Exercise
   static SchemaObject _initSchema() {
     RealmObjectBase.registerFactory(Exercise._);
     return const SchemaObject(ObjectType.realmObject, Exercise, 'Exercise', [
-      SchemaProperty('id', RealmPropertyType.objectid, primaryKey: true),
+      SchemaProperty('id', RealmPropertyType.objectid,
+          mapTo: '_id', primaryKey: true),
       SchemaProperty('name', RealmPropertyType.string),
       SchemaProperty('description', RealmPropertyType.string, optional: true),
       SchemaProperty('isTimed', RealmPropertyType.bool),

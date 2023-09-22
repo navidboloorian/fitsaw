@@ -8,6 +8,7 @@ part 'exercise.g.dart';
 @RealmModel()
 class $Exercise {
   @PrimaryKey()
+  @MapTo("_id")
   late final ObjectId id;
 
   late final String name;

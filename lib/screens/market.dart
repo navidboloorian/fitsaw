@@ -19,6 +19,7 @@ class Market extends ConsumerWidget {
           mainAxisSize: MainAxisSize.max,
           children: [
             CustomContainer(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
               child: Column(
                 children: [
                   const SwitchButton(

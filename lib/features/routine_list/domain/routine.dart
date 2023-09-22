@@ -7,6 +7,7 @@ part 'routine.g.dart';
 @RealmModel()
 class $Routine {
   @PrimaryKey()
+  @MapTo('_id')
   late final ObjectId id;
 
   late final String name;

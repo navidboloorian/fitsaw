@@ -14,7 +14,7 @@ class Routine extends $Routine with RealmEntity, RealmObjectBase, RealmObject {
     Iterable<RoutineExerciseWrapper> exercises = const [],
     Iterable<String> tags = const [],
   }) {
-    RealmObjectBase.set(this, 'id', id);
+    RealmObjectBase.set(this, '_id', id);
     RealmObjectBase.set(this, 'name', name);
     RealmObjectBase.set(this, 'description', description);
     RealmObjectBase.set<RealmList<RoutineExerciseWrapper>>(
@@ -26,7 +26,7 @@ class Routine extends $Routine with RealmEntity, RealmObjectBase, RealmObject {
   Routine._();
 
   @override
-  ObjectId get id => RealmObjectBase.get<ObjectId>(this, 'id') as ObjectId;
+  ObjectId get id => RealmObjectBase.get<ObjectId>(this, '_id') as ObjectId;
   @override
   set id(ObjectId value) => throw RealmUnsupportedSetError();
 
@@ -68,7 +68,8 @@ class Routine extends $Routine with RealmEntity, RealmObjectBase, RealmObject {
   static SchemaObject _initSchema() {
     RealmObjectBase.registerFactory(Routine._);
     return const SchemaObject(ObjectType.realmObject, Routine, 'Routine', [
-      SchemaProperty('id', RealmPropertyType.objectid, primaryKey: true),
+      SchemaProperty('id', RealmPropertyType.objectid,
+          mapTo: '_id', primaryKey: true),
       SchemaProperty('name', RealmPropertyType.string),
       SchemaProperty('description', RealmPropertyType.string, optional: true),
       SchemaProperty('exercises', RealmPropertyType.object,
