@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fitsaw/shared/providers/providers.dart';
 
-void main() {
+void main() async {
+  await dbProvider();
   runApp(ProviderScope(child: App()));
 }
 
