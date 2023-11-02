@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fitsaw/shared/providers/providers.dart';
 
 void main() async {
-  await dbProvider();
   runApp(ProviderScope(child: App()));
 }
 
