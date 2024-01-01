@@ -1,12 +1,10 @@
 import 'package:fitsaw/shared/classes/classes.dart';
-import 'package:fitsaw/shared/providers/providers.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
-class RegisterUser {
-  static Future<List<String>> register(String email, String displayName,
+class UserHelper {
+  static Future<Map<String, dynamic>> register(String email, String displayName,
       String password, String confPassword, Db db) async {
-    Map<String, Object> response = {};
+    Map<String, dynamic> response = {};
     List<String> errors = [];
     String encryptedPassword = "";
 
@@ -44,6 +42,24 @@ class RegisterUser {
 
     response['errors'] = errors;
 
-    return errors;
+    return response;
+  }
+  
+  static Future<Map<String, dynamic>> login(String email,
+      String password, Db db) async {
+    Map<String, dynamic> response = {};
+    List<String> errors = [];
+    String encryptedPassword = PasswordEncrypter.encrypt(password);
+
+    var users = db.collection('users');
+    Map<String, dynamic>? matchedUser = await users.findOne(where.eq('email', email).eq('password', encryptedPassword));
+
+    if (matchedUser == null) {
+      errors.add('A user with your provided credentials does not exist!');
+    }
+
+    response['errors'] = errors;
+
+    return response;
   }
 }

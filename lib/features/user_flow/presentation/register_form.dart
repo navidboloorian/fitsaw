@@ -1,4 +1,4 @@
-import 'package:fitsaw/features/user_flow/services/register_user.dart';
+import 'package:fitsaw/features/user_flow/services/services.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
 import 'package:fitsaw/shared/providers/db_provider.dart';
 import 'package:fitsaw/shared/widgets/bottom_button.dart';
@@ -24,11 +24,9 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
   void _submitForm() {
     AsyncValue<Db> db = ref.watch(dbProvider);
 
-    print("HERE");
-
     db.whenData(
       (db) async {
-        var val = await RegisterUser.register(
+        Map<String, dynamic> response = await UserHelper.register(
           _emailController.text,
           _displayNameController.text,
           _passwordController.text,
@@ -39,13 +37,13 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
         String snackBarString = "";
         Color snackBarColor;
 
-        if (val.isNotEmpty) {
+        if (response['errors'].isNotEmpty) {
           snackBarColor = Palette.fitsawRed;
 
-          for (int i = 0; i < val.length; i++) {
-            snackBarString += val[i];
+          for (int i = 0; i < response['errors'].length; i++) {
+            snackBarString += response['errors'][i];
 
-            if (i != val.length - 1) {
+            if (i != response['errors'].length - 1) {
               snackBarString += '\n';
             }
           }
@@ -67,7 +65,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
           );
         }
 
-        print(val);
+        print(response);
       },
     );
   }

@@ -1,8 +1,11 @@
+import 'package:fitsaw/features/user_flow/services/services.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
+import 'package:fitsaw/shared/providers/db_provider.dart';
 import 'package:fitsaw/shared/widgets/bottom_button.dart';
 import 'package:fitsaw/shared/widgets/custom_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mongo_dart/mongo_dart.dart';
 
 class LoginForm extends ConsumerStatefulWidget {
   const LoginForm({super.key});
@@ -13,12 +16,64 @@ class LoginForm extends ConsumerStatefulWidget {
 
 class _LoginFormState extends ConsumerState<LoginForm> {
   late final GlobalKey _formKey;
+  late final TextEditingController _emailController;
+  late final TextEditingController _passwordController;
+
+  void _submitForm() {
+    AsyncValue<Db> db = ref.watch(dbProvider);
+
+    db.whenData(
+      (db) async {
+        Map<String, dynamic> response = await UserHelper.login(
+          _emailController.text,
+          _passwordController.text,
+          db,
+        );
+
+        String snackBarString = "";
+        Color snackBarColor;
+
+        if (response['errors'].isNotEmpty) {
+          snackBarColor = Palette.fitsawRed;
+
+          for (int i = 0; i < response['errors'].length; i++) {
+            snackBarString += response['errors'][i];
+
+            if (i != response['errors'].length - 1) {
+              snackBarString += '\n';
+            }
+          }
+        } else {
+          snackBarColor = Palette.fitsawGreen;
+          snackBarString = "User successfully logged in!.";
+        }
+
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: snackBarColor,
+              duration: const Duration(milliseconds: 2000),
+              content: Text(
+                snackBarString,
+                style: const TextStyle(color: Palette.darkText),
+              ),
+            ),
+          );
+        }
+
+        print(response);
+      },
+    );
+  }
 
   @override
   void initState() {
     super.initState();
 
     _formKey = GlobalKey<FormState>();
+
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
   }
 
   @override
@@ -30,6 +85,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
           CustomContainer(
             color: Palette.container2Background,
             child: TextFormField(
+              controller: _emailController,
               decoration: const InputDecoration(hintText: 'Email'),
               validator: (value) {
                 if (value == null ||
@@ -46,12 +102,13 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             color: Palette.container2Background,
             child: TextFormField(
               obscureText: true,
+              controller: _passwordController,
               decoration: const InputDecoration(hintText: 'Password'),
             ),
           ),
           BottomButton(
             text: 'Login',
-            onTap: () {},
+            onTap: _submitForm,
             margin: EdgeInsets.zero,
           ),
         ],
