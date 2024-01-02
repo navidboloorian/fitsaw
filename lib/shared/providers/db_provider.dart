@@ -5,6 +5,7 @@ import 'package:fitsaw/env/env.dart';
 final dbProvider = FutureProvider<Db>(
   (ref) async {
     // wrap in try catch
+    print(Env.mongoURI);
     var db = await Db.create(Env.mongoURI);
 
     await db.open();

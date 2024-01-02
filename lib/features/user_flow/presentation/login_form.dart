@@ -15,20 +15,37 @@ class LoginForm extends ConsumerStatefulWidget {
 }
 
 class _LoginFormState extends ConsumerState<LoginForm> {
-  late final GlobalKey _formKey;
-  late final TextEditingController _emailController;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late final TextEditingController _displayNameOrEmailController;
   late final TextEditingController _passwordController;
 
   void _submitForm() {
+    if(!_formKey.currentState!.validate()) {
+      return;
+    }
+
     AsyncValue<Db> db = ref.watch(dbProvider);
 
     db.whenData(
       (db) async {
-        Map<String, dynamic> response = await UserHelper.login(
-          _emailController.text,
-          _passwordController.text,
-          db,
-        );
+        Map<String, dynamic> response;
+
+        if(_displayNameOrEmailController.text.contains('@') && _displayNameOrEmailController.text.contains('.')) {
+          response = await UserHelper.login(
+            _passwordController.text,
+            db,
+            _displayNameOrEmailController.text,
+            null,
+          );
+        }
+        else {
+          response = await UserHelper.login(
+            _passwordController.text,
+            db,
+            null,
+            _displayNameOrEmailController.text,
+          );
+        }
 
         String snackBarString = "";
         Color snackBarColor;
@@ -60,8 +77,6 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             ),
           );
         }
-
-        print(response);
       },
     );
   }
@@ -70,9 +85,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   void initState() {
     super.initState();
 
-    _formKey = GlobalKey<FormState>();
-
-    _emailController = TextEditingController();
+    _displayNameOrEmailController = TextEditingController();
     _passwordController = TextEditingController();
   }
 
@@ -85,14 +98,12 @@ class _LoginFormState extends ConsumerState<LoginForm> {
           CustomContainer(
             color: Palette.container2Background,
             child: TextFormField(
-              controller: _emailController,
-              decoration: const InputDecoration(hintText: 'Email'),
+              controller: _displayNameOrEmailController,
+              decoration: const InputDecoration(hintText: 'Display name or email'),
               validator: (value) {
                 if (value == null ||
-                    value.isEmpty ||
-                    !value.contains('@') ||
-                    !value.contains('.')) {
-                  return 'Invalid email';
+                    value.isEmpty) {
+                  return 'Please enter a display name or email.';
                 }
                 return null;
               },
@@ -101,6 +112,13 @@ class _LoginFormState extends ConsumerState<LoginForm> {
           CustomContainer(
             color: Palette.container2Background,
             child: TextFormField(
+              validator: (value) {
+                if (value == null ||
+                    value.isEmpty) {
+                  return 'Please enter a password.';
+                }
+                return null;
+              },
               obscureText: true,
               controller: _passwordController,
               decoration: const InputDecoration(hintText: 'Password'),

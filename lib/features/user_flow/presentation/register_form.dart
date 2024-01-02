@@ -15,13 +15,27 @@ class RegisterForm extends ConsumerStatefulWidget {
 }
 
 class _RegisterFormState extends ConsumerState<RegisterForm> {
-  late final GlobalKey _formKey;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late final TextEditingController _emailController;
   late final TextEditingController _displayNameController;
   late final TextEditingController _passwordController;
   late final TextEditingController _confPasswordController;
 
+  @override
+  void initState() {
+    super.initState();
+
+    _emailController = TextEditingController();
+    _displayNameController = TextEditingController();
+    _passwordController = TextEditingController();
+    _confPasswordController = TextEditingController();
+  }
+
   void _submitForm() {
+    if(!_formKey.currentState!.validate()) {
+      return;
+    }
+
     AsyncValue<Db> db = ref.watch(dbProvider);
 
     db.whenData(
@@ -71,18 +85,6 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
   }
 
   @override
-  void initState() {
-    super.initState();
-
-    _formKey = GlobalKey<FormState>();
-
-    _emailController = TextEditingController();
-    _displayNameController = TextEditingController();
-    _passwordController = TextEditingController();
-    _confPasswordController = TextEditingController();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
@@ -95,10 +97,12 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
               decoration: const InputDecoration(hintText: 'Email'),
               validator: (value) {
                 if (value == null ||
-                    value.isEmpty ||
-                    !value.contains('@') ||
+                    value.isEmpty) {
+                  return 'Please enter an email.';
+                }
+                else if(!value.contains('@') ||
                     !value.contains('.')) {
-                  return 'Invalid email';
+                  return 'Invalid email format.';
                 }
                 return null;
               },
@@ -107,6 +111,12 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
           CustomContainer(
             color: Palette.container2Background,
             child: TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a display name.';
+                }
+                return null;
+              },
               controller: _displayNameController,
               decoration: const InputDecoration(hintText: 'Display name'),
             ),
@@ -114,6 +124,12 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
           CustomContainer(
             color: Palette.container2Background,
             child: TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a password.';
+                }
+                return null;
+              },
               controller: _passwordController,
               obscureText: true,
               decoration: const InputDecoration(hintText: 'Password'),
@@ -121,7 +137,12 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
           ),
           CustomContainer(
             color: Palette.container2Background,
-            child: TextFormField(
+            child: TextFormField(validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please confirm your password.';
+                }
+                return null;
+              },
               controller: _confPasswordController,
               obscureText: true,
               decoration: const InputDecoration(hintText: 'Confirm password'),

@@ -10,11 +10,15 @@ class Market extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final db = ref.watch(dbProvider);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: const CustomAppBar(),
       body: Center(
-        child: Column(
+        child: switch(db) {
+          AsyncError(:final error) => const Text('There\'s been an error, please try again later.'),
+          AsyncData() => Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: [
@@ -36,6 +40,8 @@ class Market extends ConsumerWidget {
             )
           ],
         ),
+          _ => const CircularProgressIndicator(color: Palette.fitsawBlue),
+        }
       ),
       bottomNavigationBar: const BottomNavBar(),
     );
