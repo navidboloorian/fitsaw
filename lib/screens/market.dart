@@ -17,7 +17,7 @@ class Market extends ConsumerWidget {
       appBar: const CustomAppBar(),
       body: Center(
         child: switch(db) {
-          AsyncError(:final error) => const Text('There\'s been an error, please try again later.'),
+          AsyncError() => const Text('There\'s been an error, please try again later.'),
           AsyncData() => Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,

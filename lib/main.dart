@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fitsaw/shared/providers/providers.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
   runApp(ProviderScope(child: App()));
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 }
 
 class App extends StatelessWidget {

@@ -11,8 +11,7 @@ class _FitsawUser {
 
   late final List<$Routine> routines;
   late final List<$Exercise> exercises;
-  late final String? email;
-  late final String? password;
+  late final String? firebaseUID;
   late final String? displayName;
   late final String? profilePictureURL;
   late final double? reputation;

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "514263577912",
+    "project_id": "fitsaw",
+    "storage_bucket": "fitsaw.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:514263577912:android:5c9bf69b48c9f6afac3dcd",
+        "android_client_info": {
+          "package_name": "com.example.fitsaw"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0M7AOPax7tkGPqExpexmjlOrqj-36k0Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -16,7 +16,7 @@ class LoginForm extends ConsumerStatefulWidget {
 
 class _LoginFormState extends ConsumerState<LoginForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late final TextEditingController _displayNameOrEmailController;
+  late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
 
   void _submitForm() {
@@ -30,22 +30,11 @@ class _LoginFormState extends ConsumerState<LoginForm> {
       (db) async {
         Map<String, dynamic> response;
 
-        if(_displayNameOrEmailController.text.contains('@') && _displayNameOrEmailController.text.contains('.')) {
-          response = await UserHelper.login(
-            _passwordController.text,
-            db,
-            _displayNameOrEmailController.text,
-            null,
-          );
-        }
-        else {
-          response = await UserHelper.login(
-            _passwordController.text,
-            db,
-            null,
-            _displayNameOrEmailController.text,
-          );
-        }
+        response = await UserHelper.login(
+          _passwordController.text,
+          _emailController.text,
+          db,
+        );
 
         String snackBarString = "";
         Color snackBarColor;
@@ -85,7 +74,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   void initState() {
     super.initState();
 
-    _displayNameOrEmailController = TextEditingController();
+    _emailController = TextEditingController();
     _passwordController = TextEditingController();
   }
 
@@ -98,12 +87,12 @@ class _LoginFormState extends ConsumerState<LoginForm> {
           CustomContainer(
             color: Palette.container2Background,
             child: TextFormField(
-              controller: _displayNameOrEmailController,
-              decoration: const InputDecoration(hintText: 'Display name or email'),
+              controller: _emailController,
+              decoration: const InputDecoration(hintText: 'Email'),
               validator: (value) {
                 if (value == null ||
                     value.isEmpty) {
-                  return 'Please enter a display name or email.';
+                  return 'Please enter an email.';
                 }
                 return null;
               },
