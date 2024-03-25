@@ -48,10 +48,10 @@ class _SettingsState extends ConsumerState<Settings> {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         backgroundColor: Palette.fitsawGreen,
-        duration: const Duration(milliseconds: 500),
+        duration: Duration(milliseconds: 500),
         content: Text(
           'Settings Updated!',
-          style: const TextStyle(color: Palette.darkText),
+          style: TextStyle(color: Palette.darkText),
         ),
       ),
     );

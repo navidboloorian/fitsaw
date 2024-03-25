@@ -34,6 +34,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
           _passwordController.text,
           _emailController.text,
           db,
+          ref,
         );
 
         String snackBarString = "";
@@ -51,7 +52,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
           }
         } else {
           snackBarColor = Palette.fitsawGreen;
-          snackBarString = "User successfully logged in!.";
+          snackBarString = "User successfully logged in!";
         }
 
         if (context.mounted) {

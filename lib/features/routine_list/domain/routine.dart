@@ -11,9 +11,13 @@ class $Routine {
   late final ObjectId id;
 
   late final String name;
+  late final ObjectId? creator;
   late final String? description;
+  late final double? rating = 0;
+  late final int? downloads = 0;
   late final List<$RoutineExerciseWrapper> exercises;
   late final List<String> tags;
+  late final List<ObjectId> reviewers = [];
 }
 
 @RealmModel()

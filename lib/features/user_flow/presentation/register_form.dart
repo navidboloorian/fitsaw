@@ -46,6 +46,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
           _passwordController.text,
           _confPasswordController.text,
           db,
+          ref,
         );
 
         String snackBarString = "";
@@ -78,8 +79,6 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
             ),
           );
         }
-
-        print(response);
       },
     );
   }

@@ -6,6 +6,7 @@ part of 'settings_info.dart';
 // RealmObjectGenerator
 // **************************************************************************
 
+// ignore_for_file: type=lint
 class SettingsInfo extends _SettingsInfo
     with RealmEntity, RealmObjectBase, RealmObject {
   SettingsInfo(

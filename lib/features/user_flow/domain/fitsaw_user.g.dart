@@ -6,12 +6,12 @@ part of 'fitsaw_user.dart';
 // RealmObjectGenerator
 // **************************************************************************
 
+// ignore_for_file: type=lint
 class FitsawUser extends _FitsawUser
     with RealmEntity, RealmObjectBase, RealmObject {
   FitsawUser(
     ObjectId id, {
-    String? email,
-    String? password,
+    String? firebaseUID,
     String? displayName,
     String? profilePictureURL,
     double? reputation,
@@ -20,8 +20,7 @@ class FitsawUser extends _FitsawUser
     Iterable<Exercise> exercises = const [],
   }) {
     RealmObjectBase.set(this, 'id', id);
-    RealmObjectBase.set(this, 'email', email);
-    RealmObjectBase.set(this, 'password', password);
+    RealmObjectBase.set(this, 'firebaseUID', firebaseUID);
     RealmObjectBase.set(this, 'displayName', displayName);
     RealmObjectBase.set(this, 'profilePictureURL', profilePictureURL);
     RealmObjectBase.set(this, 'reputation', reputation);
@@ -54,15 +53,10 @@ class FitsawUser extends _FitsawUser
       throw RealmUnsupportedSetError();
 
   @override
-  String? get email => RealmObjectBase.get<String>(this, 'email') as String?;
+  String? get firebaseUID =>
+      RealmObjectBase.get<String>(this, 'firebaseUID') as String?;
   @override
-  set email(String? value) => throw RealmUnsupportedSetError();
-
-  @override
-  String? get password =>
-      RealmObjectBase.get<String>(this, 'password') as String?;
-  @override
-  set password(String? value) => throw RealmUnsupportedSetError();
+  set firebaseUID(String? value) => throw RealmUnsupportedSetError();
 
   @override
   String? get displayName =>
@@ -106,8 +100,7 @@ class FitsawUser extends _FitsawUser
           linkTarget: 'Routine', collectionType: RealmCollectionType.list),
       SchemaProperty('exercises', RealmPropertyType.object,
           linkTarget: 'Exercise', collectionType: RealmCollectionType.list),
-      SchemaProperty('email', RealmPropertyType.string, optional: true),
-      SchemaProperty('password', RealmPropertyType.string, optional: true),
+      SchemaProperty('firebaseUID', RealmPropertyType.string, optional: true),
       SchemaProperty('displayName', RealmPropertyType.string, optional: true),
       SchemaProperty('profilePictureURL', RealmPropertyType.string,
           optional: true),

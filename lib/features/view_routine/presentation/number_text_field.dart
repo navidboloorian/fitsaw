@@ -39,7 +39,7 @@ class _NumberTextFieldState extends State<NumberTextField> {
         }
       },
       child: TextFormField(
-        key: widget.key != null ? widget.key : UniqueKey(),
+        key: widget.key ?? UniqueKey(),
         textAlign: TextAlign.center,
         controller: widget.controller,
         decoration: const InputDecoration(hintText: '0'),

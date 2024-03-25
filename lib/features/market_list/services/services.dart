@@ -1,0 +1,1 @@
+export 'star_bar_provider.dart';

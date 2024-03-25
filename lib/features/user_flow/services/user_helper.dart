@@ -1,9 +1,11 @@
+import 'package:fitsaw/features/user_flow/services/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UserHelper {
   static Future<Map<String, dynamic>> register(String email, String displayName,
-      String password, String confPassword, Db db) async {
+      String password, String confPassword, Db db, WidgetRef ref) async {
     Map<String, dynamic> response = {};
     List<String> errors = [];
 
@@ -31,7 +33,7 @@ class UserHelper {
 
       if (errors.isEmpty) {
         try {
-          var firebaseResp = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+          var firebaseResp = await ref.watch(firebaseAuthProvider).createUserWithEmailAndPassword(email: email, password: password);
 
           var user = await users.insert(
             {
@@ -58,11 +60,11 @@ class UserHelper {
     return response;
   }
   
-  static Future<Map<String, dynamic>> login(String password, String email, Db db) async {
+  static Future<Map<String, dynamic>> login(String password, String email, Db db, WidgetRef ref) async {
     Map<String, dynamic> response = {};
     List<String> errors = [];
     try {
-      var firebaseResp = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+      var firebaseResp = await ref.watch(firebaseAuthProvider).signInWithEmailAndPassword(email: email, password: password);
       var users = db.collection('users');
 
       Map<String, dynamic>? user = await users.findOne(where.eq('firebaseUID', firebaseResp.user!.uid));

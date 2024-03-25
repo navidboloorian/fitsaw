@@ -6,21 +6,37 @@ part of 'routine.dart';
 // RealmObjectGenerator
 // **************************************************************************
 
+// ignore_for_file: type=lint
 class Routine extends $Routine with RealmEntity, RealmObjectBase, RealmObject {
+  static var _defaultsSet = false;
+
   Routine(
     ObjectId id,
     String name, {
     String? description,
+    double? rating = 0,
+    int? downloads = 0,
     Iterable<RoutineExerciseWrapper> exercises = const [],
     Iterable<String> tags = const [],
+    Iterable<ObjectId> reviewers = const [],
   }) {
+    if (!_defaultsSet) {
+      _defaultsSet = RealmObjectBase.setDefaults<Routine>({
+        'rating': 0,
+        'downloads': 0,
+      });
+    }
     RealmObjectBase.set(this, '_id', id);
     RealmObjectBase.set(this, 'name', name);
     RealmObjectBase.set(this, 'description', description);
+    RealmObjectBase.set(this, 'rating', rating);
+    RealmObjectBase.set(this, 'downloads', downloads);
     RealmObjectBase.set<RealmList<RoutineExerciseWrapper>>(
         this, 'exercises', RealmList<RoutineExerciseWrapper>(exercises));
     RealmObjectBase.set<RealmList<String>>(
         this, 'tags', RealmList<String>(tags));
+    RealmObjectBase.set<RealmList<ObjectId>>(
+        this, 'reviewers', RealmList<ObjectId>(reviewers));
   }
 
   Routine._();
@@ -42,6 +58,16 @@ class Routine extends $Routine with RealmEntity, RealmObjectBase, RealmObject {
   set description(String? value) => throw RealmUnsupportedSetError();
 
   @override
+  double? get rating => RealmObjectBase.get<double>(this, 'rating') as double?;
+  @override
+  set rating(double? value) => throw RealmUnsupportedSetError();
+
+  @override
+  int? get downloads => RealmObjectBase.get<int>(this, 'downloads') as int?;
+  @override
+  set downloads(int? value) => throw RealmUnsupportedSetError();
+
+  @override
   RealmList<RoutineExerciseWrapper> get exercises =>
       RealmObjectBase.get<RoutineExerciseWrapper>(this, 'exercises')
           as RealmList<RoutineExerciseWrapper>;
@@ -54,6 +80,13 @@ class Routine extends $Routine with RealmEntity, RealmObjectBase, RealmObject {
       RealmObjectBase.get<String>(this, 'tags') as RealmList<String>;
   @override
   set tags(covariant RealmList<String> value) =>
+      throw RealmUnsupportedSetError();
+
+  @override
+  RealmList<ObjectId> get reviewers =>
+      RealmObjectBase.get<ObjectId>(this, 'reviewers') as RealmList<ObjectId>;
+  @override
+  set reviewers(covariant RealmList<ObjectId> value) =>
       throw RealmUnsupportedSetError();
 
   @override
@@ -72,15 +105,20 @@ class Routine extends $Routine with RealmEntity, RealmObjectBase, RealmObject {
           mapTo: '_id', primaryKey: true),
       SchemaProperty('name', RealmPropertyType.string),
       SchemaProperty('description', RealmPropertyType.string, optional: true),
+      SchemaProperty('rating', RealmPropertyType.double, optional: true),
+      SchemaProperty('downloads', RealmPropertyType.int, optional: true),
       SchemaProperty('exercises', RealmPropertyType.object,
           linkTarget: 'RoutineExerciseWrapper',
           collectionType: RealmCollectionType.list),
       SchemaProperty('tags', RealmPropertyType.string,
           collectionType: RealmCollectionType.list),
+      SchemaProperty('reviewers', RealmPropertyType.objectid,
+          collectionType: RealmCollectionType.list),
     ]);
   }
 }
 
+// ignore_for_file: type=lint
 class RoutineExerciseWrapper extends $RoutineExerciseWrapper
     with RealmEntity, RealmObjectBase, RealmObject {
   RoutineExerciseWrapper({

@@ -6,6 +6,7 @@ part of 'exercise.dart';
 // RealmObjectGenerator
 // **************************************************************************
 
+// ignore_for_file: type=lint
 class Exercise extends $Exercise
     with RealmEntity, RealmObjectBase, RealmObject {
   Exercise(

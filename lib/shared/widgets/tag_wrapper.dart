@@ -24,6 +24,7 @@ class TagWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: add checks to add space above/below if tags is not empty
     return Align(
       alignment: Alignment.topLeft,
       child: Wrap(

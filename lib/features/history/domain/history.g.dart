@@ -6,6 +6,7 @@ part of 'history.dart';
 // RealmObjectGenerator
 // **************************************************************************
 
+// ignore_for_file: type=lint
 class History extends _History with RealmEntity, RealmObjectBase, RealmObject {
   History(
     int date, {
@@ -51,6 +52,7 @@ class History extends _History with RealmEntity, RealmObjectBase, RealmObject {
   }
 }
 
+// ignore_for_file: type=lint
 class RoutineSummary extends _RoutineSummary
     with RealmEntity, RealmObjectBase, RealmObject {
   RoutineSummary(
@@ -105,6 +107,7 @@ class RoutineSummary extends _RoutineSummary
   }
 }
 
+// ignore_for_file: type=lint
 class HistoryRoutine extends _HistoryRoutine
     with RealmEntity, RealmObjectBase, RealmObject {
   HistoryRoutine(
@@ -173,6 +176,7 @@ class HistoryRoutine extends _HistoryRoutine
   }
 }
 
+// ignore_for_file: type=lint
 class HistoryExercise extends $HistoryExercise
     with RealmEntity, RealmObjectBase, RealmObject {
   HistoryExercise(

@@ -1,8 +1,8 @@
-import 'package:fitsaw/features/view_exercise/presentation/presentation.dart';
 import 'package:fitsaw/shared/classes/classes.dart';
 import 'package:fitsaw/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fitsaw/features/exercise_list/presentation/presentation.dart';
 
 class Exercises extends ConsumerWidget {
   const Exercises({super.key});

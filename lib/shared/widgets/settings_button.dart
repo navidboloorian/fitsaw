@@ -8,7 +8,7 @@ class SettingsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      constraints: BoxConstraints(maxWidth: 40),
+      constraints: const BoxConstraints(maxWidth: 40),
       onPressed: onPressed,
       icon: const Icon(
         Icons.settings,
