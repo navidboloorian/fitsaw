@@ -1,28 +1,40 @@
 import { Colors } from "../styles/colors";
 import BackgroundBox from "./BackgroundBox";
 import { TextInput, StyleSheet } from "react-native";
+import FontAwesome from "@expo/vector-icons/FontAwesome5";
 
 export type SearchBarProps = {
     searchQuery: string,
     setSearchQuery: (query: string) => void
+    placeholder?: string,
 }
 
-const SearchBar = ({searchQuery, setSearchQuery} : SearchBarProps) => {
+const SearchBar = ({searchQuery, setSearchQuery, placeholder} : SearchBarProps) => {
     const styles = StyleSheet.create({
         textInput: {
             fontFamily: "OpenSans_400Regular",
             fontSize: 16,
             color: Colors.primaryText,
+            flex: 1,
+        },
+        italics: {
+            fontStyle: "italic"
+        },
+        searchIcon: {
+            width: 50,
         }
     });
 
     return (
-        <BackgroundBox>
+        <BackgroundBox row>
             <TextInput  
-                style = {styles.textInput}
-                value = {searchQuery}
-                onChangeText = {setSearchQuery}
+                placeholderTextColor={Colors.secondaryText}
+                placeholder={placeholder == null ? "Search..." : placeholder}
+                style={[styles.textInput, searchQuery.length == 0 ? styles.italics : null]}
+                value={searchQuery}
+                onChangeText={setSearchQuery}
             />
+            <FontAwesome styles={styles.searchIcon} size={16} name={"search"} color={Colors.secondaryText} />
         </BackgroundBox>
     );
 }

@@ -3,11 +3,12 @@ import { Colors } from "../styles/colors";
 import { Dimensions, StyleSheet } from "react-native";
 
 export type Props = {
-    children: JSX.Element,
+    children: JSX.Element[],
     color?: string,
+    row?: boolean,
 }
 
-const BackgroundBox = ({children, color} : Props) => {
+const BackgroundBox = ({children, color, row} : Props) => {
     const styles = StyleSheet.create({
         backgroundBox: {
             backgroundColor: color ? color : Colors.boxBackground1,
@@ -20,9 +21,13 @@ const BackgroundBox = ({children, color} : Props) => {
             borderRadius: 5,
             elevation: 1,
         },
+        row: {
+            flexDirection: "row",
+            alignItems: "center"
+        }
     });
 
-    return <View style={styles.backgroundBox}>{children}</View>;
+    return <View style={[styles.backgroundBox, row ? styles.row : null]}>{children}</View>;
 }
 
 export default BackgroundBox;
