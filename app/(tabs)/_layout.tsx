@@ -1,9 +1,8 @@
-import { Tabs } from "expo-router";
-import { Image, StyleSheet, View, Text, GestureResponderEvent } from "react-native";
+import { router, Tabs } from "expo-router";
+import { StyleSheet, View } from "react-native";
 import { Colors } from "../../src/shared/styles/colors";
-import { logo } from "../../src/shared/assets/images";
+import Logo from "../../src/shared/components/Logo";
 import FontAwesome from "@expo/vector-icons/FontAwesome5";
-import PlusButton from "../../src/shared/components/IconButton";
 import IconButton from "../../src/shared/components/IconButton";
 
 type TabIconProps = {
@@ -38,16 +37,8 @@ const TabIcon = ({focused, iconName, color} : TabIconProps) => {
 }
 
 const TabLayout = () => {
-    const styles = StyleSheet.create({
-        logo: {
-            flex: 1,
-            height: 100,
-            resizeMode: "contain"
-        }
-    });
-
-    const exercisesPlus = (event: GestureResponderEvent) => {
-
+    const exercisesPlus = () => {
+        router.push("/create_exercise/")
     }
 
     return (
@@ -66,7 +57,7 @@ const TabLayout = () => {
                 },
                 headerTitleAlign: "center",
                 headerShadowVisible: false,
-                headerTitle: () => <Image style={styles.logo} source={logo} />,
+                headerTitle: () => <Logo />,
                 tabBarLabel: () => null,
                 tabBarHideOnKeyboard: true
             }}
@@ -76,7 +67,12 @@ const TabLayout = () => {
                 name="exercises" 
                 options={{
                     tabBarIcon: ({focused}) => <TabIcon focused={focused} iconName={"dumbbell"} color={Colors.fitsawBlue} />,
-                    headerRight: () => <IconButton icon={<FontAwesome color={Colors.primaryText} size={16} name={"plus"} />} />
+                    headerRight: () => (
+                        <IconButton 
+                            icon={<FontAwesome color={Colors.primaryText} size={16} name={"plus"} />}
+                            onPress={exercisesPlus}
+                        />
+                    )
                 }} 
             />
             <Tabs.Screen name="routines" options={{tabBarIcon: ({focused}) => <TabIcon focused={focused} iconName={"list"} color={Colors.fitsawRed} /> }} />
