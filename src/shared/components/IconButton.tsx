@@ -18,10 +18,8 @@ const IconButton = ({icon, onPress} : PlusButtonProps) => {
     })
 
     return(
-        <Pressable onPress={onPress}>
-            <View style={styles.button}>
-                {icon}
-            </View>
+        <Pressable onPress={onPress} style={styles.button}>
+            {icon}
         </Pressable>
     )
 }

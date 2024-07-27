@@ -1,9 +1,9 @@
-import { SearchBar } from "react-native-screens";
+import CreateExerciseForm from "../../src/features/create_exercise/ui/CreateExerciseForm";
 
 const CreateExercise = () => {
     return (
         <>
-            <SearchBar />
+            <CreateExerciseForm />
         </>
     );
 }

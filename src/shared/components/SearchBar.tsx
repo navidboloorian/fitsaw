@@ -11,7 +11,7 @@ export type SearchBarProps = {
 
 const SearchBar = ({searchQuery, setSearchQuery, placeholder} : SearchBarProps) => {
     const styles = StyleSheet.create({
-        textInput: {
+        input: {
             fontFamily: "OpenSans_400Regular",
             fontSize: 16,
             color: Colors.primaryText,
@@ -26,11 +26,11 @@ const SearchBar = ({searchQuery, setSearchQuery, placeholder} : SearchBarProps) 
     });
 
     return (
-        <BackgroundBox row>
+        <BackgroundBox row paddingTop={5} paddingBottom={5}>
             <TextInput  
                 placeholderTextColor={Colors.secondaryText}
                 placeholder={placeholder == null ? "Search..." : placeholder}
-                style={[styles.textInput, searchQuery.length == 0 ? styles.italics : null]}
+                style={[styles.input, searchQuery.length == 0 ? styles.italics : null]}
                 value={searchQuery}
                 onChangeText={setSearchQuery}
             />
