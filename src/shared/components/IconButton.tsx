@@ -1,4 +1,4 @@
-import { View, Pressable, StyleSheet } from "react-native";
+import { Pressable, StyleSheet } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome5";
 
 export type PlusButtonProps = {

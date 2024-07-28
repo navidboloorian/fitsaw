@@ -26,8 +26,6 @@ const ToggleButton = ({selected, setSelected, leftText, rightText} : ToggleButto
         }
     });
 
-    console.log(selected)
-
     return (
         <BackgroundBox row paddingLeft={0} paddingBottom={0} paddingTop={0} paddingRight={0}>
             <Pressable 
