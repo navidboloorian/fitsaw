@@ -1,4 +1,4 @@
-import { TextInput, View, StyleSheet, Text} from "react-native";
+import { TextInput, View, StyleSheet, Text, ScrollView} from "react-native";
 import { Colors } from "../../../shared/styles/colors";
 import BackgroundBox from "../../../shared/components/BackgroundBox";
 import ToggleButton from "../../../shared/components/ToggleButton";
@@ -12,16 +12,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSQLiteContext } from "expo-sqlite";
 
 const CreateExerciseForm = () => {
-    const styles = StyleSheet.create({
-        grid: {
-            display: "flex",
-            gap: 10,
-        },
-        input: {
-            color: Colors.primaryText,
-            fontFamily: "OpenSans_400Regular",
-        }
-    });
 
     const db = useSQLiteContext();
     const queryClient = useQueryClient();
@@ -30,6 +20,21 @@ const CreateExerciseForm = () => {
     const [tags, setTags] = useState<string[]>([]);
     const [name, setName] = useState<string>("");
     const [notes, setNotes] = useState<string>("");
+    const [multilineHeight, setMultilineHeight] = useState<number | undefined>(undefined);
+    
+    const styles = StyleSheet.create({
+        grid: {
+            display: "flex",
+            gap: 10,
+        },
+        input: {
+            color: Colors.primaryText,
+            fontFamily: "OpenSans_400Regular",
+        },
+        multiline: {
+            height: multilineHeight ? multilineHeight : "auto" 
+        }
+    });
 
     const mutation = useMutation({
         mutationFn: (exercise : Exercise) => {
@@ -60,33 +65,36 @@ const CreateExerciseForm = () => {
     }
 
     return (
-        <View style={styles.grid}>
-            <BackgroundBox paddingTop={5} paddingBottom={5}>
-                <TextInput 
-                    style={styles.input}
-                    placeholder="Exercise name"
-                    placeholderTextColor={Colors.secondaryText}
-                    onChangeText={setName}
-                    value={name}
-                />
-            </BackgroundBox>
-            <ToggleButton selected={isWeighted} setSelected={setIsWeighted} leftText="Not Weighted" rightText="Weighted"/>
-            <ToggleButton selected={isTimed} setSelected={setIsTimed} leftText="Reps" rightText="Time"/>
-            <BackgroundBox>
-                <TextInput 
-                    style={styles.input}
-                    placeholder="Notes"
-                    placeholderTextColor={Colors.secondaryText}
-                    multiline
-                    textAlignVertical="top"
-                    numberOfLines={4}
-                    value={notes}
-                    onChangeText={setNotes}
-                />
-            </BackgroundBox>
-            <TagTextInput tags={tags} setTags={setTags} />
-            <BottomButton text={"Create"} onPress={() => {mutation.mutate(buildExercise())}} />
-        </View>
+        <ScrollView>
+            <View style={styles.grid}>
+                <BackgroundBox paddingTop={5} paddingBottom={5}>
+                    <TextInput 
+                        style={styles.input}
+                        placeholder="Exercise name"
+                        placeholderTextColor={Colors.secondaryText}
+                        onChangeText={setName}
+                        value={name}
+                    />
+                </BackgroundBox>
+                <ToggleButton selected={isWeighted} setSelected={setIsWeighted} leftText="Not Weighted" rightText="Weighted"/>
+                <ToggleButton selected={isTimed} setSelected={setIsTimed} leftText="Reps" rightText="Time"/>
+                <BackgroundBox>
+                    <TextInput 
+                        style={[styles.input, styles.multiline]}
+                        placeholder="Notes"
+                        placeholderTextColor={Colors.secondaryText}
+                        multiline
+                        numberOfLines={4}
+                        value={notes}
+                        onChangeText={setNotes}
+                        onContentSizeChange={({nativeEvent}) => setMultilineHeight(nativeEvent.contentSize.height)}
+                        textAlignVertical="top"
+                    />
+                </BackgroundBox>
+                <TagTextInput tags={tags} setTags={setTags} />
+                <BottomButton text={"Create"} onPress={() => {mutation.mutate(buildExercise())}} />
+            </View>
+        </ScrollView>
     ); 
 }
 
