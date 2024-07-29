@@ -20,7 +20,7 @@ const TagList = ({tags, dismissible, onPress} : TagListProps) => {
     if (tags.length) {
       return (
         <View style={styles.tagList}>
-            {tags.map((tag, index) => <Tag text={tag} dismissible={dismissible} onPress={onPress ? () => onPress(index) : undefined} />)}
+            {tags.map((tag, index) => <Tag key={index} text={tag} dismissible={dismissible} onPress={onPress ? () => onPress(index) : undefined} />)}
         </View>
       );
     }

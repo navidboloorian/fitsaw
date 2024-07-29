@@ -1,12 +1,16 @@
-import Tag from "./Tag";
 import BackgroundBox from "./BackgroundBox";
 import { useState } from "react";
-import { TextInput, View, StyleSheet, Text} from "react-native";
+import { TextInput, StyleSheet} from "react-native";
 import { Colors } from "../styles/colors";
 import InputErrors from "./InputErrors";
 import TagList from "./TagList";
 
-const TagTextInput = () => {
+export type TagTextInputProps = {
+    tags: string[],
+    setTags: (tags : string[]) => void
+}
+
+const TagTextInput = ({tags, setTags} : TagTextInputProps) => {
     const styles = StyleSheet.create({
         input: {
             color: Colors.primaryText,
@@ -14,13 +18,12 @@ const TagTextInput = () => {
     }); 
 
     const [currentTag, setCurrentTag] = useState<string>("");
-    const [tags, setTags] = useState<string[]>([]);
     const [errors, setErrors] = useState<string[]>([]);
 
     const addTag = () => {
         const trimmedTag = currentTag.trim();
 
-        if (trimmedTag.length > 0 && tags.indexOf(trimmedTag) < 0 && trimmedTag.length <= 25) {
+        if (trimmedTag.length > 0 && tags.indexOf(trimmedTag) < 0 && trimmedTag.length <= 25 && tags.length <= 10) {
             setTags([...tags, trimmedTag]);
             setCurrentTag("");
         }
@@ -37,6 +40,10 @@ const TagTextInput = () => {
         
         if (tags.indexOf(trimmedTag) >= 0) {
             currentErrors.push("Tag must be unique.")
+        }
+
+        if (tags.length >= 10) {
+            currentErrors.push("There can be a maximum of 10 tags per exercise.")
         }
 
         setErrors(currentErrors);
