@@ -24,8 +24,6 @@ const Exercises = () => {
         return <Text>Zere has been error</Text>;
     }
 
-    console.log(exercises.isFetching)
-
     return (
         <>
             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} placeholder={"Search exercises..."} />

@@ -3,11 +3,12 @@ import { Colors } from "../../../shared/styles/colors";
 import BackgroundBox from "../../../shared/components/BackgroundBox";
 import ToggleButton from "../../../shared/components/ToggleButton";
 import { useState } from "react";
+import { useFocusEffect } from "expo-router";
 import TagTextInput from "../../../shared/components/TagTextInput";
 import BottomButton from "../../../shared/components/BottomButton";
 import { createExercise } from "../api/exercise_api";
 import Exercise from "../model/exercise";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSQLiteContext } from "expo-sqlite";
 
 const CreateExerciseForm = () => {
@@ -23,6 +24,7 @@ const CreateExerciseForm = () => {
     });
 
     const db = useSQLiteContext();
+    const queryClient = useQueryClient();
     const [isWeighted, setIsWeighted] = useState<boolean>(false);
     const [isTimed, setIsTimed] = useState<boolean>(false);
     const [tags, setTags] = useState<string[]>([]);
@@ -44,6 +46,10 @@ const CreateExerciseForm = () => {
             tags: tags
         } as Exercise;
     }
+
+    useFocusEffect(() => {
+        queryClient.refetchQueries({queryKey: ["exercises"]});
+    });
 
     if (mutation.isError) {
         return <Text>ERROR</Text>
