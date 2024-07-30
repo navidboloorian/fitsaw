@@ -10,9 +10,12 @@ import { createExercise } from "../api/exercise_api";
 import Exercise from "../model/exercise";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSQLiteContext } from "expo-sqlite";
+import InputErrors from "../../../shared/components/InputErrors";
+import { useGlobalStore } from "../../../shared/hooks/use_global_store";
+import { router } from "expo-router";
+import { SnackbarStatus } from "../../../globals";
 
 const CreateExerciseForm = () => {
-
     const db = useSQLiteContext();
     const queryClient = useQueryClient();
     const [isWeighted, setIsWeighted] = useState<boolean>(false);
@@ -21,6 +24,8 @@ const CreateExerciseForm = () => {
     const [name, setName] = useState<string>("");
     const [notes, setNotes] = useState<string>("");
     const [multilineHeight, setMultilineHeight] = useState<number | undefined>(undefined);
+    const [isFormDisabled, setIsFormDisabled] = useState<boolean>(false);
+    const showSnackbar = useGlobalStore((state) => state.showSnackbar);
     
     const styles = StyleSheet.create({
         grid: {
@@ -36,21 +41,29 @@ const CreateExerciseForm = () => {
         }
     });
 
-    const mutation = useMutation({
-        mutationFn: (exercise : Exercise) => {
-            return createExercise(db, exercise);
-        }
-    });
+    const submitForm = () => {
+        setIsFormDisabled(true);
 
-    const buildExercise = () => {
-        return {
+        const exercise = {
             name: name,
             notes: notes,
             measurement: isTimed ? "time" : "reps",
             type: isWeighted ? "weighted" : "not weighted",
             tags: tags
         } as Exercise;
+
+        return createExercise(db, exercise);
     }
+
+    const mutation = useMutation({
+        mutationFn: submitForm,
+        onSuccess: () => {
+            setIsFormDisabled(false);
+            showSnackbar(SnackbarStatus.Success, "Exercise created!");
+            router.back();
+        },
+        onError: () => setIsFormDisabled(false)
+    });
 
     useFocusEffect(() => {
         queryClient.refetchQueries({queryKey: ["exercises"]});
@@ -75,6 +88,7 @@ const CreateExerciseForm = () => {
                         onChangeText={setName}
                         value={name}
                     />
+                    <InputErrors errors={[]} />
                 </BackgroundBox>
                 <ToggleButton selected={isWeighted} setSelected={setIsWeighted} leftText="Not Weighted" rightText="Weighted"/>
                 <ToggleButton selected={isTimed} setSelected={setIsTimed} leftText="Reps" rightText="Time"/>
@@ -92,7 +106,7 @@ const CreateExerciseForm = () => {
                     />
                 </BackgroundBox>
                 <TagTextInput tags={tags} setTags={setTags} />
-                <BottomButton text={"Create"} onPress={() => {mutation.mutate(buildExercise())}} />
+                <BottomButton text={"Create"} disabled={isFormDisabled} onPress={() => {mutation.mutate()}} />
             </View>
         </ScrollView>
     ); 

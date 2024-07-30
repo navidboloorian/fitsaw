@@ -20,7 +20,7 @@ const Exercises = () => {
         }
     );
 
-    if (exercises.isError || exercises.isPending) {
+    if (exercises.isError || exercises.isLoading) {
         return <Text>Zere has been error</Text>;
     }
 

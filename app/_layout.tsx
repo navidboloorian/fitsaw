@@ -7,6 +7,7 @@ import Logo from "../src/shared/components/Logo";
 import React from "react";
 import BackButton from "../src/shared/components/BackButton";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Snackbar from "../src/shared/components/Snackbar";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +42,7 @@ const RootLayout = () => {
                         }}
                     />
                 </Stack>
+                <Snackbar duration={3000} />
             </QueryClientProvider>
         </SQLiteProvider>
     );

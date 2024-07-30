@@ -3,7 +3,7 @@ import BackgroundBox from "./BackgroundBox";
 import { TextInput, StyleSheet } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome5";
 
-export type SearchBarProps = {
+type SearchBarProps = {
     searchQuery: string,
     setSearchQuery: (query: string) => void
     placeholder?: string,

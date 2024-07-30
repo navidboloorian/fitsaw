@@ -2,7 +2,7 @@ import { Text, ActivityIndicator, StyleSheet} from "react-native";
 import { OpenSans_400Regular, OpenSans_700Bold, useFonts } from "@expo-google-fonts/open-sans";
 import { Colors } from "../styles/colors";
 
-export type Props = {
+type Props = {
     children: JSX.Element | string,
     size?: number,
     color?: string,

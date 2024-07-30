@@ -1,7 +1,7 @@
 import { View, StyleSheet } from "react-native";
 import Tag from "./Tag";
 
-export type TagListProps = {
+type TagListProps = {
     tags: string[],
     dismissible?: boolean,
     onPress?: (indexToRemove : number) => void,

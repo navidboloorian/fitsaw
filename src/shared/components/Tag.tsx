@@ -4,7 +4,7 @@ import { Colors } from "../styles/colors";
 import FontAwesome from "@expo/vector-icons/FontAwesome5";
 import stringToColor from "../../utils/string_to_color";
 
-export type TagProps = {
+type TagProps = {
     text: string,
     dismissible?: boolean,
     onPress?: () => void,

@@ -5,7 +5,7 @@ import { Colors } from "../styles/colors";
 import InputErrors from "./InputErrors";
 import TagList from "./TagList";
 
-export type TagTextInputProps = {
+type TagTextInputProps = {
     tags: string[],
     setTags: (tags : string[]) => void
 }

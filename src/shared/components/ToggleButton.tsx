@@ -3,7 +3,7 @@ import BackgroundBox from "./BackgroundBox";
 import FitsawText from "./FitsawText";
 import { Pressable, StyleSheet, View, Text } from "react-native";
 
-export type ToggleButtonProps = {
+type ToggleButtonProps = {
     selected: boolean,
     setSelected: (selected: boolean) => void,
     leftText: string,

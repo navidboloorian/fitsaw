@@ -1,6 +1,6 @@
 import { StyleSheet, View } from "react-native"
 
-export type SpacerProps = {
+type SpacerProps = {
     height: number
 }
 

@@ -2,7 +2,7 @@ import { View } from "react-native";
 import { Colors } from "../styles/colors";
 import { Dimensions, StyleSheet } from "react-native";
 
-export type Props = {
+type Props = {
     children: JSX.Element[] | JSX.Element,
     color?: string,
     row?: boolean,
