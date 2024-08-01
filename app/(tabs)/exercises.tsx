@@ -2,7 +2,7 @@ import { useState } from "react";
 import SearchBar from "../../src/shared/components/SearchBar";
 import FitsawText from "../../src/shared/components/FitsawText";
 import { useQuery } from "@tanstack/react-query";
-import { getAllExercises } from "../../src/features/create_exercise/api/exercise_api";
+import { deleteExercise, getAllExercises } from "../../src/features/create_exercise/api/exercise_api";
 import { FlatList, Text } from "react-native";
 import BackgroundBox from "../../src/shared/components/BackgroundBox";
 import { useSQLiteContext } from "expo-sqlite";
@@ -11,7 +11,7 @@ import Exercise from "../../src/features/create_exercise/model/exercise";
 import TagList from "../../src/shared/components/TagList";
 import Dismissible from "../../src/shared/components/Dismissible";
 import { useFocusEffect } from "expo-router";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 
 const Exercises = () => {
     const db = useSQLiteContext();
@@ -28,6 +28,14 @@ const Exercises = () => {
         queryClient.refetchQueries({queryKey: ["exercises"]});
     });
 
+    const onDismiss = async (id : number) => {
+        deleteExercise(db, id);
+    }
+
+    const mutation = useMutation({
+        mutationFn: onDismiss
+    });
+
     if (exercises.isError || exercises.isLoading) {
         return <Text>Zere has been error</Text>;
     }
@@ -39,7 +47,7 @@ const Exercises = () => {
             <FlatList
                 data={exercises.data}
                 renderItem={({item}) =>
-                        <Dismissible onDismiss={() => console.log("DISMISSED")}>
+                        <Dismissible onDismiss={() => mutation.mutate(item.id!)}>
                             <BackgroundBox style={{width: "100%"}}>
                                 <FitsawText>{item.name}</FitsawText>
                                 <Spacer height={5} />

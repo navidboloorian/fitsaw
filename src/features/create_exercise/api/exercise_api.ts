@@ -14,7 +14,9 @@ export const createExercise = async (db : SQLiteDatabase, exercise : Exercise) :
     }
 }
 
-export const deleteExercise = (id : number) => {}
+export const deleteExercise = async (db : SQLiteDatabase, id : number) => {
+    await db.runAsync("DELETE FROM exercises WHERE id = ?", [id]);
+}
 
 export const updateExercise = (id : number) => {} 
 

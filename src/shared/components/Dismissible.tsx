@@ -1,9 +1,8 @@
-import React, { useRef } from "react"
-import { PanResponder, View, Animated, StyleSheet, Dimensions} from "react-native"
+import React, { useRef, useState } from "react"
+import { PanResponder, Animated, StyleSheet, Dimensions} from "react-native"
 import FontAwesome from "@expo/vector-icons/FontAwesome5";
 import { Colors } from "../styles/colors";
 import BackgroundBox from "./BackgroundBox";
-import FitsawText from "./FitsawText";
 
 type DismissibleProps = {
     children: JSX.Element[] | JSX.Element,

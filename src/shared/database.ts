@@ -3,7 +3,7 @@ import { type SQLiteDatabase } from "expo-sqlite";
 export const initDb = async (db : SQLiteDatabase) => {
     await db.execAsync(`
         PRAGMA foreign_keys = ON;
-
+        
         CREATE TABLE IF NOT EXISTS exercises (
             id INTEGER PRIMARY KEY NOT NULL,
             creator INTEGER,
@@ -17,7 +17,7 @@ export const initDb = async (db : SQLiteDatabase) => {
             id INTEGER PRIMARY KEY NOT NULL,
             name VARCHAR NOT NULL,
             exercise_id INTEGER NOT NULL,
-            FOREIGN KEY (exercise_id) REFERENCES exercises(id)
+            FOREIGN KEY (exercise_id) REFERENCES exercises(id) ON DELETE CASCADE
         );
     `);
 }
