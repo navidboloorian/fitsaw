@@ -9,16 +9,24 @@ import { useSQLiteContext } from "expo-sqlite";
 import Spacer from "../../src/shared/components/Spacer";
 import Exercise from "../../src/features/create_exercise/model/exercise";
 import TagList from "../../src/shared/components/TagList";
+import Dismissible from "../../src/shared/components/Dismissible";
+import { useFocusEffect } from "expo-router";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Exercises = () => {
-    const [searchQuery, setSearchQuery] : [string, (query: string) => void] = useState("");
     const db = useSQLiteContext();
+    const queryClient = useQueryClient();
+    const [searchQuery, setSearchQuery] : [string, (query: string) => void] = useState("");
     const exercises = useQuery(
         {
             queryKey: ["exercises"], 
             queryFn: async () : Promise<Exercise[]> => await getAllExercises(db)
         }
     );
+
+    useFocusEffect(() => {
+        queryClient.refetchQueries({queryKey: ["exercises"]});
+    });
 
     if (exercises.isError || exercises.isLoading) {
         return <Text>Zere has been error</Text>;
@@ -30,12 +38,15 @@ const Exercises = () => {
             <Spacer height={10} />
             <FlatList
                 data={exercises.data}
-                renderItem={({item}) => 
-                    <BackgroundBox>
-                        <FitsawText>{item.name}</FitsawText>
-                        <Spacer height={5} />
-                        <TagList tags={item.tags} />
-                    </BackgroundBox>}
+                renderItem={({item}) =>
+                        <Dismissible onDismiss={() => console.log("DISMISSED")}>
+                            <BackgroundBox style={{width: "100%"}}>
+                                <FitsawText>{item.name}</FitsawText>
+                                <Spacer height={5} />
+                                <TagList tags={item.tags} />
+                            </BackgroundBox>
+                        </Dismissible>
+                    }
                 keyExtractor={exercise => exercise.id!.toString()}
                 ItemSeparatorComponent={() => <Spacer height={10} />}
             />

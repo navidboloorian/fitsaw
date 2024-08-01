@@ -17,7 +17,6 @@ import { SnackbarStatus } from "../../../globals";
 
 const CreateExerciseForm = () => {
     const db = useSQLiteContext();
-    const queryClient = useQueryClient();
     const [isWeighted, setIsWeighted] = useState<boolean>(false);
     const [isTimed, setIsTimed] = useState<boolean>(false);
     const [tags, setTags] = useState<string[]>([]);
@@ -63,10 +62,6 @@ const CreateExerciseForm = () => {
             router.back();
         },
         onError: () => setIsFormDisabled(false)
-    });
-
-    useFocusEffect(() => {
-        queryClient.refetchQueries({queryKey: ["exercises"]});
     });
 
     if (mutation.isError) {

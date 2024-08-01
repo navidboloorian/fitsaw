@@ -42,7 +42,7 @@ const RootLayout = () => {
                         }}
                     />
                 </Stack>
-                <Snackbar duration={3000} />
+                <Snackbar />
             </QueryClientProvider>
         </SQLiteProvider>
     );

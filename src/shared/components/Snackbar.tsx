@@ -6,15 +6,12 @@ import { useGlobalStore } from "../hooks/use_global_store";
 import { SnackbarStatus } from "../../globals";
 import FontAwesome from "@expo/vector-icons/FontAwesome5";
 
-type SnackbarType = {
-    duration: number
-}
-
-const Snackbar = ({duration} : SnackbarType) => {
+const Snackbar = () => {
     const isVisible = useGlobalStore((state) => state.isSnackbarVisible);
     const status = useGlobalStore((state) => state.snackbarStatus);
     const snackbarMessage = useGlobalStore((state) => state.snackbarMessage);
     const hideSnackbar = useGlobalStore((state) => state.hideSnackbar);
+    const duration = useGlobalStore((state) => state.duration);
 
     const hideWithDelay = () => {
         setTimeout(() => hideSnackbar(), duration);

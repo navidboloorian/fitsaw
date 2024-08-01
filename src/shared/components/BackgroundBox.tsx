@@ -10,14 +10,15 @@ type Props = {
     paddingRight?: number,
     paddingTop?: number,
     paddingBottom?: number,
+    style?: StyleSheet | {}
 }
 
-const BackgroundBox = ({children, color, row, paddingLeft, paddingRight, paddingBottom, paddingTop} : Props) => {
+const BackgroundBox = ({children, color, row, paddingLeft, paddingRight, paddingBottom, paddingTop, style} : Props) => {
     const styles = StyleSheet.create({
         backgroundBox: {
             backgroundColor: color ? color : Colors.boxBackground1,
-            marginLeft: Dimensions.get('window').width * 0.05,
-            marginRight: Dimensions.get('window').width * 0.05,
+            width: "90%",
+            alignSelf: "center",
             paddingTop: paddingTop != null ? paddingTop : 10,
             paddingRight: paddingRight != null ? paddingRight : 10,
             paddingLeft: paddingLeft != null ? paddingLeft : 10,
@@ -31,7 +32,7 @@ const BackgroundBox = ({children, color, row, paddingLeft, paddingRight, padding
         }
     });
 
-    return <View style={[styles.backgroundBox, row ? styles.row : null]}>{children}</View>;
+    return <View style={[styles.backgroundBox, row ? styles.row : null, style]}>{children}</View>;
 }
 
 export default BackgroundBox;
