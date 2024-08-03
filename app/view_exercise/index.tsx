@@ -1,4 +1,4 @@
-import CreateExerciseForm from "../../src/features/create_exercise/ui/CreateExerciseForm";
+import CreateExerciseForm from "../../src/features/create_exercise/ui/ExerciseForm";
 
 const CreateExercise = () => {
     return (

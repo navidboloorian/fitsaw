@@ -3,14 +3,14 @@ import SearchBar from "../../src/shared/components/SearchBar";
 import FitsawText from "../../src/shared/components/FitsawText";
 import { useQuery } from "@tanstack/react-query";
 import { deleteExercise, getAllExercises } from "../../src/features/create_exercise/api/exercise_api";
-import { FlatList, Text } from "react-native";
+import { FlatList, Pressable, Text, View } from "react-native";
 import BackgroundBox from "../../src/shared/components/BackgroundBox";
 import { useSQLiteContext } from "expo-sqlite";
 import Spacer from "../../src/shared/components/Spacer";
 import Exercise from "../../src/features/create_exercise/model/exercise";
 import TagList from "../../src/shared/components/TagList";
 import Dismissible from "../../src/shared/components/Dismissible";
-import { useFocusEffect } from "expo-router";
+import { Link, router, useFocusEffect } from "expo-router";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 
 const Exercises = () => {
@@ -20,7 +20,7 @@ const Exercises = () => {
     const exercises = useQuery(
         {
             queryKey: ["exercises"], 
-            queryFn: async () : Promise<Exercise[]> => await getAllExercises(db)
+            queryFn: () : Promise<Exercise[]> => getAllExercises(db)
         }
     );
 
@@ -47,14 +47,20 @@ const Exercises = () => {
             <FlatList
                 data={exercises.data}
                 renderItem={({item}) =>
-                        <Dismissible onDismiss={() => mutation.mutate(item.id!)}>
-                            <BackgroundBox style={{width: "100%"}}>
-                                <FitsawText>{item.name}</FitsawText>
-                                <Spacer height={5} />
-                                <TagList tags={item.tags} />
-                            </BackgroundBox>
-                        </Dismissible>
-                    }
+                    <Dismissible 
+                        onPress={() => {
+                            const id = item.id;
+                            router.navigate({pathname: "/view_exercise/[id]", params: {id}});
+                        }} 
+                        onDismiss={() => onDismiss(item.id!)}
+                    >
+                        <BackgroundBox style={{width: "100%"}}>
+                            <FitsawText>{item.name}</FitsawText>
+                                {item.tags.length > 0 ? <Spacer height={5} /> : <></>}
+                            <TagList tags={item.tags} />
+                        </BackgroundBox>
+                    </Dismissible>
+                }
                 keyExtractor={exercise => exercise.id!.toString()}
                 ItemSeparatorComponent={() => <Spacer height={10} />}
             />

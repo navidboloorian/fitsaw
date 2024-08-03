@@ -31,7 +31,18 @@ const RootLayout = () => {
                 >
                     <Stack.Screen name="(tabs)" options={{headerShown: false}}/>
                     <Stack.Screen 
-                        name="create_exercise/index" 
+                        name="view_exercise/index" 
+                        options={{
+                            headerStyle: {
+                                backgroundColor: Colors.screenBackground,
+                            },
+                            headerTitleAlign: "center",
+                            headerShadowVisible: false,
+                            headerTitle: () => <Logo />
+                        }}
+                    />
+                    <Stack.Screen 
+                        name="view_exercise/[id]" 
                         options={{
                             headerStyle: {
                                 backgroundColor: Colors.screenBackground,

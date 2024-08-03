@@ -38,7 +38,7 @@ const TabIcon = ({focused, iconName, color} : TabIconProps) => {
 
 const TabLayout = () => {
     const exercisesPlus = () => {
-        router.navigate("/create_exercise/")
+        router.navigate("/view_exercise/");
     }
 
     return (

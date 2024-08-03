@@ -6,10 +6,11 @@ import BackgroundBox from "./BackgroundBox";
 
 type DismissibleProps = {
     children: JSX.Element[] | JSX.Element,
-    onDismiss: () => void
+    onDismiss: () => void,
+    onPress: () => void
 }
 
-const Dismissible = ({children, onDismiss} : DismissibleProps) => {
+const Dismissible = ({children, onDismiss, onPress} : DismissibleProps) => {
     const translateX = useRef(new Animated.Value(0)).current;
     const heightScale = useRef(new Animated.Value(1)).current;
     const clampedX = translateX.interpolate({
@@ -25,7 +26,10 @@ const Dismissible = ({children, onDismiss} : DismissibleProps) => {
             onPanResponderRelease: (_, {dx}) => {
                 const screenWidth = Dimensions.get("window").width;
 
-                if (Math.abs(dx) >= 0.5 * screenWidth) {
+                if (Math.abs(dx) < 1.5) {
+                    onPress();
+                }
+                else if (Math.abs(dx) >= 0.5 * screenWidth) {
                     Animated.timing(translateX, {
                         toValue: -screenWidth,
                         duration: 200,
