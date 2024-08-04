@@ -1,18 +1,21 @@
-import React, { useRef, useState } from "react"
+import React, { useRef } from "react"
 import { PanResponder, Animated, StyleSheet, Dimensions} from "react-native"
 import FontAwesome from "@expo/vector-icons/FontAwesome5";
 import { Colors } from "../styles/colors";
-import BackgroundBox from "./BackgroundBox";
+import { BackgroundBox } from "./components";
 
 type DismissibleProps = {
     children: JSX.Element[] | JSX.Element,
-    onDismiss: () => void,
-    onPress: () => void
+    onDismiss: () => void
 }
 
-const Dismissible = ({children, onDismiss, onPress} : DismissibleProps) => {
+export const Dismissible = ({children, onDismiss} : DismissibleProps) => {
     const translateX = useRef(new Animated.Value(0)).current;
+
+    // upon deletion, play animation and shrink height of box to zero
     const heightScale = useRef(new Animated.Value(1)).current;
+
+    // disable right swipe via clampings
     const clampedX = translateX.interpolate({
         inputRange: [-1000, 0, 1000],
         outputRange: [-1000, 0, 0],
@@ -20,16 +23,15 @@ const Dismissible = ({children, onDismiss, onPress} : DismissibleProps) => {
 
     const panResponder = useRef(
         PanResponder.create({
-            onMoveShouldSetPanResponder: () => true,
-            onMoveShouldSetPanResponderCapture: () => true,
+            // setting dx and dy threshholds so that taps aren't accidentally captured by the pan responder
+            onMoveShouldSetPanResponder: (_, gestureState) => Math.abs(gestureState.dx) > 1.5 && Math.abs(gestureState.dy) > 1.5,
+            onMoveShouldSetPanResponderCapture: (_, gestureState) => Math.abs(gestureState.dx) > 1.5 && Math.abs(gestureState.dy) > 1.5,
             onPanResponderMove: Animated.event([null, {dx: translateX}], {useNativeDriver: false}),
             onPanResponderRelease: (_, {dx}) => {
                 const screenWidth = Dimensions.get("window").width;
 
-                if (Math.abs(dx) < 1.5) {
-                    onPress();
-                }
-                else if (Math.abs(dx) >= 0.5 * screenWidth) {
+                if (Math.abs(dx) >= 0.5 * screenWidth) {
+                    // full swipe
                     Animated.timing(translateX, {
                         toValue: -screenWidth,
                         duration: 200,
@@ -45,6 +47,7 @@ const Dismissible = ({children, onDismiss, onPress} : DismissibleProps) => {
                     onDismiss();
                 }
                 else {
+                    // early release
                     Animated.spring(translateX, {
                         toValue: 0,
                         bounciness: 10,
@@ -84,5 +87,3 @@ const Dismissible = ({children, onDismiss, onPress} : DismissibleProps) => {
         </Animated.View>
     );
 }
-
-export default Dismissible;

@@ -1,8 +1,6 @@
 import { Image } from "react-native";
-import { logo } from "../assets/images";
+import { logo } from "../assets/assets";
 
-const Logo = () => {
+export const Logo = () => {
     return <Image style={{width: 150, height: 50, resizeMode: "contain"}} source={logo} />;
 }
-
-export default Logo;

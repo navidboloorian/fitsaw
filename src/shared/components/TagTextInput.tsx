@@ -1,16 +1,14 @@
-import BackgroundBox from "./BackgroundBox";
 import { useState } from "react";
 import { TextInput, StyleSheet} from "react-native";
 import { Colors } from "../styles/colors";
-import InputErrors from "./InputErrors";
-import TagList from "./TagList";
+import { InputErrors, TagList, BackgroundBox } from "./components";
 
 type TagTextInputProps = {
     tags: string[],
     setTags: (tags : string[]) => void
 }
 
-const TagTextInput = ({tags, setTags} : TagTextInputProps) => {
+export const TagTextInput = ({tags, setTags} : TagTextInputProps) => {
     const styles = StyleSheet.create({
         input: {
             color: Colors.primaryText,
@@ -68,5 +66,3 @@ const TagTextInput = ({tags, setTags} : TagTextInputProps) => {
         </BackgroundBox>
     );
 }
-
-export default TagTextInput;

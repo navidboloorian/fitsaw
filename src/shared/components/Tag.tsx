@@ -10,7 +10,7 @@ type TagProps = {
     onPress?: () => void,
 }
 
-const Tag = ({dismissible, text, onPress} : TagProps) => {
+export const Tag = ({dismissible, text, onPress} : TagProps) => {
     const styles = StyleSheet.create({
         tagBox: {
             display: "flex",
@@ -41,5 +41,3 @@ const Tag = ({dismissible, text, onPress} : TagProps) => {
         </Pressable>
     );
 }
-
-export default Tag;

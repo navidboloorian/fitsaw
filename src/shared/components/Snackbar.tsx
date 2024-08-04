@@ -1,12 +1,12 @@
 import { View, StyleSheet, Pressable } from "react-native";
 import FitsawText from "./FitsawText";
-import BackgroundBox from "./BackgroundBox";
 import { Colors } from "../styles/colors";
 import { useGlobalStore } from "../hooks/use_global_store";
-import { SnackbarStatus } from "../../globals";
+import { SnackbarStatus } from "../globals";
 import FontAwesome from "@expo/vector-icons/FontAwesome5";
+import { BackgroundBox } from "./components";
 
-const Snackbar = () => {
+export const Snackbar = () => {
     const isVisible = useGlobalStore((state) => state.isSnackbarVisible);
     const status = useGlobalStore((state) => state.snackbarStatus);
     const snackbarMessage = useGlobalStore((state) => state.snackbarMessage);
@@ -54,5 +54,3 @@ const Snackbar = () => {
             </View>
     )
 }
-
-export default Snackbar;

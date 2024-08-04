@@ -1,25 +1,21 @@
 import { TextInput, View, StyleSheet, Text, ScrollView} from "react-native";
 import { Colors } from "../../../shared/styles/colors";
-import BackgroundBox from "../../../shared/components/BackgroundBox";
-import ToggleButton from "../../../shared/components/ToggleButton";
 import { useState } from "react";
-import TagTextInput from "../../../shared/components/TagTextInput";
-import BottomButton from "../../../shared/components/BottomButton";
-import { createExercise, getExercise, updateExercise } from "../api/exercise_api";
-import Exercise from "../model/exercise";
+import { createExercise, updateExercise } from "../api/exercise_api";
+import {Exercise} from "../model/model";
 import { useMutation } from "@tanstack/react-query";
 import { useSQLiteContext } from "expo-sqlite";
-import InputErrors from "../../../shared/components/InputErrors";
 import { useGlobalStore } from "../../../shared/hooks/use_global_store";
 import { router } from "expo-router";
-import { SnackbarStatus } from "../../../globals";
+import { SnackbarStatus } from "../../../shared/globals";
 import { useEffect } from "react";
+import { BackgroundBox, InputErrors, ToggleButton, TagTextInput, BottomButton, Loading, Error } from "../../../shared/components/components";
 
 type ExerciseFormProps = {
     initialExercise ?: Exercise | null
 }
 
-const ExerciseForm = ({initialExercise} : ExerciseFormProps) => {
+export const ExerciseForm = ({initialExercise} : ExerciseFormProps) => {
     const db = useSQLiteContext();
     const [isWeighted, setIsWeighted] = useState<boolean>(false);
     const [isTimed, setIsTimed] = useState<boolean>(false);
@@ -74,7 +70,7 @@ const ExerciseForm = ({initialExercise} : ExerciseFormProps) => {
         else return createExercise(db, exercise);
     }
 
-    const mutation = useMutation({
+    const exerciseMutation = useMutation({
         mutationFn: submitForm,
         onSuccess: () => {
             setIsFormDisabled(false);
@@ -84,14 +80,15 @@ const ExerciseForm = ({initialExercise} : ExerciseFormProps) => {
         onError: () => setIsFormDisabled(false)
     });
 
-    if (mutation.isError) {
-        console.log(mutation.error)
-        return <Text>ERROR</Text>
+    if (exerciseMutation.isPending) {
+        return <Loading />
     }
-
-    if (mutation.isPending) {
-        return <Text>LOADING</Text>;
-    }
+    
+    useEffect(() => {
+        if (exerciseMutation.isError) {
+            showSnackbar(SnackbarStatus.Failure, initialExercise ? "There was an error updating the exercise." : "There was an error creating the exercise.");
+        }
+    }, [exerciseMutation]);
 
     return (
         <ScrollView>
@@ -122,10 +119,8 @@ const ExerciseForm = ({initialExercise} : ExerciseFormProps) => {
                     />
                 </BackgroundBox>
                 <TagTextInput tags={tags} setTags={setTags} />
-                <BottomButton text={initialExercise ? "Update" : "Create"} disabled={isFormDisabled} onPress={() => {mutation.mutate()}} />
+                <BottomButton text={initialExercise ? "Update" : "Create"} disabled={isFormDisabled} onPress={() => {exerciseMutation.mutate()}} />
             </View>
         </ScrollView>
     ); 
 }
-
-export default ExerciseForm;

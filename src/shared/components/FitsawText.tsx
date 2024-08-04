@@ -9,7 +9,7 @@ type Props = {
     bold?: boolean,
 }
 
-const FitsawText = ({children, size, color, bold} : Props) => {
+export const FitsawText = ({children, size, color, bold} : Props) => {
     const styles = StyleSheet.create({
         text: {
             fontFamily: "OpenSans_400Regular",

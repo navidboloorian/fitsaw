@@ -1,7 +1,7 @@
 import { Colors } from "../styles/colors";
-import BackgroundBox from "./BackgroundBox";
 import FitsawText from "./FitsawText";
-import { Pressable, StyleSheet, View, Text } from "react-native";
+import { Pressable, StyleSheet } from "react-native";
+import { BackgroundBox } from "./components";
 
 type ToggleButtonProps = {
     selected: boolean,
@@ -10,7 +10,7 @@ type ToggleButtonProps = {
     rightText: string,
 }
 
-const ToggleButton = ({selected, setSelected, leftText, rightText} : ToggleButtonProps) => {
+export const ToggleButton = ({selected, setSelected, leftText, rightText} : ToggleButtonProps) => {
     const styles = StyleSheet.create({
         toggle: {
             flex: 1,
@@ -47,5 +47,3 @@ const ToggleButton = ({selected, setSelected, leftText, rightText} : ToggleButto
         </BackgroundBox>
     );
 }
-
-export default ToggleButton;

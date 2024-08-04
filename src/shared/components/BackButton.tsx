@@ -4,7 +4,7 @@ import { Colors } from "../styles/colors";
 import FontAwesome from "@expo/vector-icons/FontAwesome5";
 import { router } from "expo-router";
 
-const BackButton = () => {
+export const BackButton = () => {
     return (
         <IconButton 
             icon={<FontAwesome color={Colors.primaryText} size={16} name={"arrow-left"} />}
@@ -12,5 +12,3 @@ const BackButton = () => {
         />
     );
 }
-
-export default BackButton;

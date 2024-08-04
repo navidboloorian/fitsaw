@@ -1,6 +1,6 @@
 import { View } from "react-native";
 import { Colors } from "../styles/colors";
-import { Dimensions, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 
 type Props = {
     children: JSX.Element[] | JSX.Element,
@@ -13,7 +13,7 @@ type Props = {
     style?: StyleSheet | {}
 }
 
-const BackgroundBox = ({children, color, row, paddingLeft, paddingRight, paddingBottom, paddingTop, style} : Props) => {
+export const BackgroundBox = ({children, color, row, paddingLeft, paddingRight, paddingBottom, paddingTop, style} : Props) => {
     const styles = StyleSheet.create({
         backgroundBox: {
             backgroundColor: color ? color : Colors.boxBackground1,
@@ -34,5 +34,3 @@ const BackgroundBox = ({children, color, row, paddingLeft, paddingRight, padding
 
     return <View style={[styles.backgroundBox, row ? styles.row : null, style]}>{children}</View>;
 }
-
-export default BackgroundBox;

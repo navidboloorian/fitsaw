@@ -1,9 +1,9 @@
 import { router, Tabs } from "expo-router";
 import { StyleSheet, View } from "react-native";
 import { Colors } from "../../src/shared/styles/colors";
-import Logo from "../../src/shared/components/Logo";
 import FontAwesome from "@expo/vector-icons/FontAwesome5";
 import IconButton from "../../src/shared/components/IconButton";
+import { Logo } from "../../src/shared/components/components";
 
 type TabIconProps = {
     focused: boolean,

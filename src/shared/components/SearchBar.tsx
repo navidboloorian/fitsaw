@@ -1,7 +1,7 @@
 import { Colors } from "../styles/colors";
-import BackgroundBox from "./BackgroundBox";
 import { TextInput, StyleSheet } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome5";
+import { BackgroundBox } from "./components";
 
 type SearchBarProps = {
     searchQuery: string,
@@ -9,7 +9,7 @@ type SearchBarProps = {
     placeholder?: string,
 }
 
-const SearchBar = ({searchQuery, setSearchQuery, placeholder} : SearchBarProps) => {
+export const SearchBar = ({searchQuery, setSearchQuery, placeholder} : SearchBarProps) => {
     const styles = StyleSheet.create({
         input: {
             fontFamily: "OpenSans_400Regular",
@@ -38,5 +38,3 @@ const SearchBar = ({searchQuery, setSearchQuery, placeholder} : SearchBarProps) 
         </BackgroundBox>
     );
 }
-
-export default SearchBar;

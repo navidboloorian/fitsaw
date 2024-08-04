@@ -6,7 +6,7 @@ type PlusButtonProps = {
     onPress: () => void
 }
 
-const IconButton = ({icon, onPress} : PlusButtonProps) => {
+export const IconButton = ({icon, onPress} : PlusButtonProps) => {
     const styles = StyleSheet.create({
         button: {
             width: 48,

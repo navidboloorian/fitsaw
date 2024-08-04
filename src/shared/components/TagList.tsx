@@ -1,5 +1,5 @@
 import { View, StyleSheet } from "react-native";
-import Tag from "./Tag";
+import { Tag } from "./components";
 
 type TagListProps = {
     tags: string[],
@@ -7,7 +7,7 @@ type TagListProps = {
     onPress?: (indexToRemove : number) => void,
 }
 
-const TagList = ({tags, dismissible, onPress} : TagListProps) => {
+export const TagList = ({tags, dismissible, onPress} : TagListProps) => {
     const styles = StyleSheet.create({
         tagList: {
             display: "flex",
@@ -27,5 +27,3 @@ const TagList = ({tags, dismissible, onPress} : TagListProps) => {
 
     return <></>;
 }
-
-export default TagList;

@@ -1,4 +1,4 @@
-type Exercise = {
+export type Exercise = {
     id? : number;
     name: string;
     creator?: number;
@@ -7,5 +7,3 @@ type Exercise = {
     notes: string;
     tags: string[];
 }
-
-export default Exercise;

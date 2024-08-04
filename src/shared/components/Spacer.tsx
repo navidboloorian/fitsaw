@@ -4,7 +4,7 @@ type SpacerProps = {
     height: number
 }
 
-const Spacer = ({height} : SpacerProps) => {
+export const Spacer = ({height} : SpacerProps) => {
     const styles = StyleSheet.create({
         spacer: {
             height: height
@@ -13,5 +13,3 @@ const Spacer = ({height} : SpacerProps) => {
 
     return <View style={styles.spacer}></View>;
 }
-
-export default Spacer;

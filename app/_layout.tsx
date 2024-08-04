@@ -1,13 +1,11 @@
 import { Stack } from "expo-router";
 import { Colors } from "../src/shared/styles/colors";
 import { SQLiteProvider } from "expo-sqlite";
-import { initDb } from "../src/shared/database";
+import { initDb } from "../src/shared/shared";
 import { View } from "react-native";
-import Logo from "../src/shared/components/Logo";
 import React from "react";
-import BackButton from "../src/shared/components/BackButton";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Snackbar from "../src/shared/components/Snackbar";
+import { Snackbar, Logo, BackButton } from "../src/shared/components/components";
 
 const queryClient = new QueryClient();
 

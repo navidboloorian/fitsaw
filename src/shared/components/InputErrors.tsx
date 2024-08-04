@@ -6,7 +6,7 @@ type InputErrorsProps = {
     errors: string[]
 }
 
-const InputErrors = ({errors} : InputErrorsProps) => {
+export const InputErrors = ({errors} : InputErrorsProps) => {
     const styles = StyleSheet.create({
         errorList: {
             marginBottom: 5,
@@ -23,5 +23,3 @@ const InputErrors = ({errors} : InputErrorsProps) => {
 
     return <></>;
 }   
-
-export default InputErrors;

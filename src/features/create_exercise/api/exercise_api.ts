@@ -1,5 +1,5 @@
 import { SQLiteDatabase, useSQLiteContext } from "expo-sqlite";
-import Exercise from "../model/exercise";
+import {Exercise} from "../model/model";
 
 export const createExercise = async (db : SQLiteDatabase, exercise : Exercise) : Promise<void> => {
     const dbExercise = await db.runAsync(

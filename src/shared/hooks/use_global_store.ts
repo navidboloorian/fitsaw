@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { SnackbarStatus } from "../../globals";
+import { SnackbarStatus } from "../globals";
 
 type GlobalState = {
     isSnackbarVisible: boolean,

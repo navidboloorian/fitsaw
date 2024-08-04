@@ -1,8 +1,7 @@
 import { Pressable, StyleSheet } from "react-native";
-import BackgroundBox from "./BackgroundBox";
 import { Colors } from "../styles/colors";
 import FitsawText from "./FitsawText";
-import Spacer from "./Spacer";
+import {BackgroundBox} from "./components";
 
 type BottomButtonProps = {
     text: string,
@@ -11,7 +10,7 @@ type BottomButtonProps = {
     onPress?: () => void
 }
 
-const BottomButton = ({text, color, onPress, disabled} : BottomButtonProps) => {
+export const BottomButton = ({text, color, onPress, disabled} : BottomButtonProps) => {
     const styles = StyleSheet.create({
         button: {
             width: "100%",
@@ -39,5 +38,3 @@ const BottomButton = ({text, color, onPress, disabled} : BottomButtonProps) => {
             </>
     );
 }
-
-export default BottomButton;
