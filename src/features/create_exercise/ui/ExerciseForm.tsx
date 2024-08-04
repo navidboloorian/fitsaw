@@ -10,9 +10,15 @@ import { router } from "expo-router";
 import { SnackbarStatus } from "../../../shared/globals";
 import { useEffect } from "react";
 import { BackgroundBox, InputErrors, ToggleButton, TagTextInput, BottomButton, Loading, Error } from "../../../shared/components/components";
+import { FitsawError, ErrorNameType } from "../../../shared/shared";
 
 type ExerciseFormProps = {
     initialExercise ?: Exercise | null
+}
+
+type FormErrorsType = {
+    name: string[],
+    notes: string[]
 }
 
 export const ExerciseForm = ({initialExercise} : ExerciseFormProps) => {
@@ -24,6 +30,7 @@ export const ExerciseForm = ({initialExercise} : ExerciseFormProps) => {
     const [notes, setNotes] = useState<string>("");
     const [multilineHeight, setMultilineHeight] = useState<number | undefined>(undefined);
     const [isFormDisabled, setIsFormDisabled] = useState<boolean>(false);
+    const [formErrors, setFormErrors] = useState<FormErrorsType>({name: [], notes: []});
     const showSnackbar = useGlobalStore((state) => state.showSnackbar);
 
     useEffect(() => {
@@ -53,6 +60,17 @@ export const ExerciseForm = ({initialExercise} : ExerciseFormProps) => {
 
     const submitForm = () => {
         setIsFormDisabled(true);
+        const currFormErrors : FormErrorsType = {name: [], notes: []};
+
+        if (name.length < 3 || name.length > 100) {
+            currFormErrors.name.push("Exercise name must be between 3 and 100 characters long");
+
+            setFormErrors(currFormErrors);
+        }
+
+        if (currFormErrors.name.length || currFormErrors.notes.length) {
+            throw new FitsawError({name: "FORM_ERROR", message: "Form content errors."});
+        }
 
         const exercise = {
             name: name,
@@ -101,7 +119,7 @@ export const ExerciseForm = ({initialExercise} : ExerciseFormProps) => {
                         onChangeText={setName}
                         value={name}
                     />
-                    <InputErrors errors={[]} />
+                    <InputErrors errors={formErrors.name} />
                 </BackgroundBox>
                 <ToggleButton selected={isWeighted} setSelected={setIsWeighted} leftText="Not Weighted" rightText="Weighted"/>
                 <ToggleButton selected={isTimed} setSelected={setIsTimed} leftText="Reps" rightText="Time"/>

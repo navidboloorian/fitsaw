@@ -42,7 +42,15 @@ const Exercises = () => {
     }
 
     // narrow down list based on search query
-    const exerciseList = exercises.data!.filter((exercise) => exercise.name.toLocaleLowerCase().includes(searchQuery.toLowerCase()));
+    const exerciseList = exercises.data!.filter((exercise) => {
+        if (exercise.name.toLowerCase().includes(searchQuery.toLowerCase())) return true;
+
+        for (const tag of exercise.tags) {
+            if (tag.toLowerCase().includes(searchQuery.toLowerCase())) return true;
+        }
+
+        return false;
+    });
 
     return (
         <>
