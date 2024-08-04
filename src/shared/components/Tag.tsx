@@ -1,5 +1,5 @@
 import { View, StyleSheet, Pressable } from "react-native";
-import FitsawText from "./FitsawText";
+import {FitsawText} from "./FitsawText";
 import { Colors } from "../styles/colors";
 import FontAwesome from "@expo/vector-icons/FontAwesome5";
 import stringToColor from "../../utils/string_to_color";

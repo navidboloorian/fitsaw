@@ -23,5 +23,3 @@ export const IconButton = ({icon, onPress} : PlusButtonProps) => {
         </Pressable>
     )
 }
-
-export default IconButton;

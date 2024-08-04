@@ -1,5 +1,5 @@
 import { useState } from "react";
-import FitsawText from "../../src/shared/components/FitsawText";
+import { FitsawText } from "../../src/shared/components/components";
 import { useQuery } from "@tanstack/react-query";
 import { deleteExercise, getAllExercises } from "../../src/features/create_exercise/api/exercise_api";
 import { FlatList, Pressable} from "react-native";
@@ -41,29 +41,34 @@ const Exercises = () => {
         return <Error message={"There was an error loading the exercise list."} />;
     }
 
+    // narrow down list based on search query
+    const exerciseList = exercises.data!.filter((exercise) => exercise.name.toLocaleLowerCase().includes(searchQuery.toLowerCase()));
+
     return (
         <>
             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} placeholder={"Search exercises..."} />
             <Spacer height={10} />
             <FlatList
-                data={exercises.data}
-                renderItem={({item}) =>
-                    <Dismissible 
-                        onDismiss={() => deleteMutation.mutate(item.id!)}
-                    >
-                        <Pressable
-                            onPress={() => {
-                                const id = item.id;
-                                router.navigate({pathname: "/view_exercise/[id]", params: {id}});
-                            }} 
+                data={exerciseList}
+                renderItem={({item}) => 
+                    (
+                        <Dismissible 
+                            onDismiss={() => deleteMutation.mutate(item.id!)}
                         >
-                            <BackgroundBox style={{width: "100%"}}>
-                                <FitsawText>{item.name}</FitsawText>
-                                {item.tags.length > 0 ? <Spacer height={5} /> : <></>}
-                                <TagList tags={item.tags} />
-                            </BackgroundBox>
-                        </Pressable>
-                    </Dismissible>
+                            <Pressable
+                                onPress={() => {
+                                    const id = item.id;
+                                    router.navigate({pathname: "/view_exercise/[id]", params: {id}});
+                                }} 
+                            >
+                                <BackgroundBox style={{width: "100%"}}>
+                                    <FitsawText>{item.name}</FitsawText>
+                                    {item.tags.length > 0 ? <Spacer height={5} /> : <></>}
+                                    <TagList tags={item.tags} />
+                                </BackgroundBox>
+                            </Pressable>
+                        </Dismissible>
+                    )
                 }
                 keyExtractor={exercise => exercise.id!.toString()}
                 ItemSeparatorComponent={() => <Spacer height={10} />}

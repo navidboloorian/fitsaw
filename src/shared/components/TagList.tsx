@@ -1,5 +1,5 @@
 import { View, StyleSheet } from "react-native";
-import { Tag } from "./components";
+import { Tag } from "./Tag";
 
 type TagListProps = {
     tags: string[],

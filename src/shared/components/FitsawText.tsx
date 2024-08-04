@@ -27,5 +27,3 @@ export const FitsawText = ({children, size, color, bold} : Props) => {
 
     return <Text style={styles.text}>{children}</Text>;
 }
-
-export default FitsawText;

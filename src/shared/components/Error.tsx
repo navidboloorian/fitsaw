@@ -1,7 +1,7 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome5";
 import { View } from "react-native";
 import { Colors } from "../styles/colors";
-import FitsawText from "./FitsawText";
+import {FitsawText} from "./FitsawText";
 
 type ErrorProps = {
     message: string

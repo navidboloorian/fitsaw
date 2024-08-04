@@ -1,7 +1,7 @@
 import { Colors } from "../styles/colors";
-import FitsawText from "./FitsawText";
+import { FitsawText } from "./FitsawText";
 import { Pressable, StyleSheet } from "react-native";
-import { BackgroundBox } from "./components";
+import { BackgroundBox } from "./BackgroundBox";
 
 type ToggleButtonProps = {
     selected: boolean,

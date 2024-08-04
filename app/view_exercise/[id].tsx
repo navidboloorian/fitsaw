@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import {Exercise} from "../../src/features/create_exercise/model/model";
 import { getExercise } from "../../src/features/create_exercise/api/exercise_api";
 import { useSQLiteContext } from "expo-sqlite";
-import FitsawText from "../../src/shared/components/FitsawText";
+import { Loading } from "../../src/shared/components/Loading";
 
 const ViewExercise = () => {
     const {id} = useLocalSearchParams<{id : string}>();
@@ -18,10 +18,8 @@ const ViewExercise = () => {
     );
 
     if (exercise.isLoading || exercise.isFetching) {
-        return <FitsawText>Loading</FitsawText>
+        return <Loading />;
     }
-
-    console.log(exercise.data)
 
     return (
         <>

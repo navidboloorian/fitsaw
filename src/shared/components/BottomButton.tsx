@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet } from "react-native";
 import { Colors } from "../styles/colors";
-import FitsawText from "./FitsawText";
-import {BackgroundBox} from "./components";
+import {FitsawText} from "./FitsawText";
+import { BackgroundBox } from "./BackgroundBox";
 
 type BottomButtonProps = {
     text: string,

@@ -1,10 +1,10 @@
 import { View, StyleSheet, Pressable } from "react-native";
-import FitsawText from "./FitsawText";
+import {FitsawText} from "./FitsawText";
 import { Colors } from "../styles/colors";
 import { useGlobalStore } from "../hooks/use_global_store";
 import { SnackbarStatus } from "../globals";
 import FontAwesome from "@expo/vector-icons/FontAwesome5";
-import { BackgroundBox } from "./components";
+import { BackgroundBox } from "./BackgroundBox";
 
 export const Snackbar = () => {
     const isVisible = useGlobalStore((state) => state.isSnackbarVisible);

@@ -79,16 +79,16 @@ export const ExerciseForm = ({initialExercise} : ExerciseFormProps) => {
         },
         onError: () => setIsFormDisabled(false)
     });
-
-    if (exerciseMutation.isPending) {
-        return <Loading />
-    }
     
     useEffect(() => {
         if (exerciseMutation.isError) {
             showSnackbar(SnackbarStatus.Failure, initialExercise ? "There was an error updating the exercise." : "There was an error creating the exercise.");
         }
     }, [exerciseMutation]);
+
+    if (exerciseMutation.isPending) {
+        return <Loading />
+    }
 
     return (
         <ScrollView>

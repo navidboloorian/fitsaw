@@ -1,5 +1,5 @@
 import React from "react";
-import IconButton from "./IconButton";
+import {IconButton} from "./IconButton";
 import { Colors } from "../styles/colors";
 import FontAwesome from "@expo/vector-icons/FontAwesome5";
 import { router } from "expo-router";

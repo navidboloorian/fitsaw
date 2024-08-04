@@ -2,7 +2,7 @@ import React, { useRef } from "react"
 import { PanResponder, Animated, StyleSheet, Dimensions} from "react-native"
 import FontAwesome from "@expo/vector-icons/FontAwesome5";
 import { Colors } from "../styles/colors";
-import { BackgroundBox } from "./components";
+import { BackgroundBox } from "./BackgroundBox";
 
 type DismissibleProps = {
     children: JSX.Element[] | JSX.Element,

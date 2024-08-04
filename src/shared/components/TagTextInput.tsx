@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { TextInput, StyleSheet} from "react-native";
 import { Colors } from "../styles/colors";
-import { InputErrors, TagList, BackgroundBox } from "./components";
+import { BackgroundBox } from "./BackgroundBox";
+import { InputErrors } from "./InputErrors";
+import { TagList } from "./TagList";
 
 type TagTextInputProps = {
     tags: string[],
