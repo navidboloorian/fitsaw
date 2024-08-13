@@ -1,6 +1,7 @@
 export * from "./BackButton";
 export * from "./BackgroundBox";
 export * from "./BottomButton";
+export * from "./Collapsible";
 export * from "./Dismissible";
 export * from "./Error";
 export * from "./FitsawText";

@@ -7,6 +7,7 @@ import { BackgroundBox, ToggleButton, TagTextInput, BottomButton, Spacer, Fitsaw
 import { RoutineAutocomplete } from "./RoutineAutocomplete";
 import { RoutineExercise } from "../model/routine_exercise";
 import { Exercise } from "../../view_exercise/model/exercise";
+import { RoutineExerciseCard } from "./RoutineExerciseCard";
 
 export const RoutineForm = () => {
     const db = useSQLiteContext();
@@ -58,6 +59,9 @@ export const RoutineForm = () => {
                     onChangeText={setName}
                     value={name}
                 />
+            </BackgroundBox>
+            <BackgroundBox>
+                <RoutineExerciseCard />
             </BackgroundBox>
             <TagTextInput tags={tags} setTags={setTags} />
             <BackgroundBox style={{zIndex: 1}}>

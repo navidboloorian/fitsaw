@@ -1,13 +1,15 @@
 import { StyleSheet, View } from "react-native"
 
 type SpacerProps = {
-    height: number
+    height?: number
+    width?: number
 }
 
-export const Spacer = ({ height } : SpacerProps) => {
+export const Spacer = ({ height, width } : SpacerProps) => {
     const styles = StyleSheet.create({
         spacer: {
-            height: height
+            height: height,
+            width: width
         }
     });
 
