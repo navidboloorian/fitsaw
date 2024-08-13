@@ -1,15 +1,16 @@
 import React, { useRef } from "react"
-import { PanResponder, Animated, StyleSheet, Dimensions} from "react-native"
+import { PanResponder, Animated, StyleSheet, Dimensions, DimensionValue} from "react-native"
 import FontAwesome from "@expo/vector-icons/FontAwesome5";
 import { Colors } from "../styles/colors";
 import { BackgroundBox } from "./BackgroundBox";
 
 type DismissibleProps = {
     children: JSX.Element[] | JSX.Element,
+    width?: DimensionValue,
     onDismiss: () => void
 }
 
-export const Dismissible = ({children, onDismiss} : DismissibleProps) => {
+export const Dismissible = ({children, width, onDismiss} : DismissibleProps) => {
     const translateX = useRef(new Animated.Value(0)).current;
 
     // upon deletion, play animation and shrink height of box to zero
@@ -67,7 +68,7 @@ export const Dismissible = ({children, onDismiss} : DismissibleProps) => {
             justifyContent: "center",
         },
         container: {
-            width: "90%",
+            width: width ? width : "90%",
             transform: [{scaleY: heightScale}],
             alignSelf: "center",
         }

@@ -1,12 +1,12 @@
 import { Pressable, StyleSheet } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome5";
 
-type PlusButtonProps = {
+type IconButtonProps = {
     icon: typeof FontAwesome,
     onPress: () => void
 }
 
-export const IconButton = ({icon, onPress} : PlusButtonProps) => {
+export const IconButton = ({icon, onPress} : IconButtonProps) => {
     const styles = StyleSheet.create({
         button: {
             width: 48,

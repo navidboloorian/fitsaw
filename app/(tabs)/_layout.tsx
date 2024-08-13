@@ -37,10 +37,6 @@ const TabIcon = ({focused, iconName, color} : TabIconProps) => {
 }
 
 const TabLayout = () => {
-    const exercisesPlus = () => {
-        router.navigate("/view_exercise/");
-    }
-
     return (
         <Tabs
             screenOptions={{
@@ -70,12 +66,23 @@ const TabLayout = () => {
                     headerRight: () => (
                         <IconButton 
                             icon={<FontAwesome color={Colors.primaryText} size={16} name={"plus"} />}
-                            onPress={exercisesPlus}
+                            onPress={() => router.navigate("/view_exercise/")}
                         />
                     )
                 }} 
             />
-            <Tabs.Screen name="routines" options={{tabBarIcon: ({focused}) => <TabIcon focused={focused} iconName={"list"} color={Colors.fitsawRed} /> }} />
+            <Tabs.Screen 
+                name="routines"
+                options={{
+                    tabBarIcon: ({focused}) => <TabIcon focused={focused} iconName={"list"} color={Colors.fitsawRed} />,
+                    headerRight: () => (
+                        <IconButton 
+                            icon={<FontAwesome color={Colors.primaryText} size={16} name={"plus"} />}
+                            onPress={() => router.navigate("/view_routine/")}
+                        />
+                    )
+                }} 
+            />
             <Tabs.Screen name="history" options={{tabBarIcon: ({focused}) => <TabIcon focused={focused} iconName={"history"} color={Colors.fitsawGreen} /> }} />
         </Tabs>
     );

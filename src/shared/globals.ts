@@ -3,7 +3,7 @@ export enum SnackbarStatus {
     Failure
 }
 
-export type ErrorNameType = "FORM_ERROR";
+type ErrorNameType = "FORM_ERROR";
 
 export class FitsawError extends Error {
     name: ErrorNameType;

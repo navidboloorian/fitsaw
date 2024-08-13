@@ -3,7 +3,7 @@ import { Colors } from "../styles/colors";
 import { StyleSheet } from "react-native";
 
 type Props = {
-    children: JSX.Element[] | JSX.Element,
+    children?: JSX.Element[] | JSX.Element,
     color?: string,
     row?: boolean,
     paddingLeft?: number,
@@ -23,8 +23,7 @@ export const BackgroundBox = ({children, color, row, paddingLeft, paddingRight, 
             paddingRight: paddingRight != null ? paddingRight : 10,
             paddingLeft: paddingLeft != null ? paddingLeft : 10,
             paddingBottom: paddingBottom != null ? paddingBottom : 10,
-            borderRadius: 5,
-            elevation: 1,
+            borderRadius: 5
         },
         row: {
             flexDirection: "row",

@@ -5,11 +5,14 @@ import { BackgroundBox } from "./BackgroundBox";
 
 type SearchBarProps = {
     searchQuery: string,
-    setSearchQuery: (query: string) => void
+    setSearchQuery: (query: string) => void,
+    color?: string,
+    displayIcon?: boolean,
     placeholder?: string,
+    style?: StyleSheet | {}
 }
 
-export const SearchBar = ({searchQuery, setSearchQuery, placeholder} : SearchBarProps) => {
+export const SearchBar = ({searchQuery, setSearchQuery, color, placeholder, style, displayIcon} : SearchBarProps) => {
     const styles = StyleSheet.create({
         input: {
             fontFamily: "OpenSans_400Regular",
@@ -26,7 +29,7 @@ export const SearchBar = ({searchQuery, setSearchQuery, placeholder} : SearchBar
     });
 
     return (
-        <BackgroundBox row paddingTop={5} paddingBottom={5}>
+        <BackgroundBox style={style} row color={color} paddingTop={5} paddingBottom={5}>
             <TextInput  
                 placeholderTextColor={Colors.secondaryText}
                 placeholder={placeholder == null ? "Search..." : placeholder}
@@ -34,7 +37,7 @@ export const SearchBar = ({searchQuery, setSearchQuery, placeholder} : SearchBar
                 value={searchQuery}
                 onChangeText={setSearchQuery}
             />
-            <FontAwesome styles={styles.searchIcon} size={16} name={"search"} color={Colors.secondaryText} />
+            {displayIcon === undefined || displayIcon ? <FontAwesome styles={styles.searchIcon} size={16} name={"search"} color={Colors.secondaryText} /> : <></>}
         </BackgroundBox>
     );
 }

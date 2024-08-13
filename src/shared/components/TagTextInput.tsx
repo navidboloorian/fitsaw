@@ -54,7 +54,7 @@ export const TagTextInput = ({tags, setTags} : TagTextInputProps) => {
     }
 
     return (
-        <BackgroundBox>
+        <BackgroundBox paddingTop={5} paddingBottom={5}>
             <TextInput
                 value={currentTag}
                 onChangeText={setCurrentTag}

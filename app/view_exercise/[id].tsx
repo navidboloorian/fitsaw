@@ -1,8 +1,8 @@
 import { useLocalSearchParams } from "expo-router";
-import {ExerciseForm} from "../../src/features/create_exercise/ui/ui";
+import {ExerciseForm} from "../../src/features/view_exercise/ui/ui";
 import { useQuery } from "@tanstack/react-query";
-import {Exercise} from "../../src/features/create_exercise/model/model";
-import { getExercise } from "../../src/features/create_exercise/api/exercise_api";
+import {Exercise} from "../../src/features/view_exercise/model/model";
+import { getExercise } from "../../src/features/view_exercise/api/exercise_api";
 import { useSQLiteContext } from "expo-sqlite";
 import { Loading } from "../../src/shared/components/Loading";
 

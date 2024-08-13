@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { FitsawText } from "../../src/shared/components/components";
 import { useQuery } from "@tanstack/react-query";
-import { deleteExercise, getAllExercises } from "../../src/features/create_exercise/api/exercise_api";
-import { FlatList, Pressable} from "react-native";
+import { deleteExercise, getAllExercises } from "../../src/features/view_exercise/api/exercise_api";
+import { FlatList, Pressable } from "react-native";
 import { useSQLiteContext } from "expo-sqlite";
-import {Exercise} from "../../src/features/create_exercise/model/model";
+import { Exercise } from "../../src/features/view_exercise/model/model";
 import { router, useFocusEffect } from "expo-router";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { Error, Loading, SearchBar, BackgroundBox, Spacer, TagList, Dismissible } from "../../src/shared/components/components";
+import { FitsawError } from "../../src/shared/globals";
 
 const Exercises = () => {
     const db = useSQLiteContext();
@@ -38,7 +39,7 @@ const Exercises = () => {
     }
 
     if (exercises.isError) {
-        return <Error message={"There was an error loading the exercise list."} />;
+        throw new FitsawError({name: "FORM_ERROR", message: "There was an error loading the exercises."});
     }
 
     // narrow down list based on search query

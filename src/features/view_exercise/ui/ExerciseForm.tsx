@@ -1,4 +1,4 @@
-import { TextInput, View, StyleSheet, Text, ScrollView} from "react-native";
+import { TextInput, View, StyleSheet, Text, ScrollView, FlatList} from "react-native";
 import { Colors } from "../../../shared/styles/colors";
 import { useState } from "react";
 import { createExercise, updateExercise } from "../api/exercise_api";
@@ -9,8 +9,8 @@ import { useGlobalStore } from "../../../shared/hooks/use_global_store";
 import { router } from "expo-router";
 import { SnackbarStatus } from "../../../shared/globals";
 import { useEffect } from "react";
-import { BackgroundBox, InputErrors, ToggleButton, TagTextInput, BottomButton, Loading, Error } from "../../../shared/components/components";
-import { FitsawError, ErrorNameType } from "../../../shared/shared";
+import { BackgroundBox, InputErrors, ToggleButton, TagTextInput, BottomButton, Loading, Error, Spacer } from "../../../shared/components/components";
+import { FitsawError } from "../../../shared/shared";
 
 type ExerciseFormProps = {
     initialExercise ?: Exercise | null
@@ -69,7 +69,7 @@ export const ExerciseForm = ({initialExercise} : ExerciseFormProps) => {
         }
 
         if (currFormErrors.name.length || currFormErrors.notes.length) {
-            throw new FitsawError({name: "FORM_ERROR", message: "Form content errors."});
+            throw new FitsawError({name: "FORM_ERROR", message: "There is an error(s) in the form."});
         }
 
         const exercise = {
@@ -100,7 +100,14 @@ export const ExerciseForm = ({initialExercise} : ExerciseFormProps) => {
     
     useEffect(() => {
         if (exerciseMutation.isError) {
-            showSnackbar(SnackbarStatus.Failure, initialExercise ? "There was an error updating the exercise." : "There was an error creating the exercise.");
+            const errorMessage = exerciseMutation.error.message;
+
+            if (errorMessage.indexOf("UNIQUE") != -1) {
+                showSnackbar(SnackbarStatus.Failure, "An exercise with this name already exists.");
+            }
+            else {
+                showSnackbar(SnackbarStatus.Failure, initialExercise ? "There was an error updating the exercise." : "There was an error creating the exercise.");
+            }
         }
     }, [exerciseMutation]);
 
@@ -108,37 +115,41 @@ export const ExerciseForm = ({initialExercise} : ExerciseFormProps) => {
         return <Loading />
     }
 
+    const pageComponents = [
+        <BackgroundBox paddingTop={5} paddingBottom={5}>
+            <TextInput 
+                style={styles.input}
+                placeholder="Exercise name"
+                placeholderTextColor={Colors.secondaryText}
+                onChangeText={setName}
+                value={name}
+            />
+            <InputErrors errors={formErrors.name} />
+        </BackgroundBox>,
+        <TagTextInput tags={tags} setTags={setTags} />,
+        <ToggleButton selected={isWeighted} setSelected={setIsWeighted} leftText="Not Weighted" rightText="Weighted"/>,
+        <ToggleButton selected={isTimed} setSelected={setIsTimed} leftText="Reps" rightText="Time"/>,
+        <BackgroundBox>
+            <TextInput 
+                style={[styles.input, styles.multiline]}
+                placeholder="Notes"
+                placeholderTextColor={Colors.secondaryText}
+                multiline
+                numberOfLines={4}
+                value={notes}
+                onChangeText={setNotes}
+                onContentSizeChange={({nativeEvent}) => setMultilineHeight(nativeEvent.contentSize.height)}
+                textAlignVertical="top"
+            />
+        </BackgroundBox>,
+        <BottomButton text={initialExercise ? "Update" : "Create"} disabled={isFormDisabled} onPress={() => {exerciseMutation.mutate()}} />
+    ]
+
     return (
-        <ScrollView>
-            <View style={styles.grid}>
-                <BackgroundBox paddingTop={5} paddingBottom={5}>
-                    <TextInput 
-                        style={styles.input}
-                        placeholder="Exercise name"
-                        placeholderTextColor={Colors.secondaryText}
-                        onChangeText={setName}
-                        value={name}
-                    />
-                    <InputErrors errors={formErrors.name} />
-                </BackgroundBox>
-                <ToggleButton selected={isWeighted} setSelected={setIsWeighted} leftText="Not Weighted" rightText="Weighted"/>
-                <ToggleButton selected={isTimed} setSelected={setIsTimed} leftText="Reps" rightText="Time"/>
-                <BackgroundBox>
-                    <TextInput 
-                        style={[styles.input, styles.multiline]}
-                        placeholder="Notes"
-                        placeholderTextColor={Colors.secondaryText}
-                        multiline
-                        numberOfLines={4}
-                        value={notes}
-                        onChangeText={setNotes}
-                        onContentSizeChange={({nativeEvent}) => setMultilineHeight(nativeEvent.contentSize.height)}
-                        textAlignVertical="top"
-                    />
-                </BackgroundBox>
-                <TagTextInput tags={tags} setTags={setTags} />
-                <BottomButton text={initialExercise ? "Update" : "Create"} disabled={isFormDisabled} onPress={() => {exerciseMutation.mutate()}} />
-            </View>
-        </ScrollView>
+        <FlatList
+            data={pageComponents}
+            renderItem={({item}) => item}
+            ItemSeparatorComponent={() => <Spacer height={10} />}
+        />
     ); 
 }

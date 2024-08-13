@@ -3,6 +3,7 @@ export const Colors = {
     secondaryText: "#8c8c8c",
     boxBackground1: "#272727",
     boxBackground2: "#444444",
+    boxBackground3: "#5d5d5d",
     screenBackground: "#0f0f0f",
 
     fitsawBlue: "#009ddc",
