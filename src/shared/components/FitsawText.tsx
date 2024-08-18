@@ -2,14 +2,14 @@ import { Text, ActivityIndicator, StyleSheet} from "react-native";
 import { OpenSans_400Regular, OpenSans_700Bold, useFonts } from "@expo-google-fonts/open-sans";
 import { Colors } from "../styles/colors";
 
-type Props = {
-    children: JSX.Element | string,
+type FitsawTextProps = {
+    children?: string[] | string;
     size?: number,
     color?: string,
     bold?: boolean,
 }
 
-export const FitsawText = ({children, size, color, bold} : Props) => {
+export const FitsawText = ({children, size, color, bold} : FitsawTextProps) => {
     const styles = StyleSheet.create({
         text: {
             fontFamily: "OpenSans_400Regular",

@@ -9,6 +9,7 @@ import { RoutineExercise } from "../model/routine_exercise";
 import { Exercise } from "../../view_exercise/model/exercise";
 import { RoutineExerciseCard } from "./RoutineExerciseCard";
 
+
 export const RoutineForm = () => {
     const db = useSQLiteContext();
     const [tags, setTags] = useState<string[]>([]);
@@ -31,7 +32,7 @@ export const RoutineForm = () => {
         multiline: {
             height: multilineHeight ? multilineHeight : "auto" 
         },
-        routineExercise: {
+        routineExerciseCardContainer: {
             width: "100%",
             zIndex: 1
         }
@@ -40,11 +41,19 @@ export const RoutineForm = () => {
     const submitForm = () => {
     }
 
-    // add exercise to list of routine exercises
-    const addRoutineExercise = (exercise : Exercise) => {
-        setRoutineExercises([...routineExercises, {exercise: exercise, sets: 1, rest: 1}]);
+    const updateRoutineExercise = (index : number, routineExercise : RoutineExercise) => {
+        const tempRoutineExercises = [...routineExercises];
+        tempRoutineExercises[index] = routineExercise;
+
+        setRoutineExercises(tempRoutineExercises);
     }
 
+    // add exercise to list of routine exercises
+    const addRoutineExercise = (exercise : Exercise) => {
+        setRoutineExercises([...routineExercises, {exercise: exercise, sets: 1, rest: 1, reps: [1], weights: [1], times: [1]}]);
+    }
+
+    // TODO: does not work, must be fixed
     const deleteRoutineExercise = (index : number) => {
         setRoutineExercises(routineExercises.filter((_, i) => (i != index)));
     }
@@ -60,9 +69,6 @@ export const RoutineForm = () => {
                     value={name}
                 />
             </BackgroundBox>
-            <BackgroundBox>
-                <RoutineExerciseCard />
-            </BackgroundBox>
             <TagTextInput tags={tags} setTags={setTags} />
             <BackgroundBox style={{zIndex: 1}}>
                 <RoutineAutocomplete addRoutineExercise={addRoutineExercise} />
@@ -74,10 +80,19 @@ export const RoutineForm = () => {
                             onDismiss={() => deleteRoutineExercise(index)}
                             width={"100%"}
                         >
-                            <BackgroundBox style={styles.routineExercise} 
-                                color={Colors.boxBackground2}
+                            <BackgroundBox 
+                                style={styles.routineExerciseCardContainer} 
+                                color={Colors.boxBackground2} 
+                                paddingLeft={0} 
+                                paddingRight={0} 
+                                paddingBottom={0} 
+                                paddingTop={0}
                             >
-                                <FitsawText>{item.exercise.name}</FitsawText>
+                                <RoutineExerciseCard 
+                                    index={index}
+                                    routineExercise={item}
+                                    updateRoutineExercise={updateRoutineExercise}
+                                />
                             </BackgroundBox>
                         </Dismissible>
                     )}

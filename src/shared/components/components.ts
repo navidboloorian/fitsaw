@@ -16,3 +16,4 @@ export * from "./Tag";
 export * from "./TagList";
 export * from "./TagTextInput";
 export * from "./ToggleButton";
+export * from "./TimeInput";

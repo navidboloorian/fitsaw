@@ -17,11 +17,12 @@ export const RoutineAutocomplete = ({addRoutineExercise} : RoutineAutocompletePr
     const styles = StyleSheet.create({
         autocompleteBox: {
             position: "absolute",
-            top: 38,
+            top: 46,
             width: "100%",
             paddingTop: 5,
             paddingBottom: 5,
-            zIndex: 2
+            zIndex: 2,
+            elevation: 5,
         },
         autocompleteRow: {
             flexDirection: "row", 

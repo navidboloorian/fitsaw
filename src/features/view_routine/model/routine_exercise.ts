@@ -5,8 +5,9 @@ export type RoutineExercise = {
     exercise: Exercise,
     routine?: Routine,
     sets: number,
-    rest?: number,
+    rest: number | string,
     position?: number,
-    time?: number[],
-    reps?: number[]
+    weights: number[],
+    times: (number | string)[],
+    reps: number[]
 }
