@@ -4,13 +4,13 @@ import {FitsawText} from "./FitsawText";
 import { BackgroundBox } from "./BackgroundBox";
 
 type BottomButtonProps = {
-    text: string,
+    contents: JSX.Element,
     color?: string,
     disabled?: boolean,
     onPress?: () => void
 }
 
-export const BottomButton = ({text, color, onPress, disabled} : BottomButtonProps) => {
+export const BottomButton = ({contents, color, onPress, disabled} : BottomButtonProps) => {
     const styles = StyleSheet.create({
         button: {
             width: "100%",
@@ -30,9 +30,7 @@ export const BottomButton = ({text, color, onPress, disabled} : BottomButtonProp
                     paddingBottom={0}
                 >
                     <Pressable disabled={disabled ? disabled : false} style={styles.button} onPress={onPress}>
-                        <FitsawText bold color={Colors.boxBackground1}>
-                            {text}
-                        </FitsawText>
+                        {contents}
                     </Pressable>
                 </BackgroundBox>
             </>

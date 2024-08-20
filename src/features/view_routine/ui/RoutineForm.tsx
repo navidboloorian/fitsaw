@@ -1,16 +1,30 @@
 import { TextInput, View, StyleSheet, FlatList} from "react-native";
 import { Colors } from "../../../shared/styles/colors";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSQLiteContext } from "expo-sqlite";
 import { useGlobalStore } from "../../../shared/hooks/use_global_store";
-import { BackgroundBox, ToggleButton, TagTextInput, BottomButton, Spacer, FitsawText, Dismissible } from "../../../shared/components/components";
+import { BackgroundBox, ToggleButton, TagTextInput, BottomButton, Spacer, FitsawText, Dismissible, InputErrors, Loading } from "../../../shared/components/components";
 import { RoutineAutocomplete } from "./RoutineAutocomplete";
 import { RoutineExercise } from "../model/routine_exercise";
 import { Exercise } from "../../view_exercise/model/exercise";
 import { RoutineExerciseCard } from "./RoutineExerciseCard";
+import { createRoutine, updateRoutine } from "../api/routine_api";
+import { Routine } from "../model/model";
+import { useMutation } from "@tanstack/react-query";
+import { FitsawError, SnackbarStatus } from "../../../shared/shared";
+import { router } from "expo-router";
 
+type FormErrorsType = {
+    name: string[],
+    notes: string[],
+    exercises: string[]
+}
 
-export const RoutineForm = () => {
+type RoutineFormProps = {
+    initialRoutine? : Routine | null
+}
+
+export const RoutineForm = ({initialRoutine} : RoutineFormProps) => {
     const db = useSQLiteContext();
     const [tags, setTags] = useState<string[]>([]);
     const [name, setName] = useState<string>("");
@@ -18,7 +32,18 @@ export const RoutineForm = () => {
     const [routineExercises, setRoutineExercises] = useState<RoutineExercise[]>([]);
     const [multilineHeight, setMultilineHeight] = useState<number | undefined>(undefined); // prevents multiline from capturing scroll events
     const [isFormDisabled, setIsFormDisabled] = useState<boolean>(false);
+    const [formErrors, setFormErrors] = useState<FormErrorsType>({name: [], notes: [], exercises: []});
     const showSnackbar = useGlobalStore((state) => state.showSnackbar);
+
+    useEffect(() => {
+        if (initialRoutine) {
+            setName(initialRoutine.name);
+            setNotes(initialRoutine.notes);
+            setRoutineExercises(initialRoutine.routineExercises);
+
+            if (initialRoutine.tags) setTags(initialRoutine.tags);
+        }
+    }, []);
     
     const styles = StyleSheet.create({
         grid: {
@@ -39,7 +64,48 @@ export const RoutineForm = () => {
     });
 
     const submitForm = () => {
+        setIsFormDisabled(true);
+        const currFormErrors : FormErrorsType = {name: [], notes: [], exercises: []};
+
+        if (name.length < 3 || name.length > 100) {
+            currFormErrors.name.push("Routine name must be between 3 and 100 characters long");
+        }
+
+        if (routineExercises.length < 1 || routineExercises.length > 50) {
+            currFormErrors.exercises.push("Routine must have between 1 and 50 exercises");
+        }
+
+        setFormErrors(currFormErrors);
+
+        if (currFormErrors.name.length || currFormErrors.notes.length || currFormErrors.exercises.length) {
+            throw new FitsawError({name: "FORM_ERROR", message: "There is an error(s) in the form."});
+        }
+
+        const routine : Routine = {
+            name: name,
+            notes: notes,
+            units: "lbs",
+            tags: tags,
+            routineExercises: routineExercises
+        };
+
+        if (initialRoutine) {
+            routine.id = initialRoutine.id;
+            return updateRoutine(db, routine);
+        }
+
+        return createRoutine(db, routine);
     }
+
+    const rotuineMutation = useMutation({
+        mutationFn: submitForm,
+        onSuccess: () => {
+            setIsFormDisabled(false);
+            showSnackbar(SnackbarStatus.Success, initialRoutine ? "Routine Updated" : "Routine created!");
+            router.back();
+        },
+        onError: () => setIsFormDisabled(false)
+    })
 
     const updateRoutineExercise = (index : number, routineExercise : RoutineExercise) => {
         const tempRoutineExercises = [...routineExercises];
@@ -68,6 +134,7 @@ export const RoutineForm = () => {
                     onChangeText={setName}
                     value={name}
                 />
+                <InputErrors errors={formErrors.name} />
             </BackgroundBox>
             <TagTextInput tags={tags} setTags={setTags} />
             <BackgroundBox style={{zIndex: 1}}>
@@ -98,6 +165,7 @@ export const RoutineForm = () => {
                     )}
                     ItemSeparatorComponent={() => <Spacer height={5} />}
                 />
+                <InputErrors errors={formErrors.exercises} />
             </BackgroundBox>
             <BackgroundBox>
                 <TextInput 
@@ -112,7 +180,15 @@ export const RoutineForm = () => {
                     textAlignVertical="top"
                 />
             </BackgroundBox>
-            <BottomButton text="Create" disabled={isFormDisabled} />
+            <BottomButton 
+                contents={
+                            isFormDisabled ? 
+                                <Loading size={16} color={Colors.screenBackground} height="auto" /> : 
+                                <FitsawText bold color={Colors.screenBackground}>{initialRoutine ? "Update" : "Create"}</FitsawText>
+                        } 
+                disabled={isFormDisabled}
+                onPress={() => rotuineMutation.mutate()} 
+            />
             <Spacer height={10} />
         </View>
     ]

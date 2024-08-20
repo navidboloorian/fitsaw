@@ -110,7 +110,7 @@ export const RoutineExerciseCard = ({index, routineExercise, updateRoutineExerci
     const updateNumberField = (fieldType : NumberFieldType, valueString : string, arrIndex? : number) => {
         if (valueString.match(/[^\d]/)) return;
 
-        const value = parseInt(valueString);
+        const value = valueString === "" ? 0 : parseInt(valueString);
 
         if (fieldType === NumberFieldType.Reps) {
             routineExercise.reps[arrIndex!] = value;

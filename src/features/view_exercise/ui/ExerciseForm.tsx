@@ -9,11 +9,11 @@ import { useGlobalStore } from "../../../shared/hooks/use_global_store";
 import { router } from "expo-router";
 import { SnackbarStatus } from "../../../shared/globals";
 import { useEffect } from "react";
-import { BackgroundBox, InputErrors, ToggleButton, TagTextInput, BottomButton, Loading, Error, Spacer } from "../../../shared/components/components";
+import { BackgroundBox, InputErrors, ToggleButton, TagTextInput, BottomButton, Loading, Error, Spacer, FitsawText } from "../../../shared/components/components";
 import { FitsawError } from "../../../shared/shared";
 
 type ExerciseFormProps = {
-    initialExercise ?: Exercise | null
+    initialExercise?: Exercise | null
 }
 
 type FormErrorsType = {
@@ -85,7 +85,8 @@ export const ExerciseForm = ({initialExercise} : ExerciseFormProps) => {
             exercise.id = initialExercise.id;
             return updateExercise(db, exercise);
         }
-        else return createExercise(db, exercise);
+        
+        return createExercise(db, exercise);
     }
 
     const exerciseMutation = useMutation({
@@ -112,7 +113,7 @@ export const ExerciseForm = ({initialExercise} : ExerciseFormProps) => {
     }, [exerciseMutation]);
 
     if (exerciseMutation.isPending) {
-        return <Loading />
+        return <Loading />;
     }
 
     const pageComponents = [
@@ -142,7 +143,15 @@ export const ExerciseForm = ({initialExercise} : ExerciseFormProps) => {
                 textAlignVertical="top"
             />
         </BackgroundBox>,
-        <BottomButton text={initialExercise ? "Update" : "Create"} disabled={isFormDisabled} onPress={() => {exerciseMutation.mutate()}} />
+        <BottomButton 
+            contents={
+                        isFormDisabled ? 
+                                <Loading size={16} color={Colors.screenBackground} height="auto" /> : 
+                                <FitsawText bold color={Colors.screenBackground}>{initialExercise ? "Update" : "Create"}</FitsawText>
+                    } 
+            disabled={isFormDisabled}
+            onPress={() => exerciseMutation.mutate()} 
+        />
     ]
 
     return (

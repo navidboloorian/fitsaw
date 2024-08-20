@@ -71,7 +71,6 @@ export const RoutineAutocomplete = ({addRoutineExercise} : RoutineAutocompletePr
                 placeholder="Add exercise..."
             />
             {
-                // need to remove scrolling and add tags
                 exerciseList && exerciseList.length > 0 ? (
                     <BackgroundBox style={styles.autocompleteBox} color={Colors.boxBackground2}>
                         <FlatList
