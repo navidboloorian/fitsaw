@@ -72,6 +72,17 @@ const RootLayout = () => {
                             headerTitle: () => <Logo />
                         }}
                     />
+                    <Stack.Screen 
+                        name="active_routine/[id]" 
+                        options={{
+                            headerStyle: {
+                                backgroundColor: Colors.screenBackground,
+                            },
+                            headerTitleAlign: "center",
+                            headerShadowVisible: false,
+                            headerTitle: () => <Logo />
+                        }}
+                    />
                 </Stack>
                 <Snackbar />
             </QueryClientProvider>

@@ -157,11 +157,13 @@ export const RoutineForm = ({initialRoutine} : RoutineFormProps) => {
     // add exercise to list of routine exercises
     const addRoutineExercise = (exercise : Exercise) => {
         setRoutineExercises([...routineExercises, {exercise: exercise, sets: 1, rest: 1, reps: [1], weights: [1], times: [1]}]);
+        setIsChanged(true);
     }
 
     // TODO: does not work, must be fixed
     const deleteRoutineExercise = (index : number) => {
         setRoutineExercises(routineExercises.filter((_, i) => (i != index)));
+        setIsChanged(true);
     }
 
     const pageComponents = [
