@@ -3,7 +3,7 @@ import { Colors } from "../../../shared/styles/colors";
 import { useEffect, useState } from "react";
 import { useSQLiteContext } from "expo-sqlite";
 import { useGlobalStore } from "../../../shared/hooks/use_global_store";
-import { BackgroundBox, ToggleButton, TagTextInput, BottomButton, Spacer, FitsawText, Dismissible, InputErrors, Loading } from "../../../shared/components/components";
+import { BackgroundBox, TagTextInput, BottomButton, Spacer, FitsawText, Dismissible, InputErrors, Loading } from "../../../shared/components/components";
 import { RoutineAutocomplete } from "./RoutineAutocomplete";
 import { RoutineExercise } from "../model/routine_exercise";
 import { Exercise } from "../../view_exercise/model/exercise";
@@ -32,8 +32,25 @@ export const RoutineForm = ({initialRoutine} : RoutineFormProps) => {
     const [routineExercises, setRoutineExercises] = useState<RoutineExercise[]>([]);
     const [multilineHeight, setMultilineHeight] = useState<number | undefined>(undefined); // prevents multiline from capturing scroll events
     const [isFormDisabled, setIsFormDisabled] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [formErrors, setFormErrors] = useState<FormErrorsType>({name: [], notes: [], exercises: []});
+    const [isChanged, setIsChanged] = useState<boolean>(false);
+
+    // decides behavior upon successful mutation: start -> start routine, update -> show snackbar and pop page
+    const [mutationReferrer, setMutationReferrer] = useState<"update" | "start" | undefined>(undefined); 
     const showSnackbar = useGlobalStore((state) => state.showSnackbar);
+
+    const areTagsEqual = () => {
+
+        if (!tags || !initialRoutine!.tags) return false;
+        if (tags.length !== initialRoutine!.tags.length) return false;
+
+        for (let i = 0; i < tags.length; i++) {
+            if (tags[i] !== initialRoutine!.tags[i]) return false;
+        }
+
+        return true;
+    }
 
     useEffect(() => {
         if (initialRoutine) {
@@ -43,7 +60,23 @@ export const RoutineForm = ({initialRoutine} : RoutineFormProps) => {
 
             if (initialRoutine.tags) setTags(initialRoutine.tags);
         }
+            
+        setIsLoading(false);
     }, []);
+
+    useEffect(() => {
+        // checks to see if any of the routine's information has been changed and only updates the database upon start if a change has occurred
+        if (initialRoutine && !isLoading && !isChanged) {
+            if (name !== initialRoutine.name 
+                || notes !== initialRoutine.notes 
+                || !areTagsEqual()) {
+                setIsChanged(true);
+            }
+            else {
+                setIsChanged(false);
+            }
+        }
+    }, [name, notes, tags, routineExercises, isLoading]);
     
     const styles = StyleSheet.create({
         grid: {
@@ -100,9 +133,15 @@ export const RoutineForm = ({initialRoutine} : RoutineFormProps) => {
     const rotuineMutation = useMutation({
         mutationFn: submitForm,
         onSuccess: () => {
-            setIsFormDisabled(false);
-            showSnackbar(SnackbarStatus.Success, initialRoutine ? "Routine Updated" : "Routine created!");
-            router.back();
+            if (mutationReferrer === "update") {    
+                setIsFormDisabled(false);
+                showSnackbar(SnackbarStatus.Success, initialRoutine ? "Routine Updated" : "Routine created!");
+                router.back();
+            }
+            else {
+                const id = initialRoutine!.id!.toString();
+                router.replace({pathname: "/active_routine/[id]", params: {id}});
+            }
         },
         onError: () => setIsFormDisabled(false)
     })
@@ -112,6 +151,7 @@ export const RoutineForm = ({initialRoutine} : RoutineFormProps) => {
         tempRoutineExercises[index] = routineExercise;
 
         setRoutineExercises(tempRoutineExercises);
+        setIsChanged(true);
     }
 
     // add exercise to list of routine exercises
@@ -187,11 +227,40 @@ export const RoutineForm = ({initialRoutine} : RoutineFormProps) => {
                                 <FitsawText bold color={Colors.screenBackground}>{initialRoutine ? "Update" : "Create"}</FitsawText>
                         } 
                 disabled={isFormDisabled}
-                onPress={() => rotuineMutation.mutate()} 
+                onPress={() => {
+                    setMutationReferrer("update");
+                    rotuineMutation.mutate();
+                }} 
             />
+            {
+                initialRoutine ? 
+                    <BottomButton 
+                        contents={
+                            isFormDisabled ?
+                                <Loading size={16} color={Colors.screenBackground} height="auto" /> : 
+                                <FitsawText bold color={Colors.screenBackground}>Start</FitsawText>
+                        } 
+                        disabled={isFormDisabled}
+                        onPress={() => {
+                            if (isChanged) {
+                                setMutationReferrer("start");
+                                rotuineMutation.mutate();
+                            }
+                            else {
+                                const id = initialRoutine!.id!.toString();
+
+                                router.replace({pathname: "/active_routine/[id]", params: {id}});
+                            }
+                        }} 
+                    /> 
+                : 
+                    <></>
+            }
             <Spacer height={10} />
         </View>
     ]
+
+    if (isLoading) return <Loading />;
 
     return (
         <FlatList
