@@ -162,7 +162,9 @@ export const RoutineForm = ({initialRoutine} : RoutineFormProps) => {
 
     // TODO: does not work, must be fixed
     const deleteRoutineExercise = (index : number) => {
-        setRoutineExercises(routineExercises.filter((_, i) => (i != index)));
+        const tmp = [...routineExercises];
+
+        setRoutineExercises(tmp.filter((_, i) => (i != index)));
         setIsChanged(true);
     }
 
@@ -186,9 +188,10 @@ export const RoutineForm = ({initialRoutine} : RoutineFormProps) => {
                     data={routineExercises}
                     keyExtractor={(routineExercise, index) => `${index}${routineExercise.exercise.name}`}
                     renderItem={({item, index}) => (
-                        <Dismissible 
+                        <Dismissible
                             onDismiss={() => deleteRoutineExercise(index)}
                             width={"100%"}
+                            key={`${index}${item.exercise.name}`}
                         >
                             <BackgroundBox 
                                 style={styles.routineExerciseCardContainer} 
