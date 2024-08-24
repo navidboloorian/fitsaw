@@ -114,8 +114,6 @@ export const RoutineExerciseCard = ({index, routineExercise, updateRoutineExerci
 
         if (fieldType === NumberFieldType.Reps) {
             routineExercise.reps[arrIndex!] = value;
-
-            console.log(routineExercise.reps[arrIndex!])
         } else if (fieldType === NumberFieldType.Weight) {
             routineExercise.weights[arrIndex!] = value;
         } else if (fieldType === NumberFieldType.Sets) {

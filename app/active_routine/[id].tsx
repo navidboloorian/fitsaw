@@ -5,12 +5,10 @@ import { Routine } from "../../src/features/view_routine/model/routine";
 import { getRoutine } from "../../src/features/view_routine/api/routine_api";
 import { Loading } from "../../src/shared/components/components";
 import { ActiveRoutineFrame } from "../../src/features/active_routine/ui/ActiveRoutineFrame";
-import { useActiveRoutine } from "../../src/features/active_routine/lib/use_active_routine";
 
 const ActiveRoutine = () => {
     const {id} = useLocalSearchParams<{id : string}>();
     const db = useSQLiteContext();
-    const setActiveRoutine = useActiveRoutine((state) => state.setActiveRoutine);
 
     const routine = useQuery(
         {
@@ -23,11 +21,9 @@ const ActiveRoutine = () => {
         return <Loading />;
     }
 
-    setActiveRoutine(routine.data!);
-
     return (
         <>
-            <ActiveRoutineFrame />
+            <ActiveRoutineFrame routine={routine.data!} />
         </>
     );
 }

@@ -1,12 +1,14 @@
 import { StyleSheet, View } from "react-native";
 import { BackgroundBox, FitsawText } from "../../../shared/components/components";
 import { Colors } from "../../../shared/styles/colors";
-import { useActiveRoutine } from "../lib/use_active_routine";
 
-export const ProgressBar = () => {
-    const currentStep = useActiveRoutine((state) => state.currentStep);
-    const totalSteps = useActiveRoutine((state) => state.totalSteps);
-    const progressPercentage = currentStep!/totalSteps!;
+type ProgressBarProps = {
+    curr: number,
+    total: number
+}
+
+export const ProgressBar = ({curr, total} : ProgressBarProps) => {
+    const progressPercentage = curr/total;
 
     const styles = StyleSheet.create({
         bar: {
@@ -32,7 +34,7 @@ export const ProgressBar = () => {
             {progressPercentage === 1 ? <></> : <BackgroundBox paddingLeft={0} paddingRight={0} style={styles.unfilled} />}
             <View style={styles.labelWrapper}>
                 <FitsawText bold color={progressPercentage >= 0.5 ? Colors.screenBackground : Colors.primaryText}>
-                    {`${currentStep}/${totalSteps}`}
+                    {`${curr}/${total}`}
                 </FitsawText>
             </View>
         </BackgroundBox>
