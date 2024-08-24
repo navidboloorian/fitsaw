@@ -184,6 +184,7 @@ export const RoutineForm = ({initialRoutine} : RoutineFormProps) => {
                 {routineExercises.length > 0 ? <Spacer height={5} /> : <></>}
                 <FlatList
                     data={routineExercises}
+                    keyExtractor={(routineExercise, index) => `${index}${routineExercise.exercise.name}`}
                     renderItem={({item, index}) => (
                         <Dismissible 
                             onDismiss={() => deleteRoutineExercise(index)}
