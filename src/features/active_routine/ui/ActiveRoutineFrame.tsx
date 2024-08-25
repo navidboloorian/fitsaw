@@ -96,6 +96,7 @@ export const ActiveRoutineFrame = ({routine} : ActiveRoutineFrameProps) => {
 
     return (
         <FlatList 
+            keyExtractor={(_, index) => index.toString()}
             data={pageComponents}
             renderItem={({item, index}) => {
                     if (index === 1 && isFinished) return <RoutineSummary routine={routine} />;

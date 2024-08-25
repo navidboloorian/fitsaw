@@ -35,6 +35,7 @@ export const RoutineForm = ({initialRoutine} : RoutineFormProps) => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [formErrors, setFormErrors] = useState<FormErrorsType>({name: [], notes: [], exercises: []});
     const [isChanged, setIsChanged] = useState<boolean>(false);
+    const [testList, setIsTestList] = useState<string[]>(["1", "2", "3", "4"]);
 
     // decides behavior upon successful mutation: start -> start routine, update -> show snackbar and pop page
     const [mutationReferrer, setMutationReferrer] = useState<"update" | "start" | undefined>(undefined); 
@@ -160,9 +161,18 @@ export const RoutineForm = ({initialRoutine} : RoutineFormProps) => {
         setIsChanged(true);
     }
 
+    
+    useEffect(() => {
+        console.log("0000000000000000");
+        for (const routineExercise of testList) {
+            console.log(routineExercise)
+        }
+        console.log("----------------")
+    }, [testList])
+
     // TODO: does not work, must be fixed
     const deleteRoutineExercise = (index : number) => {
-        const tmp = [...routineExercises];
+        const tmp = [...routineExercises]
 
         setRoutineExercises(tmp.filter((_, i) => (i != index)));
         setIsChanged(true);
@@ -186,12 +196,11 @@ export const RoutineForm = ({initialRoutine} : RoutineFormProps) => {
                 {routineExercises.length > 0 ? <Spacer height={5} /> : <></>}
                 <FlatList
                     data={routineExercises}
-                    keyExtractor={(routineExercise, index) => `${index}${routineExercise.exercise.name}`}
+                    keyExtractor={(routineExercise) => Math.random().toString()}
                     renderItem={({item, index}) => (
                         <Dismissible
                             onDismiss={() => deleteRoutineExercise(index)}
                             width={"100%"}
-                            key={`${index}${item.exercise.name}`}
                         >
                             <BackgroundBox 
                                 style={styles.routineExerciseCardContainer} 

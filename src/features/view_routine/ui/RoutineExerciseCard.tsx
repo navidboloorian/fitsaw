@@ -74,7 +74,7 @@ type RoutineExerciseCardProps = {
     updateRoutineExercise : (index : number, routineExercise : RoutineExercise) => void
 }
 
-enum NumberFieldType {
+export enum NumberFieldType {
     Sets,
     Reps,
     Weight
