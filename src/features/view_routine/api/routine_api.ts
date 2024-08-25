@@ -76,7 +76,7 @@ export const getRoutine = async (db: SQLiteDatabase, id: number) => {
             }
 
             const routineExercise : RoutineExercise = {
-                id: Math.random(),
+                id: Math.random(), // used for deletion on view routine screen
                 exercise: exercise!,
                 sets: dbRoutineExercise.sets,
                 rest: dbRoutineExercise.rest,

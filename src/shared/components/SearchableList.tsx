@@ -24,16 +24,10 @@ type SearchableListProps = {
     errorMessage: string,
 }
 
-export const SearchableList = ({queryFn, queryKey, mutation, searchPlaceholder, viewItemPath, errorMessage} : SearchableListProps) => {
-    const queryClient = useQueryClient();
+export const SearchableList = ({queryFn, mutation, searchPlaceholder, viewItemPath, errorMessage} : SearchableListProps) => {
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedItem, setSelectedItem] = useState<number | undefined>(undefined);
     const query = queryFn;
-
-    useFocusEffect(() => {
-        // ensures that list is refetched everytime it loads anew
-        queryClient.refetchQueries({queryKey: [queryKey]});
-    });
 
     const deleteMutation = mutation;
 

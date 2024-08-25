@@ -3,7 +3,7 @@ import { Colors } from "../../../shared/styles/colors";
 import { useState } from "react";
 import { createExercise, updateExercise } from "../api/exercise_api";
 import {Exercise} from "../model/model";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSQLiteContext } from "expo-sqlite";
 import { useGlobalStore } from "../../../shared/hooks/use_global_store";
 import { router } from "expo-router";
@@ -23,6 +23,7 @@ type FormErrorsType = {
 
 export const ExerciseForm = ({initialExercise} : ExerciseFormProps) => {
     const db = useSQLiteContext();
+    const queryClient = useQueryClient();
     const [isWeighted, setIsWeighted] = useState<boolean>(false);
     const [isTimed, setIsTimed] = useState<boolean>(false);
     const [tags, setTags] = useState<string[]>([]);
@@ -92,6 +93,7 @@ export const ExerciseForm = ({initialExercise} : ExerciseFormProps) => {
     const exerciseMutation = useMutation({
         mutationFn: submitForm,
         onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ["exercises"]}); // ensures that exercise list is updated
             setIsFormDisabled(false);
             showSnackbar(SnackbarStatus.Success, initialExercise ? "Exercise updated!" : "Exercise created!");
             router.back();

@@ -10,7 +10,7 @@ import { Exercise } from "../../view_exercise/model/exercise";
 import { RoutineExerciseCard } from "./RoutineExerciseCard";
 import { createRoutine, updateRoutine } from "../api/routine_api";
 import { Routine } from "../model/model";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FitsawError, SnackbarStatus } from "../../../shared/shared";
 import { router } from "expo-router";
 import { SwipeListView }  from "react-native-swipe-list-view";
@@ -26,15 +26,9 @@ type RoutineFormProps = {
     initialRoutine? : Routine | null
 }
 
-type FormData = {
-    name : string,
-    tags : string[],
-    notes : string,
-    routineExercises : RoutineExercise[]
-}
-
 export const RoutineForm = ({initialRoutine} : RoutineFormProps) => {
     const db = useSQLiteContext();
+    const queryClient = useQueryClient();
     const [tags, setTags] = useState<string[]>([]);
     const [name, setName] = useState<string>("");
     const [notes, setNotes] = useState<string>("");
@@ -138,6 +132,8 @@ export const RoutineForm = ({initialRoutine} : RoutineFormProps) => {
     const rotuineMutation = useMutation({
         mutationFn: submitForm,
         onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ["routines"]}); // ensures that routine list is updated
+
             if (mutationReferrer === "update") {    
                 setIsFormDisabled(false);
                 showSnackbar(SnackbarStatus.Success, initialRoutine ? "Routine Updated" : "Routine created!");
@@ -161,6 +157,7 @@ export const RoutineForm = ({initialRoutine} : RoutineFormProps) => {
 
     // add exercise to list of routine exercises
     const addRoutineExercise = (exercise : Exercise) => {
+        // Math.random() is used to give a unique id for deletion, it won't be uploaded to the db
         setRoutineExercises([...routineExercises, {id: Math.random(), exercise: exercise, sets: 1, rest: 1, reps: [1], weights: [1], times: [1]}]);
         setIsChanged(true);
     }
