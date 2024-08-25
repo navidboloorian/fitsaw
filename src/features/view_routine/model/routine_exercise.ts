@@ -1,6 +1,7 @@
 import { Exercise } from "../../view_exercise/model/model";
 
 export type RoutineExercise = {
+    id?: number,
     exercise: Exercise,
     sets: number,
     rest: number | string,

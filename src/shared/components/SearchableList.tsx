@@ -1,19 +1,19 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { FlatList, Pressable } from "react-native";
-import { SQLiteDatabase, useSQLiteContext } from "expo-sqlite";
+import { Pressable, Dimensions } from "react-native";
 import { router, useFocusEffect } from "expo-router";
-import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { Exercise } from "../../features/view_exercise/model/model";
 import { Loading } from "./Loading";
 import { FitsawError } from "../globals";
 import { Routine } from "../../features/view_routine/model/model";
 import { SearchBar } from "./SearchBar";
 import { Spacer } from "./Spacer";
-import { Dismissible } from "./Dismissible";
 import { BackgroundBox } from "./BackgroundBox";
 import { FitsawText } from "./FitsawText";
 import { TagList } from "./TagList";
+import { Colors } from "../styles/colors";
+import { SwipeListView }  from "react-native-swipe-list-view";
+import { DeleteBackground } from "./DeleteBackground";
 
 type SearchableListProps = {
     queryFn: any,
@@ -25,9 +25,9 @@ type SearchableListProps = {
 }
 
 export const SearchableList = ({queryFn, queryKey, mutation, searchPlaceholder, viewItemPath, errorMessage} : SearchableListProps) => {
-    const db = useSQLiteContext();
     const queryClient = useQueryClient();
     const [searchQuery, setSearchQuery] = useState("");
+    const [selectedItem, setSelectedItem] = useState<number | undefined>(undefined);
     const query = queryFn;
 
     useFocusEffect(() => {
@@ -60,28 +60,34 @@ export const SearchableList = ({queryFn, queryKey, mutation, searchPlaceholder, 
         <>
             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} placeholder={searchPlaceholder} />
             <Spacer height={10} />
-            <FlatList
+            <SwipeListView
+                previewRowIndex={0}
                 data={dataList}
-                renderItem={({item}) => 
+                extraData={selectedItem}
+                closeOnScroll
+                recalculateHiddenLayout
+                disableRightSwipe
+                renderItem={({item, index}) => 
                     (
-                        <Dismissible 
-                            onDismiss={() => deleteMutation.mutate(item.id!)}
+                        <Pressable
+                            onPress={() => {
+                                const id = item.id;
+                                router.navigate({pathname: viewItemPath, params: {id}});
+                            }} 
+                            onLongPress={() => setSelectedItem(index)}
                         >
-                            <Pressable
-                                onPress={() => {
-                                    const id = item.id;
-                                    router.navigate({pathname: viewItemPath, params: {id}});
-                                }} 
-                            >
-                                <BackgroundBox style={{width: "100%"}}>
-                                    <FitsawText>{item.name}</FitsawText>
-                                    {item.tags.length > 0 ? <Spacer height={5} /> : <></>}
-                                    <TagList tags={item.tags} />
-                                </BackgroundBox>
-                            </Pressable>
-                        </Dismissible>
+                            <BackgroundBox color={index === selectedItem ? Colors.fitsawRed : Colors.boxBackground1} style={{width: "90%"}}>
+                                <FitsawText>{item.name}</FitsawText>
+                                {item.tags.length > 0 ? <Spacer height={5} /> : <></>}
+                                <TagList tags={item.tags} />
+                            </BackgroundBox>
+                        </Pressable>
                     )
                 }
+                renderHiddenItem={() => <DeleteBackground />}
+                swipeGestureEnded={(rowKey, data) => {
+                    if (Math.abs(data.translateX) > Dimensions.get("window").width * 0.5) deleteMutation.mutate(rowKey);
+                }}
                 keyExtractor={(item : Routine | Exercise) => item.id!.toString()}
                 ItemSeparatorComponent={() => <Spacer height={10} />}
             />

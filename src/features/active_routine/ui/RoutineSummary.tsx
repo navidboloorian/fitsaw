@@ -1,3 +1,4 @@
+import { View } from "react-native";
 import { BackgroundBox } from "../../../shared/components/BackgroundBox";
 import { Spacer } from "../../../shared/components/components";
 import { FitsawText } from "../../../shared/components/FitsawText";
@@ -19,11 +20,11 @@ export const RoutineSummary = ({routine} : RoutineSummaryProps) => {
             <Spacer height={5} />
             <>
                 {
-                    routine.routineExercises.map((routineExercise) => (
-                        <>
+                    routine.routineExercises.map((routineExercise, index) => (
+                        <View key={index}>
                             <FitsawText bold size={18}>{routineExercise.exercise.name}</FitsawText>
                             <SummaryGraph routineExercise={routineExercise} />
-                        </>
+                        </View>
                     ))
                 }
             </>

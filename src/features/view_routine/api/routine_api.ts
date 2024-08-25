@@ -76,6 +76,7 @@ export const getRoutine = async (db: SQLiteDatabase, id: number) => {
             }
 
             const routineExercise : RoutineExercise = {
+                id: Math.random(),
                 exercise: exercise!,
                 sets: dbRoutineExercise.sets,
                 rest: dbRoutineExercise.rest,

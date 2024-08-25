@@ -1,9 +1,9 @@
-import { TextInput, View, StyleSheet, FlatList} from "react-native";
+import { TextInput, View, StyleSheet, FlatList, Pressable, Dimensions} from "react-native";
 import { Colors } from "../../../shared/styles/colors";
 import { useEffect, useState } from "react";
 import { useSQLiteContext } from "expo-sqlite";
 import { useGlobalStore } from "../../../shared/hooks/use_global_store";
-import { BackgroundBox, TagTextInput, BottomButton, Spacer, FitsawText, Dismissible, InputErrors, Loading } from "../../../shared/components/components";
+import { BackgroundBox, TagTextInput, BottomButton, Spacer, FitsawText, InputErrors, Loading } from "../../../shared/components/components";
 import { RoutineAutocomplete } from "./RoutineAutocomplete";
 import { RoutineExercise } from "../model/routine_exercise";
 import { Exercise } from "../../view_exercise/model/exercise";
@@ -13,6 +13,8 @@ import { Routine } from "../model/model";
 import { useMutation } from "@tanstack/react-query";
 import { FitsawError, SnackbarStatus } from "../../../shared/shared";
 import { router } from "expo-router";
+import { SwipeListView }  from "react-native-swipe-list-view";
+import { DeleteBackground } from "../../../shared/components/components";
 
 type FormErrorsType = {
     name: string[],
@@ -24,18 +26,23 @@ type RoutineFormProps = {
     initialRoutine? : Routine | null
 }
 
+type FormData = {
+    name : string,
+    tags : string[],
+    notes : string,
+    routineExercises : RoutineExercise[]
+}
+
 export const RoutineForm = ({initialRoutine} : RoutineFormProps) => {
     const db = useSQLiteContext();
     const [tags, setTags] = useState<string[]>([]);
     const [name, setName] = useState<string>("");
     const [notes, setNotes] = useState<string>("");
     const [routineExercises, setRoutineExercises] = useState<RoutineExercise[]>([]);
-    const [multilineHeight, setMultilineHeight] = useState<number | undefined>(undefined); // prevents multiline from capturing scroll events
     const [isFormDisabled, setIsFormDisabled] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [formErrors, setFormErrors] = useState<FormErrorsType>({name: [], notes: [], exercises: []});
     const [isChanged, setIsChanged] = useState<boolean>(false);
-    const [testList, setIsTestList] = useState<string[]>(["1", "2", "3", "4"]);
 
     // decides behavior upon successful mutation: start -> start routine, update -> show snackbar and pop page
     const [mutationReferrer, setMutationReferrer] = useState<"update" | "start" | undefined>(undefined); 
@@ -87,9 +94,6 @@ export const RoutineForm = ({initialRoutine} : RoutineFormProps) => {
         input: {
             color: Colors.primaryText,
             fontFamily: "OpenSans_400Regular",
-        },
-        multiline: {
-            height: multilineHeight ? multilineHeight : "auto" 
         },
         routineExerciseCardContainer: {
             width: "100%",
@@ -157,24 +161,14 @@ export const RoutineForm = ({initialRoutine} : RoutineFormProps) => {
 
     // add exercise to list of routine exercises
     const addRoutineExercise = (exercise : Exercise) => {
-        setRoutineExercises([...routineExercises, {exercise: exercise, sets: 1, rest: 1, reps: [1], weights: [1], times: [1]}]);
+        setRoutineExercises([...routineExercises, {id: Math.random(), exercise: exercise, sets: 1, rest: 1, reps: [1], weights: [1], times: [1]}]);
         setIsChanged(true);
     }
 
-    
-    useEffect(() => {
-        console.log("0000000000000000");
-        for (const routineExercise of testList) {
-            console.log(routineExercise)
-        }
-        console.log("----------------")
-    }, [testList])
+    const deleteRoutineExercise = (id : number) => {
+        const tmp = [...routineExercises];
 
-    // TODO: does not work, must be fixed
-    const deleteRoutineExercise = (index : number) => {
-        const tmp = [...routineExercises]
-
-        setRoutineExercises(tmp.filter((_, i) => (i != index)));
+        setRoutineExercises(tmp.filter((item) => item.id != id));
         setIsChanged(true);
     }
 
@@ -194,44 +188,45 @@ export const RoutineForm = ({initialRoutine} : RoutineFormProps) => {
             <BackgroundBox style={{zIndex: 1}}>
                 <RoutineAutocomplete addRoutineExercise={addRoutineExercise} />
                 {routineExercises.length > 0 ? <Spacer height={5} /> : <></>}
-                <FlatList
+                <SwipeListView
                     data={routineExercises}
-                    keyExtractor={(routineExercise) => Math.random().toString()}
+                    keyExtractor={(routineExercise) => routineExercise.id!.toString()} // random used to set a random id for deletion purposes
+                    disableRightSwipe
+                    recalculateHiddenLayout
+                    closeOnScroll={false}
                     renderItem={({item, index}) => (
-                        <Dismissible
-                            onDismiss={() => deleteRoutineExercise(index)}
-                            width={"100%"}
+                        <BackgroundBox 
+                            style={styles.routineExerciseCardContainer} 
+                            color={Colors.boxBackground2} 
+                            paddingLeft={0} 
+                            paddingRight={0} 
+                            paddingBottom={0} 
+                            paddingTop={0}
                         >
-                            <BackgroundBox 
-                                style={styles.routineExerciseCardContainer} 
-                                color={Colors.boxBackground2} 
-                                paddingLeft={0} 
-                                paddingRight={0} 
-                                paddingBottom={0} 
-                                paddingTop={0}
-                            >
-                                <RoutineExerciseCard 
-                                    index={index}
-                                    routineExercise={item}
-                                    updateRoutineExercise={updateRoutineExercise}
-                                />
-                            </BackgroundBox>
-                        </Dismissible>
+                            <RoutineExerciseCard 
+                                index={index}
+                                routineExercise={item}
+                                updateRoutineExercise={updateRoutineExercise}
+                            />
+                        </BackgroundBox>
                     )}
+                    renderHiddenItem={() => <DeleteBackground width="100%" />}
+                    swipeGestureEnded={(rowKey, data) => {
+                        if (Math.abs(data.translateX) > Dimensions.get("window").width * 0.4) deleteRoutineExercise(parseFloat(rowKey));
+                    }}
                     ItemSeparatorComponent={() => <Spacer height={5} />}
                 />
                 <InputErrors errors={formErrors.exercises} />
             </BackgroundBox>
             <BackgroundBox>
                 <TextInput 
-                    style={[styles.input, styles.multiline]}
+                    style={styles.input}
                     placeholder="Notes"
                     placeholderTextColor={Colors.secondaryText}
                     multiline
                     numberOfLines={4}
                     value={notes}
                     onChangeText={setNotes}
-                    onContentSizeChange={({nativeEvent}) => setMultilineHeight(nativeEvent.contentSize.height)}
                     textAlignVertical="top"
                 />
             </BackgroundBox>
