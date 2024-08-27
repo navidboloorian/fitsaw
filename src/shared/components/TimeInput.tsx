@@ -64,7 +64,9 @@ export const TimeInput = ({value, updateValue, fieldType, index} : TimeInputProp
             }
             else {
                 leftSubstring = timeVal.substring(0, 2);
-                rightSubstring = timeVal.substring(3, 5);
+                
+                if (timeVal.substring(3, 5).indexOf(":") > -1) rightSubstring = timeVal.substring(4, 6);
+                else rightSubstring = timeVal.substring(3, 5);
             }
         }
 
