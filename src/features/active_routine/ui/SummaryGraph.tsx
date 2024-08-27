@@ -6,6 +6,7 @@ import { LineChart } from "react-native-chart-kit";
 import { View } from "react-native";
 import { RoutineExercise } from "../../view_routine/model/model";
 import { Loading } from "../../../shared/components/Loading";
+import { timeNumToString } from "../../../shared/components/TimeInput";
 
 type SummaryGraphProps = {
     routineExercise : RoutineExercise,
@@ -36,7 +37,7 @@ export const SummaryGraph = ({routineExercise, isHistory} : SummaryGraphProps) =
                 color: (_ : any) => Colors.fitsawRed
             };
 
-            newLegend.push("Time (seconds)");
+            newLegend.push("Time");
             newDatasets.push(dataset);
         }
         else {
@@ -55,7 +56,7 @@ export const SummaryGraph = ({routineExercise, isHistory} : SummaryGraphProps) =
                 color: (_ : any) => Colors.fitsawOrange
             };
 
-            newLegend.push("Weight (lbs)");
+            newLegend.push("Weight");
             newDatasets.push(dataset);
         }
 
@@ -88,6 +89,7 @@ export const SummaryGraph = ({routineExercise, isHistory} : SummaryGraphProps) =
                         r: "6",
                     }
                 }}
+                formatYLabel={(yValue) => routineExercise.exercise.measurement === "time" ? timeNumToString(parseInt(yValue)) : yValue}
                 style={{
                     paddingRight: 35
                 }}

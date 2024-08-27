@@ -48,8 +48,6 @@ export const ActiveRoutineFrame = ({routine} : ActiveRoutineFrameProps) => {
     });
 
     const goNext = () => {
-        console.log("CLICKED")
-
         if (isFinished) {
             router.back();
             return;

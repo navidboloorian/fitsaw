@@ -271,6 +271,7 @@ export const RoutineForm = ({initialRoutine} : RoutineFormProps) => {
 
     return (
         <FlatList
+            keyExtractor={(_, index) => index.toString()}
             contentContainerStyle={{flexGrow: 1}}
             data={pageComponents}
             renderItem={({item}) => item}

@@ -50,6 +50,7 @@ export const HistoryList = () => {
         <>
             <Spacer height={10} />
             <FlatList
+                keyExtractor={(_, index) => index.toString()}
                 data={historyList}
                 renderItem={({item}) => renderHistory(item)}
                 ItemSeparatorComponent={() => <Spacer height={10} />}

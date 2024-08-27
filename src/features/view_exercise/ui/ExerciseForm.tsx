@@ -158,6 +158,7 @@ export const ExerciseForm = ({initialExercise} : ExerciseFormProps) => {
 
     return (
         <FlatList
+            keyExtractor={(_, index) => index.toString()}
             data={pageComponents}
             renderItem={({item}) => item}
             ItemSeparatorComponent={() => <Spacer height={10} />}
