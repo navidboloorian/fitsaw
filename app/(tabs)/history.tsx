@@ -1,7 +1,7 @@
-import { Text } from "react-native";
+import { DateSelector } from "../../src/features/history/ui/DateSelector";
 
 const History = () => {
-    return <Text>Welcome to the world-renowned history page!</Text>;
+    return <DateSelector />;
 }
 
 export default History;

@@ -10,12 +10,18 @@ import { useEffect, useState } from "react";
 import { Rest } from "./Rest";
 import { RoutineSummary } from "./RoutineSummary";
 import { router } from "expo-router";
+import { useSQLiteContext } from "expo-sqlite";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createHistoryRoutine } from "../../history/api/history_api";
+import { HistoryRoutine } from "../../history/model/history_routine";
 
 type ActiveRoutineFrameProps = {
     routine: Routine
 }
 
 export const ActiveRoutineFrame = ({routine} : ActiveRoutineFrameProps) => {
+    const db = useSQLiteContext();
+    const queryClient = useQueryClient();
     const [exerciseIdx, setExerciseIdx] = useState(0);
     const [currSet, setCurrSet] = useState(0);
     const [totalSteps, setTotalSteps] = useState(1);
@@ -24,19 +30,26 @@ export const ActiveRoutineFrame = ({routine} : ActiveRoutineFrameProps) => {
     const [buttonText, setButtonText] = useState("");
     const [currStep, setCurrStep] = useState(0);
 
-    useEffect(() => {
-        let total = 0;
+    const historyMutation = useMutation({
+        mutationFn: () => {
+            const historyRoutine : HistoryRoutine = {
+                routine: routine,
+                name: routine.name,
+                routineExercises: routine.routineExercises,
+            };
 
-        for (const routineExercise of routine.routineExercises) {
-            total += routineExercise.sets;
-        }
-
-        setTotalSteps(total);
-    }, []);
+            return createHistoryRoutine(db, historyRoutine);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ["history-dates", "history"]});
+            router.back();
+        },
+        onError: (e) => console.log(e)
+    });
 
     const goNext = () => {
         if (isFinished) {
-            router.back();
+            historyMutation.mutate();
             return;
         }
 
@@ -63,6 +76,16 @@ export const ActiveRoutineFrame = ({routine} : ActiveRoutineFrameProps) => {
 
         setCurrStep(currStep + 1);
     }
+
+    useEffect(() => {
+        let total = 0;
+
+        for (const routineExercise of routine.routineExercises) {
+            total += routineExercise.sets;
+        }
+
+        setTotalSteps(total);
+    }, []);
 
     useEffect(() => {
         const isLastExercise = exerciseIdx === routine.routineExercises.length - 1 && currSet === routine.routineExercises[exerciseIdx].sets - 1;

@@ -3,7 +3,7 @@ import { Routine } from "../model/routine";
 import { RoutineExercise } from "../model/routine_exercise";
 import { Exercise } from "../../view_exercise/model/exercise";
 
-type dbRoutineExercise = {
+export type dbRoutineExercise = {
     id: number, 
     exercise_id : number, 
     routine_id : number, 
@@ -12,7 +12,7 @@ type dbRoutineExercise = {
     rest : number
 }
 
-type dbStats = {
+export type dbStats = {
     id: number,
     weight: number,
     reps: number,

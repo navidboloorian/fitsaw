@@ -52,5 +52,37 @@ export const initDb = async (db : SQLiteDatabase) => {
 
             FOREIGN KEY (routine_exercise_id) REFERENCES routine_exercises(id) ON DELETE CASCADE
         );
+
+        CREATE TABLE IF NOT EXISTS history_routines (
+            id INTEGER PRIMARY KEY NOT NULL,
+            name TEXT NOT NULL,
+            date TEXT NOT NULL,
+            routine_id INTEGER NOT NULL,
+
+            FOREIGN KEY (routine_id) REFERENCES routines(id)
+        );
+
+        CREATE TABLE IF NOT EXISTS history_routine_exercises (
+            id INTEGER PRIMARY KEY NOT NULL,
+            name TEXT NOT NULL,
+            sets INTEGER NOT NULL,
+            exercise_id INTEGER NOT NULL,
+            history_routine_id INTEGER NOT NULL,
+            position INTEGER NOT NULL,
+
+            FOREIGN KEY (exercise_id) REFERENCES exercises(id),
+            FOREIGN KEY (history_routine_id) REFERENCES history_routines(id)
+        );
+
+        CREATE TABLE IF NOT EXISTS history_routine_exercise_stats (
+            id INTEGER PRIMARY KEY NOT NULL,
+            history_routine_exercise_id INTEGER NOT NULL,
+            weight INTEGER,
+            reps INTEGER,
+            time INTEGER,
+            position INTEGER NOT NULL,
+
+            FOREIGN KEY (history_routine_exercise_id) REFERENCES history_routine_exercises(id)
+        );
     `);
 }
