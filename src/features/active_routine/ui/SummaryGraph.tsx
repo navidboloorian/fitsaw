@@ -8,10 +8,11 @@ import { RoutineExercise } from "../../view_routine/model/model";
 import { Loading } from "../../../shared/components/Loading";
 
 type SummaryGraphProps = {
-    routineExercise : RoutineExercise
+    routineExercise : RoutineExercise,
+    isHistory : boolean
 }
 
-export const SummaryGraph = ({routineExercise} : SummaryGraphProps) => {
+export const SummaryGraph = ({routineExercise, isHistory} : SummaryGraphProps) => {
     const [graphWidth, setGraphWidth] = useState(0);
     const [labels, setLabels] = useState<string[]>([]);
     const [legend, setLegend] = useState<string[]>([]);
@@ -29,7 +30,7 @@ export const SummaryGraph = ({routineExercise} : SummaryGraphProps) => {
             newLabels.push(`set ${i}`);
         }
 
-        if (routineExercise.exercise.measurement === "time") {
+        if ((!isHistory && routineExercise.exercise.measurement === "time") || (isHistory && routineExercise.times.length > 0)) {
             const dataset = {
                 data: times,
                 color: (_ : any) => Colors.fitsawRed
@@ -48,7 +49,7 @@ export const SummaryGraph = ({routineExercise} : SummaryGraphProps) => {
             newDatasets.push(dataset);
         }
 
-        if (routineExercise.exercise.type === "weighted") {
+        if ((!isHistory && routineExercise.exercise.type === "weighted") || (isHistory && routineExercise.weights.length > 0)) {
             const dataset = {
                 data: weights,
                 color: (_ : any) => Colors.fitsawOrange

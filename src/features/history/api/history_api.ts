@@ -25,9 +25,9 @@ export const createHistoryRoutine = async (db : SQLiteDatabase, historyRoutine :
                 "INSERT INTO history_routine_exercise_stats (history_routine_exercise_id, weight, reps, time, position) VALUES (?, ?, ?, ?, ?)",
                 [
                     dbHistoryRoutineExercise.lastInsertRowId, 
-                    routineExercise.weights ? routineExercise.weights[i] : null, 
-                    routineExercise.reps ? routineExercise.reps[i] : null, 
-                    routineExercise.times ? routineExercise.times[i] : null, i
+                    routineExercise.exercise.type === "weighted" ? routineExercise.weights[i] : null, 
+                    routineExercise.exercise.measurement === "reps" ? routineExercise.reps[i] : null, 
+                    routineExercise.exercise.measurement === "time" ? routineExercise.times[i] : null, i
                 ]
             );
         }
@@ -35,25 +35,24 @@ export const createHistoryRoutine = async (db : SQLiteDatabase, historyRoutine :
 }
 
 export const getHistory = async (db : SQLiteDatabase, date : string) : Promise<HistoryRoutine[]> => {
-    const historyRoutines = await db.getAllAsync<HistoryRoutine>("SELECT * FROM history_routines WHERE date = ?", [date]);
-    const routineExercises : RoutineExercise[] = [];
+    const historyRoutines = await db.getAllAsync<HistoryRoutine>("SELECT * FROM history_routines WHERE date = ? ORDER BY id DESC", [date]);
+    let routineExercises : RoutineExercise[] = [];
 
     for (const historyRoutine of historyRoutines) {
         const dbRoutineExercises = await db.getAllAsync<dbRoutineExercise>("SELECT * FROM history_routine_exercises WHERE history_routine_id = ?", [historyRoutine.id!]);
-
 
         for (const dbRoutineExercise of dbRoutineExercises) {
             const exercise : Exercise | null = await db.getFirstAsync<Exercise>("SELECT * FROM exercises WHERE id = ?", dbRoutineExercise.exercise_id);
             const dbStats : dbStats[] | null = await db.getAllAsync<dbStats>("SELECT * FROM history_routine_exercise_stats WHERE history_routine_exercise_id = ? ORDER BY position", dbRoutineExercise.id);
 
-            const weights : number[] = [];
-            const times : number[] = [];
-            const reps : number[] = [];
+            let weights : number[] | null = [];
+            let times : number[] | null = [];
+            let reps : number[] | null = [];
 
             for (const stat of dbStats) {
-                weights.push(stat.weight);
-                times.push(stat.time);
-                reps.push(stat.reps);
+                stat.weight ? weights.push(stat.weight) : null;
+                stat.time ? times.push(stat.time) : null;
+                stat.reps ? reps.push(stat.reps) : null;
             }
 
             const routineExercise : RoutineExercise = {
@@ -69,6 +68,7 @@ export const getHistory = async (db : SQLiteDatabase, date : string) : Promise<H
         }
 
         historyRoutine.routineExercises = routineExercises;
+        routineExercises = [];
     }
     
     return historyRoutines;

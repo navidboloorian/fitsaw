@@ -25,7 +25,7 @@ const SetRow = ({index, onNumberChange, onTimeChange, isTimed, isWeighted, timeV
                         <>
                             <TextInput 
                                 value={weightValue!.toString()} 
-                                maxLength={2} 
+                                maxLength={3} 
                                 placeholder="0" 
                                 keyboardType="numeric"
                                 placeholderTextColor={Colors.secondaryText} 

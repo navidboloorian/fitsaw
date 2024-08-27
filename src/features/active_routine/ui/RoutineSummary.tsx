@@ -23,7 +23,7 @@ export const RoutineSummary = ({routine} : RoutineSummaryProps) => {
                     routine.routineExercises.map((routineExercise, index) => (
                         <View key={index}>
                             <FitsawText bold size={18}>{routineExercise.exercise.name}</FitsawText>
-                            <SummaryGraph routineExercise={routineExercise} />
+                            <SummaryGraph routineExercise={routineExercise} isHistory={false} />
                         </View>
                     ))
                 }

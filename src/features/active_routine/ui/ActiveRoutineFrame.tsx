@@ -14,6 +14,7 @@ import { useSQLiteContext } from "expo-sqlite";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createHistoryRoutine } from "../../history/api/history_api";
 import { HistoryRoutine } from "../../history/model/history_routine";
+import { Loading } from "../../../shared/components/components";
 
 type ActiveRoutineFrameProps = {
     routine: Routine
@@ -41,15 +42,16 @@ export const ActiveRoutineFrame = ({routine} : ActiveRoutineFrameProps) => {
             return createHistoryRoutine(db, historyRoutine);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ["history-dates", "history"]});
-            router.back();
-        },
-        onError: (e) => console.log(e)
+            queryClient.invalidateQueries({queryKey: ["history"]});
+            queryClient.invalidateQueries({queryKey: ["history-dates"]});
+        }
     });
 
     const goNext = () => {
+        console.log("CLICKED")
+
         if (isFinished) {
-            historyMutation.mutate();
+            router.back();
             return;
         }
 
@@ -91,6 +93,7 @@ export const ActiveRoutineFrame = ({routine} : ActiveRoutineFrameProps) => {
         const isLastExercise = exerciseIdx === routine.routineExercises.length - 1 && currSet === routine.routineExercises[exerciseIdx].sets - 1;
 
         if (isFinished) {
+            historyMutation.mutate();
             setButtonText("Done");
         }
         else if (isLastExercise && !isResting) {
@@ -113,7 +116,13 @@ export const ActiveRoutineFrame = ({routine} : ActiveRoutineFrameProps) => {
     const pageComponents = [
         <ProgressBar curr={isFinished ? totalSteps : currStep} total={totalSteps} />,
         <></>, // placeholder element that gets replaced by current exercise, finished screen, or rest screen 
-        <BottomButton onPress={goNext} contents={<FitsawText bold color={Colors.screenBackground}>{buttonText}</FitsawText>} />,
+        <BottomButton onPress={goNext} contents={
+            historyMutation.isPending 
+            ?
+                <Loading size={16} color={Colors.screenBackground} height="auto" /> 
+            :
+                <FitsawText bold color={Colors.screenBackground}>{buttonText}</FitsawText>
+        } />,
         <Spacer height={10} />
     ]
 
