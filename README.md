@@ -3,27 +3,27 @@ An application for creating fully customizable routines in a modular way. Start 
 
 ## Exercises
 ### Create
-![Create Exercise](assets/create_exercise.mp4)
+![Create Exercise](assets/create_exercise.gif)
 - Add a description to help you remember key tips
 - Include tags for easy searchability
 - Select whether the exercise is for time or for reps, weighted or unweighted
 ### Update
-![Update Exercise](assets/update_exercise.mp4)
+![Update Exercise](assets/update_exercise.gif)
 - Modify any of the exercise's field and the changes will apply to all routines that exercise is in
 ### Delete
-![Delete Exercise](assets/delete_exercise.mp4)
+![Delete Exercise](assets/delete_exercise.gif)
 - Delete exercises by swiping left
 - Exercises will be removed from the routines they are found in
 
 ## Routines
 ### Create
-![Create Routine](assets/create_routine.mp4)
+![Create Routine](assets/create_routine.gif)
 - Create a routine comprised of exercises from your exercise library
 ### Start
-![Start Routine](assets/start_routine.mp4)
+![Start Routine](assets/start_routine.gif)
 - Start and track your routine. When your done, your progress will be saved in the history tab
 ### Update
-![Update Routine](assets/update_routine.mp4)
+![Update Routine](assets/update_routine.gif)
 - Reorder exercises by dragging up and down the list
 
 ## What's next?
