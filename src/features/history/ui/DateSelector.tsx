@@ -59,7 +59,6 @@ export const DateSelector = () => {
                     </Pressable>
                 :
                     <></>
-
             }
             <FitsawText size={20} bold>{formatDate(date!)}</FitsawText>
             {

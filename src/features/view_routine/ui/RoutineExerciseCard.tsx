@@ -126,7 +126,7 @@ export const RoutineExerciseCard = ({index, routineExercise, updateRoutineExerci
     }
 
     const updateSetRows = (setsString : string) => {
-        const sets = Math.max(1, parseInt(setsString));
+        const sets = Math.min(10, Math.max(1, parseInt(setsString)));
         const numRows = routineExercise.times.length;
         const newRoutineExercise = JSON.parse(JSON.stringify(routineExercise));
 
@@ -152,51 +152,47 @@ export const RoutineExerciseCard = ({index, routineExercise, updateRoutineExerci
 
     return (
         <BackgroundBox color={Colors.boxBackground2} style={{width: "100%"}}>
-            <Collapsible 
-                header={<FitsawText bold>{routineExercise.exercise.name}</FitsawText>} 
-                body={
-                    <>
-                        <View style={{flexDirection: "row", alignItems: "center"}}>
-                            <TimeInput 
-                                value={typeof routineExercise.rest === "string" ? routineExercise.rest as string : timeNumToString(routineExercise.rest)} 
-                                updateValue={updateTimeField}
-                                fieldType={TimeFieldType.Rest}
+            <>
+                <FitsawText bold>{routineExercise.exercise.name}</FitsawText>
+                <View style={{flexDirection: "row", alignItems: "center"}}>
+                    <TimeInput 
+                        value={typeof routineExercise.rest === "string" ? routineExercise.rest as string : timeNumToString(routineExercise.rest)} 
+                        updateValue={updateTimeField}
+                        fieldType={TimeFieldType.Rest}
+                    />
+                    <FitsawText>Rest</FitsawText>
+                    <Spacer width={10} />
+                    <TextInput 
+                        keyboardType="numeric"
+                        value={routineExercise.sets.toString()}
+                        maxLength={2} 
+                        placeholder="0" 
+                        onChangeText={(text) => updateNumberField(NumberFieldType.Sets, text, undefined)}
+                        placeholderTextColor={Colors.secondaryText} 
+                        style={{color: Colors.primaryText}}
+                        onSubmitEditing={(e) => updateSetRows(e.nativeEvent.text)}
+                        onBlur={() => updateSetRows(routineExercise.sets.toString())}
+                    />
+                    <FitsawText>Sets</FitsawText>
+                </View>
+                <FlatList 
+                    removeClippedSubviews={false}
+                    data={isTimed ? routineExercise.times : routineExercise.reps}
+                    renderItem={({item, index}) => (
+                            <SetRow 
+                                index={index} 
+                                timeValue={isTimed ? item : undefined}
+                                repValue={!isTimed ? item as number : undefined}
+                                weightValue={isWeighted ? routineExercise.weights[index] as number : undefined}
+                                onNumberChange={updateNumberField}
+                                onTimeChange={updateTimeField}
+                                isTimed={isTimed}
+                                isWeighted={isWeighted}
                             />
-                            <FitsawText>Rest</FitsawText>
-                            <Spacer width={10} />
-                            <TextInput 
-                                keyboardType="numeric"
-                                value={routineExercise.sets.toString()}
-                                maxLength={2} 
-                                placeholder="0" 
-                                onChangeText={(text) => updateNumberField(NumberFieldType.Sets, text, undefined)}
-                                placeholderTextColor={Colors.secondaryText} 
-                                style={{color: Colors.primaryText}}
-                                onSubmitEditing={(e) => updateSetRows(e.nativeEvent.text)}
-                                onBlur={() => updateSetRows(routineExercise.sets.toString())}
-                            />
-                            <FitsawText>Sets</FitsawText>
-                        </View>
-                        <FlatList 
-                            removeClippedSubviews={false}
-                            data={isTimed ? routineExercise.times : routineExercise.reps}
-                            renderItem={({item, index}) => (
-                                    <SetRow 
-                                        index={index} 
-                                        timeValue={isTimed ? item : undefined}
-                                        repValue={!isTimed ? item as number : undefined}
-                                        weightValue={isWeighted ? routineExercise.weights[index] as number : undefined}
-                                        onNumberChange={updateNumberField}
-                                        onTimeChange={updateTimeField}
-                                        isTimed={isTimed}
-                                        isWeighted={isWeighted}
-                                    />
-                                )
-                            }
-                        />
-                    </>
-                }
-            />
+                        )
+                    }
+                />
+            </>
             
         </BackgroundBox>
     );
