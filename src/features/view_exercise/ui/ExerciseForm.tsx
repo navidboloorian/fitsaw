@@ -29,7 +29,6 @@ export const ExerciseForm = ({initialExercise} : ExerciseFormProps) => {
     const [tags, setTags] = useState<string[]>([]);
     const [name, setName] = useState<string>("");
     const [notes, setNotes] = useState<string>("");
-    const [multilineHeight, setMultilineHeight] = useState<number | undefined>(undefined);
     const [isFormDisabled, setIsFormDisabled] = useState<boolean>(false);
     const [formErrors, setFormErrors] = useState<FormErrorsType>({name: [], notes: []});
     const showSnackbar = useGlobalStore((state) => state.showSnackbar);
@@ -53,9 +52,6 @@ export const ExerciseForm = ({initialExercise} : ExerciseFormProps) => {
         input: {
             color: Colors.primaryText,
             fontFamily: "OpenSans_400Regular",
-        },
-        multiline: {
-            height: multilineHeight ? multilineHeight : "auto" 
         }
     });
 
@@ -134,14 +130,13 @@ export const ExerciseForm = ({initialExercise} : ExerciseFormProps) => {
         <ToggleButton selected={isTimed} setSelected={setIsTimed} leftText="Reps" rightText="Time"/>,
         <BackgroundBox>
             <TextInput 
-                style={[styles.input, styles.multiline]}
+                style={styles.input}
                 placeholder="Notes"
                 placeholderTextColor={Colors.secondaryText}
                 multiline
                 numberOfLines={4}
                 value={notes}
                 onChangeText={setNotes}
-                onContentSizeChange={({nativeEvent}) => setMultilineHeight(nativeEvent.contentSize.height)}
                 textAlignVertical="top"
             />
         </BackgroundBox>,

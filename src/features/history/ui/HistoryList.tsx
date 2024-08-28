@@ -10,13 +10,14 @@ import { Spacer } from "../../../shared/components/Spacer";
 import { HistoryRoutine } from "../model/history_routine";
 import { SummaryGraph } from "../../active_routine/ui/SummaryGraph";
 import { FitsawError } from "../../../shared/shared";
+import { Colors } from "../../../shared/styles/colors";
 
 export const HistoryList = () => {
     const db = useSQLiteContext();
     const {date} = useHistory();
     const historyQuery = useQuery({
-        queryKey: ["history", date],
-        queryFn: () => getHistory(db, date)
+        queryKey: ["history", date!],
+        queryFn: () => getHistory(db, date!)
     });
 
     const renderHistory = (historyRoutine : HistoryRoutine) => {
@@ -44,7 +45,11 @@ export const HistoryList = () => {
         throw new FitsawError({name: "QUERY_ERROR", message: "There was an error getting your history."});
     }
 
-    const historyList = historyQuery.data;
+    const historyList = historyQuery.data!;
+
+    if (historyList.length === 0) {
+        return <BackgroundBox color={Colors.screenBackground}><FitsawText>No history to display.</FitsawText></BackgroundBox>
+    }
 
     return (
         <>

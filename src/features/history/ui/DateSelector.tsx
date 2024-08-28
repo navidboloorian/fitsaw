@@ -8,7 +8,7 @@ import { useSQLiteContext } from "expo-sqlite";
 import { HistoryRoutine } from "../model/history_routine";
 import { Loading } from "../../../shared/components/Loading";
 import { useHistory } from "../hooks/use_history";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const DateSelector = () => {
     const db = useSQLiteContext();
@@ -39,18 +39,20 @@ export const DateSelector = () => {
         }
     });
 
-    if (dateQuery.isLoading || dateQuery.isPending) {
+    const dates = dateQuery.data;
+
+    useEffect(() => {
+        if (date === undefined && dates) setDate(dates[dates.length - 1]);
+    }, [dates]);
+
+    if (dateQuery.isLoading || dateQuery.isPending || date === undefined) {
         return <Loading />
     }
-
-    const dates = dateQuery.data!;
-
-    if (dates && date !== dates[dateIndex]) setDate(dateQuery.data![dateIndex]);
     
     return ( 
         <View style={styles.container}>
             {
-                dateIndex < dates.length - 1 
+                dateIndex < dates!.length - 1 
                 ?
                     <Pressable onPress={() => setDateIndex(dateIndex + 1)}>
                         <FontAwesome size={20} name={"caret-left"} color={Colors.primaryText} />
@@ -59,7 +61,7 @@ export const DateSelector = () => {
                     <></>
 
             }
-            <FitsawText size={20} bold>{formatDate(date)}</FitsawText>
+            <FitsawText size={20} bold>{formatDate(date!)}</FitsawText>
             {
                 dateIndex > 0
                 ?

@@ -1,6 +1,6 @@
 import { TextInput, View, StyleSheet, FlatList, Pressable, Dimensions} from "react-native";
 import { Colors } from "../../../shared/styles/colors";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSQLiteContext } from "expo-sqlite";
 import { useGlobalStore } from "../../../shared/hooks/use_global_store";
 import { BackgroundBox, TagTextInput, BottomButton, Spacer, FitsawText, InputErrors, Loading } from "../../../shared/components/components";
@@ -13,8 +13,9 @@ import { Routine } from "../model/model";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FitsawError, SnackbarStatus } from "../../../shared/shared";
 import { router } from "expo-router";
-import { SwipeListView }  from "react-native-swipe-list-view";
 import { DeleteBackground } from "../../../shared/components/components";
+import { NestableDraggableFlatList, NestableScrollContainer, RenderItemParams, OpacityDecorator, ShadowDecorator } from "react-native-draggable-flatlist";
+import SwipeableItem from "react-native-swipeable-item";
 
 type FormErrorsType = {
     name: string[],
@@ -169,6 +170,32 @@ export const RoutineForm = ({initialRoutine} : RoutineFormProps) => {
         setIsChanged(true);
     }
 
+    const renderRoutineExercise = ({ item, getIndex, drag } : RenderItemParams<RoutineExercise>) => {
+        const index = getIndex()!;
+
+        return (
+            <SwipeableItem
+                item={item}
+                renderUnderlayLeft={() => <DeleteBackground width="100%" onPress={() => deleteRoutineExercise(item.id!)}/>}
+                snapPointsLeft={[50]}
+            >
+                <Pressable
+                    onLongPress={drag}
+                >
+                    <ShadowDecorator>
+                    <OpacityDecorator>
+                        <RoutineExerciseCard 
+                            index={index}
+                            routineExercise={item}
+                            updateRoutineExercise={updateRoutineExercise}
+                        />
+                    </OpacityDecorator>
+                    </ShadowDecorator>
+                </Pressable>
+            </SwipeableItem>
+        )
+    }
+
     const pageComponents = [
         <View style={{gap: 10, height: "100%"}}>
             <BackgroundBox paddingTop={5} paddingBottom={5}>
@@ -185,33 +212,16 @@ export const RoutineForm = ({initialRoutine} : RoutineFormProps) => {
             <BackgroundBox style={{zIndex: 1}}>
                 <RoutineAutocomplete addRoutineExercise={addRoutineExercise} />
                 {routineExercises.length > 0 ? <Spacer height={5} /> : <></>}
-                <SwipeListView
+                <NestableDraggableFlatList
                     data={routineExercises}
                     keyExtractor={(routineExercise) => routineExercise.id!.toString()} // random used to set a random id for deletion purposes
-                    disableRightSwipe
-                    recalculateHiddenLayout
-                    closeOnScroll={false}
-                    renderItem={({item, index}) => (
-                        <BackgroundBox 
-                            style={styles.routineExerciseCardContainer} 
-                            color={Colors.boxBackground2} 
-                            paddingLeft={0} 
-                            paddingRight={0} 
-                            paddingBottom={0} 
-                            paddingTop={0}
-                        >
-                            <RoutineExerciseCard 
-                                index={index}
-                                routineExercise={item}
-                                updateRoutineExercise={updateRoutineExercise}
-                            />
-                        </BackgroundBox>
-                    )}
-                    renderHiddenItem={() => <DeleteBackground width="100%" />}
-                    swipeGestureEnded={(rowKey, data) => {
-                        if (Math.abs(data.translateX) > Dimensions.get("window").width * 0.4) deleteRoutineExercise(parseFloat(rowKey));
-                    }}
+                    renderItem={renderRoutineExercise}
                     ItemSeparatorComponent={() => <Spacer height={5} />}
+                    onDragEnd={({data}) => {
+                            setIsChanged(true);
+                            setRoutineExercises(data);
+                        }
+                    }
                 />
                 <InputErrors errors={formErrors.exercises} />
             </BackgroundBox>
@@ -249,13 +259,12 @@ export const RoutineForm = ({initialRoutine} : RoutineFormProps) => {
                         } 
                         disabled={isFormDisabled}
                         onPress={() => {
-                            if (isChanged) {
+                            if (isChanged || routineExercises.length === 0) {
                                 setMutationReferrer("start");
                                 rotuineMutation.mutate();
                             }
                             else {
                                 const id = initialRoutine!.id!.toString();
-
                                 router.replace({pathname: "/active_routine/[id]", params: {id}});
                             }
                         }} 
@@ -270,11 +279,13 @@ export const RoutineForm = ({initialRoutine} : RoutineFormProps) => {
     if (isLoading) return <Loading />;
 
     return (
-        <FlatList
-            keyExtractor={(_, index) => index.toString()}
-            contentContainerStyle={{flexGrow: 1}}
-            data={pageComponents}
-            renderItem={({item}) => item}
-        />
+        <NestableScrollContainer>
+            <FlatList
+                keyExtractor={(_, index) => index.toString()}
+                contentContainerStyle={{flexGrow: 1}}
+                data={pageComponents}
+                renderItem={({item}) => item}
+            />
+        </NestableScrollContainer>
     ); 
 }

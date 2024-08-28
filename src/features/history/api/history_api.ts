@@ -82,5 +82,9 @@ export const getDates = async (db : SQLiteDatabase) : Promise<string[]> => {
         dates.push(dbDate.date);
     }
 
+    const todaysDate = new Date().toISOString().split("T")[0];
+
+    if (dates[dates.length - 1] != todaysDate) dates.push(todaysDate); 
+
     return dates;
 }

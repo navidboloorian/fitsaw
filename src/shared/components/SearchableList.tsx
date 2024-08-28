@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Pressable, Dimensions } from "react-native";
 import { router, useFocusEffect } from "expo-router";
 import { useQueryClient } from "@tanstack/react-query";
@@ -12,8 +12,9 @@ import { BackgroundBox } from "./BackgroundBox";
 import { FitsawText } from "./FitsawText";
 import { TagList } from "./TagList";
 import { Colors } from "../styles/colors";
-import { SwipeListView }  from "react-native-swipe-list-view";
 import { DeleteBackground } from "./DeleteBackground";
+import { FlatList } from "react-native-gesture-handler";
+import SwipeableItem from "react-native-swipeable-item";
 
 type SearchableListProps = {
     queryFn: any,
@@ -54,34 +55,32 @@ export const SearchableList = ({queryFn, mutation, searchPlaceholder, viewItemPa
         <>
             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} placeholder={searchPlaceholder} />
             <Spacer height={10} />
-            <SwipeListView
-                previewRowIndex={0}
+            <FlatList
                 data={dataList}
                 extraData={selectedItem}
-                closeOnScroll
-                recalculateHiddenLayout
-                disableRightSwipe
                 renderItem={({item, index}) => 
                     (
-                        <Pressable
-                            onPress={() => {
-                                const id = item.id;
-                                router.navigate({pathname: viewItemPath, params: {id}});
-                            }} 
-                            onLongPress={() => setSelectedItem(index)}
+                        <SwipeableItem
+                            item={item}
+                            renderUnderlayLeft={() => <DeleteBackground onPress={() => deleteMutation.mutate(item.id!)}/>}
+                            snapPointsLeft={[50]}
                         >
-                            <BackgroundBox color={index === selectedItem ? Colors.fitsawRed : Colors.boxBackground1} style={{width: "90%"}}>
-                                <FitsawText>{item.name}</FitsawText>
-                                {item.tags.length > 0 ? <Spacer height={5} /> : <></>}
-                                <TagList tags={item.tags} />
-                            </BackgroundBox>
-                        </Pressable>
+                            <Pressable
+                                onPress={() => {
+                                    const id = item.id;
+                                    router.navigate({pathname: viewItemPath, params: {id}});
+                                }} 
+                                onLongPress={() => setSelectedItem(index)}
+                            >
+                                <BackgroundBox color={index === selectedItem ? Colors.fitsawRed : Colors.boxBackground1} style={{width: "90%"}}>
+                                    <FitsawText>{item.name}</FitsawText>
+                                    {item.tags.length > 0 ? <Spacer height={5} /> : <></>}
+                                    <TagList tags={item.tags} />
+                                </BackgroundBox>
+                            </Pressable>
+                        </SwipeableItem>  
                     )
                 }
-                renderHiddenItem={() => <DeleteBackground />}
-                swipeGestureEnded={(rowKey, data) => {
-                    if (Math.abs(data.translateX) > Dimensions.get("window").width * 0.5) deleteMutation.mutate(rowKey);
-                }}
                 keyExtractor={(item : Routine | Exercise) => item.id!.toString()}
                 ItemSeparatorComponent={() => <Spacer height={10} />}
             />

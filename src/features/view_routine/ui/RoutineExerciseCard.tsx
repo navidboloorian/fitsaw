@@ -91,6 +91,7 @@ export const RoutineExerciseCard = ({index, routineExercise, updateRoutineExerci
 
     const updateTimeField = (fieldType : TimeFieldType, valueString : string, submitChange : boolean, arrIndex? : number) => {
         let value;
+        const newRoutineExercise = JSON.parse(JSON.stringify(routineExercise));
 
         if (submitChange) {
             value = timeStringToNum(valueString);
@@ -99,52 +100,54 @@ export const RoutineExerciseCard = ({index, routineExercise, updateRoutineExerci
         }
 
         if (fieldType === TimeFieldType.Rest) {
-            routineExercise.rest = value;
+            newRoutineExercise.rest = value;
         } else if (fieldType === TimeFieldType.Time) {
-            routineExercise.times[arrIndex!] = value;
+            newRoutineExercise.times[arrIndex!] = value;
         }
 
-        updateRoutineExercise(index, routineExercise);
+        updateRoutineExercise(index, newRoutineExercise);
     }
 
     const updateNumberField = (fieldType : NumberFieldType, valueString : string, arrIndex? : number) => {
         if (valueString.match(/[^\d]/)) return;
 
         const value = valueString === "" ? 0 : parseInt(valueString);
+        const newRoutineExercise = JSON.parse(JSON.stringify(routineExercise));
 
         if (fieldType === NumberFieldType.Reps) {
-            routineExercise.reps[arrIndex!] = value;
+            newRoutineExercise.reps[arrIndex!] = value;
         } else if (fieldType === NumberFieldType.Weight) {
-            routineExercise.weights[arrIndex!] = value;
+            newRoutineExercise.weights[arrIndex!] = value;
         } else if (fieldType === NumberFieldType.Sets) {
-            routineExercise.sets = value;
+            newRoutineExercise.sets = value;
         }
 
-        updateRoutineExercise(index, routineExercise);
+        updateRoutineExercise(index, newRoutineExercise);
     }
 
     const updateSetRows = (setsString : string) => {
         const sets = Math.max(1, parseInt(setsString));
         const numRows = routineExercise.times.length;
+        const newRoutineExercise = JSON.parse(JSON.stringify(routineExercise));
 
         if (sets > numRows) {
             for (let i = 0; i < sets - numRows; i++) {
-                routineExercise.times.push(1);
-                routineExercise.reps.push(1);
-                routineExercise.weights.push(1);
+                newRoutineExercise.times.push(1);
+                newRoutineExercise.reps.push(1);
+                newRoutineExercise.weights.push(1);
             }
         }
         else {
             for (let i = 0; i < numRows - sets; i++) {
-                routineExercise.times.pop();
-                routineExercise.reps.pop();
-                routineExercise.weights.pop();
+                newRoutineExercise.times.pop();
+                newRoutineExercise.reps.pop();
+                newRoutineExercise.weights.pop();
             }
         }
 
-        routineExercise.sets = sets;
+        newRoutineExercise.sets = sets;
         
-        updateRoutineExercise(index, routineExercise);
+        updateRoutineExercise(index, newRoutineExercise);
     }
 
     return (

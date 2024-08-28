@@ -59,7 +59,7 @@ export const initDb = async (db : SQLiteDatabase) => {
             date TEXT NOT NULL,
             routine_id INTEGER NOT NULL,
 
-            FOREIGN KEY (routine_id) REFERENCES routines(id)
+            FOREIGN KEY (routine_id) REFERENCES routines(id) ON DELETE CASCADE
         );
 
         CREATE TABLE IF NOT EXISTS history_routine_exercises (
@@ -70,8 +70,8 @@ export const initDb = async (db : SQLiteDatabase) => {
             history_routine_id INTEGER NOT NULL,
             position INTEGER NOT NULL,
 
-            FOREIGN KEY (exercise_id) REFERENCES exercises(id),
-            FOREIGN KEY (history_routine_id) REFERENCES history_routines(id)
+            FOREIGN KEY (exercise_id) REFERENCES exercises(id) ON DELETE CASCADE,
+            FOREIGN KEY (history_routine_id) REFERENCES history_routines(id) ON DELETE CASCADE
         );
 
         CREATE TABLE IF NOT EXISTS history_routine_exercise_stats (
@@ -82,7 +82,7 @@ export const initDb = async (db : SQLiteDatabase) => {
             time INTEGER,
             position INTEGER NOT NULL,
 
-            FOREIGN KEY (history_routine_exercise_id) REFERENCES history_routine_exercises(id)
+            FOREIGN KEY (history_routine_exercise_id) REFERENCES history_routine_exercises(id) ON DELETE CASCADE
         );
     `);
 }

@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSQLiteContext } from "expo-sqlite";
 import { useMutation } from "@tanstack/react-query";
 import { deleteRoutine, getAllRoutines } from "../../src/features/view_routine/api/routine_api";
@@ -7,7 +7,7 @@ import { SearchableList } from "../../src/shared/components/SearchableList";
 
 const Routines = () => {
     const db = useSQLiteContext();
-    
+    const queryClient = useQueryClient();
     const queryFn = useQuery(
         {
             queryKey: ["routines"], 
@@ -16,7 +16,12 @@ const Routines = () => {
     );
 
     const mutation = useMutation({
-        mutationFn: async (id : number) => deleteRoutine(db, id)
+        mutationFn: async (id : number) => deleteRoutine(db, id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ["routines"]});
+            queryClient.invalidateQueries({queryKey: ["history"]});
+        },
+        mutationKey: ["routines"]
     });
 
     return (

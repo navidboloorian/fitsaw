@@ -1,5 +1,5 @@
 import { SearchableList } from "../../src/shared/components/components";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { deleteExercise, getAllExercises } from "../../src/features/view_exercise/api/exercise_api";
 import { useSQLiteContext } from "expo-sqlite";
 import { Exercise } from "../../src/features/view_exercise/model/model";
@@ -7,7 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 
 const Exercises = () => {
     const db = useSQLiteContext();
-    
+    const queryClient = useQueryClient();
     const queryFn = useQuery(
         {
             queryKey: ["exercises"], 
@@ -16,7 +16,12 @@ const Exercises = () => {
     );
 
     const mutation = useMutation({
-        mutationFn: async (id : number) => deleteExercise(db, id)
+        mutationFn: async (id : number) => deleteExercise(db, id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ["exercises"]});
+            queryClient.invalidateQueries({queryKey: ["history"]});
+        },
+        mutationKey: ["routines"]
     });
 
     return (
